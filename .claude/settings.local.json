@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(anthropic-skills:docx)",
+      "Skill(anthropic-skills:docx:*)",
+      "Bash(extract-text \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Dokumentatsioon.docx\")",
+      "Bash(pandoc \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Dokumentatsioon.docx\" -o - -t markdown)"
+    ]
+  }
+}

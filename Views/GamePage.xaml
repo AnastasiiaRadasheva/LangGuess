@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:LangGuess.Models"
+             xmlns:svc="clr-namespace:LangGuess.Services"
+             x:Class="LangGuess.Views.GamePage"
+             BackgroundColor="#0D1117">
+
+    <!-- Root AbsoluteLayout needed for drag ghost overlay -->
+    <AbsoluteLayout x:Name="RootLayout">
+
+        <Grid AbsoluteLayout.LayoutBounds="0,0,1,1"
+              AbsoluteLayout.LayoutFlags="SizeProportional"
+              RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>  <!-- header -->
+                <RowDefinition Height="Auto"/>  <!-- column headers -->
+                <RowDefinition Height="*"/>     <!-- guess rows -->
+                <RowDefinition Height="Auto"/>  <!-- drop zone -->
+                <RowDefinition Height="Auto"/>  <!-- status / attempts -->
+                <RowDefinition Height="110"/>   <!-- language cards -->
+            </Grid.RowDefinitions>
+
+            <!-- ── HEADER ── -->
+            <Grid Grid.Row="0"
+                  BackgroundColor="#161B22"
+                  Padding="12,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"
+                       Text="🎯 LangGuess"
+                       TextColor="#58A6FF"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"/>
+
+                <HorizontalStackLayout Grid.Column="1"
+                                       Spacing="4"
+                                       VerticalOptions="Center"
+                                       Margin="0,0,12,0">
+                    <Label Text="🔥"
+                           FontSize="16"
+                           VerticalOptions="Center"/>
+                    <Label Text="{Binding Streak}"
+                           TextColor="#F0A500"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+
+                <Button Grid.Column="2"
+                        Text="⚙"
+                        BackgroundColor="Transparent"
+                        TextColor="#8B949E"
+                        FontSize="20"
+                        Padding="4,0"
+                        Command="{Binding GoToSettingsCommand}"/>
+            </Grid>
+
+            <!-- ── COLUMN HEADERS ── -->
+            <Grid Grid.Row="1"
+                  ColumnSpacing="2"
+                  Padding="4,6"
+                  BackgroundColor="#0D1117"
+                  ColumnDefinitions="2*,*,*,*,*,*,*">
+                <Label Grid.Column="0" Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColLang]}"
+                       Style="{StaticResource ColHeader}"/>
+                <Label Grid.Column="1" Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColYear]}"
+                       Style="{StaticResource ColHeader}"/>
+                <Label Grid.Column="2" Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPara]}"
+                       Style="{StaticResource ColHeader}"/>
+                <Label Grid.Column="3" Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColType]}"
+                       Style="{StaticResource ColHeader}"/>
+                <Label Grid.Column="4" Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColComp]}"
+                       Style="{StaticResource ColHeader}"/>
+                <Label Grid.Column="5" Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPlat]}"
+                       Style="{StaticResource ColHeader}"/>
+                <Label Grid.Column="6" Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPop]}"
+                       Style="{StaticResource ColHeader}"/>
+            </Grid>
+
+            <!-- ── GUESS ROWS (DataTemplate) ── -->
+            <CollectionView Grid.Row="2"
+                            ItemsSource="{Binding GuessRows}"
+                            Margin="4,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:GuessResultRow">
+                        <Grid ColumnSpacing="2"
+                              Margin="0,2"
+                              ColumnDefinitions="2*,*,*,*,*,*,*">
+
+                            <!-- Language name -->
+                            <Border Grid.Column="0"
+                                    BackgroundColor="{Binding AbbrColor}"
+                                    StrokeShape="RoundRectangle 6"
+                                    Stroke="#30363D"
+                                    StrokeThickness="1"
+                                    Padding="3,4">
+                                <Label Text="{Binding LanguageName}"
+                                       Style="{StaticResource CellLabel}"
+                                       FontSize="10"/>
+                            </Border>
+
+                            <Border Grid.Column="1" BackgroundColor="{Binding YearColor}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                <Label Text="{Binding Year}" Style="{StaticResource CellLabel}"/>
+                            </Border>
+
+                            <Border Grid.Column="2" BackgroundColor="{Binding ParadigmColor}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                <Label Text="{Binding Paradigm}" Style="{StaticResource CellLabel}"/>
+                            </Border>
+
+                            <Border Grid.Column="3" BackgroundColor="{Binding TypingColor}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                <Label Text="{Binding Typing}" Style="{StaticResource CellLabel}"/>
+                            </Border>
+
+                            <Border Grid.Column="4" BackgroundColor="{Binding CompilationColor}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                <Label Text="{Binding Compilation}" Style="{StaticResource CellLabel}"/>
+                            </Border>
+
+                            <Border Grid.Column="5" BackgroundColor="{Binding PlatformColor}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                <Label Text="{Binding Platform}" Style="{StaticResource CellLabel}"/>
+                            </Border>
+
+                            <Border Grid.Column="6" BackgroundColor="{Binding PopularityColor}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                <Label Text="{Binding Popularity}" Style="{StaticResource CellLabel}"/>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- ── DROP ZONE ── -->
+            <Border x:Name="DropZone"
+                    Grid.Row="3"
+                    Margin="12,6"
+                    HeightRequest="64"
+                    BackgroundColor="#0E1929"
+                    Stroke="#2D5099"
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 16">
+                <Label x:Name="DropLabel"
+                       Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[DragHere]}"
+                       TextColor="#667788"
+                       FontSize="14"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
+            <!-- ── STATUS / ATTEMPTS ── -->
+            <VerticalStackLayout Grid.Row="4"
+                                 Spacing="2"
+                                 Padding="12,0,12,4">
+                <Label Text="{Binding StatusMessage}"
+                       TextColor="#F0A500"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       IsVisible="{Binding IsGameOver}"/>
+                <Label TextColor="#8B949E"
+                       FontSize="12"
+                       HorizontalOptions="Center"
+                       IsVisible="{Binding IsGameOver, Converter={StaticResource InvertBool}}">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{}{0}/6">
+                            <Binding Path="AttemptsLeft"/>
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+            </VerticalStackLayout>
+
+            <!-- ── LANGUAGE CARDS (filled from code-behind) ── -->
+            <ScrollView Grid.Row="5"
+                        Orientation="Horizontal"
+                        BackgroundColor="#161B22">
+                <HorizontalStackLayout x:Name="LangLayout"
+                                       Spacing="8"
+                                       Padding="10,8"/>
+            </ScrollView>
+        </Grid>
+
+    </AbsoluteLayout>
+</ContentPage>

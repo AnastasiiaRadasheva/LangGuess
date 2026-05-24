@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="AppTitle"      xml:space="preserve"><value>LangGuess</value></data>
+  <data name="DragHere"      xml:space="preserve"><value>Перетащи язык сюда для угадывания</value></data>
+  <data name="ColLang"       xml:space="preserve"><value>Язык</value></data>
+  <data name="ColYear"       xml:space="preserve"><value>Год</value></data>
+  <data name="ColPara"       xml:space="preserve"><value>Парад</value></data>
+  <data name="ColType"       xml:space="preserve"><value>Тип</value></data>
+  <data name="ColComp"       xml:space="preserve"><value>Комп</value></data>
+  <data name="ColPlat"       xml:space="preserve"><value>Плат</value></data>
+  <data name="ColPop"        xml:space="preserve"><value>Поп</value></data>
+  <data name="Settings"      xml:space="preserve"><value>Настройки</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Язык интерфейса</value></data>
+  <data name="ThemeLabel"    xml:space="preserve"><value>Тёмный режим</value></data>
+  <data name="ThemeSub"      xml:space="preserve"><value>Переключить тёмную / светлую тему</value></data>
+  <data name="SoundLabel"    xml:space="preserve"><value>Звуковые эффекты</value></data>
+  <data name="SoundSub"      xml:space="preserve"><value>Включить звуки угадывания</value></data>
+  <data name="HistoryTitle"  xml:space="preserve"><value>История игр</value></data>
+  <data name="NoHistory"     xml:space="preserve"><value>Игр пока не было</value></data>
+  <data name="Back"          xml:space="preserve"><value>Назад</value></data>
+</root>
