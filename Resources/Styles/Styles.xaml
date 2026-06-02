@@ -12,7 +12,7 @@
 
     <!-- ── LangGuess cell styles ── -->
     <Style x:Key="ColHeader" TargetType="Label">
-        <Setter Property="TextColor"             Value="#8B949E"/>
+        <Setter Property="TextColor"             Value="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}"/>
         <Setter Property="FontSize"              Value="10"/>
         <Setter Property="FontAttributes"        Value="Bold"/>
         <Setter Property="HorizontalOptions"     Value="Center"/>
@@ -20,7 +20,7 @@
     </Style>
 
     <Style x:Key="CellLabel" TargetType="Label">
-        <Setter Property="TextColor"               Value="#C9D1D9"/>
+        <Setter Property="TextColor"               Value="White"/>
         <Setter Property="FontSize"                Value="10"/>
         <Setter Property="HorizontalOptions"       Value="Center"/>
         <Setter Property="HorizontalTextAlignment" Value="Center"/>

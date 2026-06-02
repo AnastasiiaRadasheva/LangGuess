@@ -8,26 +8,31 @@ public class GuessResultRow
     public string Year { get; set; } = "";
     public GuessStatus YearStatus { get; set; }
 
-    public string Paradigm { get; set; } = "";
+    public string Paradigm      { get; set; } = "";
     public GuessStatus ParadigmStatus { get; set; }
+    public string ParadigmArrow { get; set; } = "";
 
-    public string Typing { get; set; } = "";
+    public string Typing        { get; set; } = "";
     public GuessStatus TypingStatus { get; set; }
+    public string TypingArrow   { get; set; } = "";
 
-    public string Compilation { get; set; } = "";
+    public string Compilation   { get; set; } = "";
     public GuessStatus CompilationStatus { get; set; }
+    public string CompilationArrow { get; set; } = "";
 
-    public string Platform { get; set; } = "";
+    public string Platform      { get; set; } = "";
     public GuessStatus PlatformStatus { get; set; }
+    public string PlatformArrow { get; set; } = "";
 
-    public string Popularity { get; set; } = "";
+    public string Popularity    { get; set; } = "";
     public GuessStatus PopularityStatus { get; set; }
-    public string PopArrow { get; set; } = "";
+    public string PopArrow      { get; set; } = "";
 
-    public string GCType { get; set; } = "";
+    public string GCType        { get; set; } = "";
     public GuessStatus GCTypeStatus { get; set; }
+    public string GCTypeArrow   { get; set; } = "";
 
-    public string YearArrow { get; set; } = "";
+    public string YearArrow     { get; set; } = "";
 
     public bool IsWin { get; set; }
 
@@ -56,6 +61,11 @@ public class GuessResultRow
     public Color PopularityColor => GetColor(PopularityStatus);
     public Color GCTypeColor     => GetColor(GCTypeStatus);
 
-    public Color YearArrowColor => YearArrow == "" ? Colors.Transparent : ArrowColor(YearArrow);
-    public Color PopArrowColor  => PopArrow  == "" ? Colors.Transparent : ArrowColor(PopArrow);
+    public Color YearArrowColor       => YearArrow       == "" ? Colors.Transparent : ArrowColor(YearArrow);
+    public Color PopArrowColor        => PopArrow        == "" ? Colors.Transparent : ArrowColor(PopArrow);
+    public Color ParadigmArrowColor   => ParadigmArrow   == "" ? Colors.Transparent : ArrowColor(ParadigmArrow);
+    public Color TypingArrowColor     => TypingArrow     == "" ? Colors.Transparent : ArrowColor(TypingArrow);
+    public Color CompilationArrowColor=> CompilationArrow== "" ? Colors.Transparent : ArrowColor(CompilationArrow);
+    public Color PlatformArrowColor   => PlatformArrow   == "" ? Colors.Transparent : ArrowColor(PlatformArrow);
+    public Color GCTypeArrowColor     => GCTypeArrow     == "" ? Colors.Transparent : ArrowColor(GCTypeArrow);
 }

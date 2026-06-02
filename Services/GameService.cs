@@ -18,6 +18,13 @@ public class GameService
         return all[index];
     }
 
+    // Defined orderings for categorical columns
+    private static readonly string[] ParadigmOrder    = ["Procedural", "OOP", "Multi", "Functional"];
+    private static readonly string[] TypingOrder      = ["Static", "Dynamic"];
+    private static readonly string[] CompilationOrder = ["Compiled", "JVM", "Transpiled", "Interpreted"];
+    private static readonly string[] PlatformOrder    = ["System", "Mobile", "Web", "Universal"];
+    private static readonly string[] GCTypeOrder      = ["Manual", "Own", "ARC", "GC"];
+
     public GuessResultRow Compare(ProgrammingLanguage guess, ProgrammingLanguage secret)
     {
         var yearStatus = CompareYear(guess.Year, secret.Year);
@@ -32,19 +39,33 @@ public class GameService
             YearArrow         = yearStatus == GuessStatus.Green ? "" : guess.Year < secret.Year ? "↑" : "↓",
             Paradigm          = ShortenParadigm(guess.Paradigm),
             ParadigmStatus    = guess.Paradigm == secret.Paradigm ? GuessStatus.Green : GuessStatus.Red,
+            ParadigmArrow     = CatArrow(guess.Paradigm, secret.Paradigm, ParadigmOrder),
             Typing            = guess.Typing == "Dynamic" ? "Dyn" : "Stat",
             TypingStatus      = guess.Typing == secret.Typing ? GuessStatus.Green : GuessStatus.Red,
+            TypingArrow       = CatArrow(guess.Typing, secret.Typing, TypingOrder),
             Compilation       = ShortenCompilation(guess.Compilation),
             CompilationStatus = guess.Compilation == secret.Compilation ? GuessStatus.Green : GuessStatus.Red,
+            CompilationArrow  = CatArrow(guess.Compilation, secret.Compilation, CompilationOrder),
             Platform          = ShortenPlatform(guess.Platform),
             PlatformStatus    = guess.Platform == secret.Platform ? GuessStatus.Green : GuessStatus.Red,
+            PlatformArrow     = CatArrow(guess.Platform, secret.Platform, PlatformOrder),
             Popularity        = guess.Popularity,
             PopularityStatus  = popStatus,
             PopArrow          = PopDirection(guess.Popularity, secret.Popularity, popStatus),
             GCType            = guess.GCType,
             GCTypeStatus      = guess.GCType == secret.GCType ? GuessStatus.Green : GuessStatus.Red,
+            GCTypeArrow       = CatArrow(guess.GCType, secret.GCType, GCTypeOrder),
             IsWin             = guess.Id == secret.Id,
         };
+    }
+
+    // ↑ = secret is higher in the order, ↓ = lower
+    private static string CatArrow(string g, string s, string[] order)
+    {
+        if (g == s) return "";
+        int gi = Array.IndexOf(order, g), si = Array.IndexOf(order, s);
+        if (gi < 0 || si < 0) return "";
+        return gi < si ? "↑" : "↓";
     }
 
     private static GuessStatus CompareYear(int g, int s)

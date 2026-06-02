@@ -3,84 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:svc="clr-namespace:LangGuess.Services"
              x:Class="LangGuess.Views.HomePage"
-             BackgroundColor="#0F0B1A">
+             BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0F0B1A}">
 
     <ScrollView>
         <VerticalStackLayout Spacing="0" Padding="0">
 
-            <!-- ── TOP BAR ── -->
-            <Grid BackgroundColor="#1C1730" Padding="16,14">
+            <!-- TOP BAR -->
+            <Grid BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}" Padding="16,14">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
-                <Label Grid.Column="0"
-                       Text="LangGuess"
-                       TextColor="#A374FF"
-                       FontSize="22"
-                       FontAttributes="Bold"
-                       VerticalOptions="Center"/>
-
-                <Button Grid.Column="1"
-                        Text="⚙"
-                        BackgroundColor="#2A1F45"
-                        TextColor="#9B8EC4"
-                        FontSize="18"
-                        CornerRadius="10"
-                        Padding="10,6"
+                <Label Grid.Column="0" Text="LangGuess"
+                       TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                       FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
+                <Button Grid.Column="1" Text="⚙"
+                        BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#2A1F45}"
+                        TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
+                        FontSize="18" CornerRadius="10" Padding="10,6"
                         Command="{Binding GoToSettingsCommand}"/>
             </Grid>
 
-            <!-- ── HERO SECTION ── -->
+            <!-- HERO SECTION -->
             <VerticalStackLayout Spacing="16" Padding="28,40,28,32" HorizontalOptions="Center">
-
-                <Border BackgroundColor="#170F2E"
+                <Border BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#170F2E}"
                         StrokeShape="RoundRectangle 30"
-                        Stroke="#5E3BA8"
-                        StrokeThickness="2"
-                        WidthRequest="110"
-                        HeightRequest="110"
+                        Stroke="{AppThemeBinding Light=#7C3AED, Dark=#5E3BA8}"
+                        StrokeThickness="2" WidthRequest="110" HeightRequest="110"
                         HorizontalOptions="Center">
                     <Label Text="&lt;/&gt;"
-                           TextColor="#A374FF"
-                           FontSize="42"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"/>
+                           TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                           FontSize="42" FontAttributes="Bold"
+                           HorizontalOptions="Center" VerticalOptions="Center"/>
                 </Border>
-
                 <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[Welcome]}"
-                       TextColor="#E2D9F3"
-                       FontSize="24"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"/>
-
+                       TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}"
+                       FontSize="24" FontAttributes="Bold"
+                       HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                 <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[WelcomeSub]}"
-                       TextColor="#9B8EC4"
-                       FontSize="14"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"/>
+                       TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}"
+                       FontSize="14" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
             </VerticalStackLayout>
 
-            <!-- ── HOW TO PLAY ── -->
-            <Border BackgroundColor="#1C1730"
+            <!-- HOW TO PLAY -->
+            <Border BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#3A2D5C"
-                    StrokeThickness="1"
-                    Margin="20,0"
-                    Padding="20,16">
+                    Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                    StrokeThickness="1" Margin="20,0" Padding="20,16">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="How to play"
-                           TextColor="#A374FF"
-                           FontSize="14"
-                           FontAttributes="Bold"/>
+                           TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                           FontSize="14" FontAttributes="Bold"/>
                     <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[HowTo]}"
-                           TextColor="#9B8EC4"
-                           FontSize="12"
-                           LineBreakMode="WordWrap"/>
-
+                           TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}"
+                           FontSize="12" LineBreakMode="WordWrap"/>
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8" Margin="0,4,0,0">
                         <Border Grid.Column="0" BackgroundColor="#1A5C2E" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
                             <Label Text="Correct" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
@@ -95,83 +71,54 @@
                 </VerticalStackLayout>
             </Border>
 
-            <!-- ── LANGUAGE SELECTOR ── -->
-            <Border BackgroundColor="#1C1730"
+            <!-- LANGUAGE SELECTOR -->
+            <Border BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#3A2D5C"
-                    StrokeThickness="1"
-                    Margin="20,16,20,0"
-                    Padding="20,16">
+                    Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                    StrokeThickness="1" Margin="20,16,20,0" Padding="20,16">
                 <VerticalStackLayout Spacing="12">
                     <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ChooseLang]}"
-                           TextColor="#E2D9F3"
-                           FontSize="14"
-                           FontAttributes="Bold"/>
-
+                           TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}"
+                           FontSize="14" FontAttributes="Bold"/>
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-                        <Button Grid.Column="0"
-                                Text="English"
-                                FontSize="12"
-                                Command="{Binding SelectLangCommand}"
-                                CommandParameter="0"
-                                BackgroundColor="{Binding Lang0Color}"
-                                TextColor="{Binding Lang0Text}"
-                                CornerRadius="10"
-                                Padding="0,10"/>
-                        <Button Grid.Column="1"
-                                Text="Eesti"
-                                FontSize="12"
-                                Command="{Binding SelectLangCommand}"
-                                CommandParameter="1"
-                                BackgroundColor="{Binding Lang1Color}"
-                                TextColor="{Binding Lang1Text}"
-                                CornerRadius="10"
-                                Padding="0,10"/>
-                        <Button Grid.Column="2"
-                                Text="Русский"
-                                FontSize="12"
-                                Command="{Binding SelectLangCommand}"
-                                CommandParameter="2"
-                                BackgroundColor="{Binding Lang2Color}"
-                                TextColor="{Binding Lang2Text}"
-                                CornerRadius="10"
-                                Padding="0,10"/>
+                        <Button Grid.Column="0" Text="English" FontSize="12"
+                                Command="{Binding SelectLangCommand}" CommandParameter="0"
+                                BackgroundColor="{Binding Lang0Color}" TextColor="{Binding Lang0Text}"
+                                CornerRadius="10" Padding="0,10"/>
+                        <Button Grid.Column="1" Text="Eesti" FontSize="12"
+                                Command="{Binding SelectLangCommand}" CommandParameter="1"
+                                BackgroundColor="{Binding Lang1Color}" TextColor="{Binding Lang1Text}"
+                                CornerRadius="10" Padding="0,10"/>
+                        <Button Grid.Column="2" Text="Русский" FontSize="12"
+                                Command="{Binding SelectLangCommand}" CommandParameter="2"
+                                BackgroundColor="{Binding Lang2Color}" TextColor="{Binding Lang2Text}"
+                                CornerRadius="10" Padding="0,10"/>
                     </Grid>
                 </VerticalStackLayout>
             </Border>
 
-            <!-- ── DARK MODE TOGGLE ── -->
-            <Border BackgroundColor="#1C1730"
+            <!-- DARK MODE TOGGLE -->
+            <Border BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#3A2D5C"
-                    StrokeThickness="1"
-                    Margin="20,16,20,0"
-                    Padding="20,14">
+                    Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                    StrokeThickness="1" Margin="20,16,20,0" Padding="20,14">
                 <Grid ColumnDefinitions="*,Auto">
                     <Label Grid.Column="0"
                            Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ChooseTheme]}"
-                           TextColor="#E2D9F3"
-                           FontSize="14"
-                           FontAttributes="Bold"
-                           VerticalOptions="Center"/>
-                    <Switch Grid.Column="1"
-                            IsToggled="{Binding IsDark}"
-                            OnColor="#A374FF"
-                            ThumbColor="White"
-                            VerticalOptions="Center"/>
+                           TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}"
+                           FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
+                    <Switch Grid.Column="1" IsToggled="{Binding IsDark}"
+                            OnColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                            ThumbColor="White" VerticalOptions="Center"/>
                 </Grid>
             </Border>
 
-            <!-- ── PLAY BUTTON ── -->
+            <!-- PLAY BUTTON -->
             <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayBtn]}"
                     Command="{Binding PlayCommand}"
-                    BackgroundColor="#5E3BA8"
-                    TextColor="White"
-                    FontSize="18"
-                    FontAttributes="Bold"
-                    CornerRadius="16"
-                    HeightRequest="60"
-                    Margin="20,28,20,40"/>
+                    BackgroundColor="{AppThemeBinding Light=#6D28D9, Dark=#5E3BA8}"
+                    TextColor="White" FontSize="18" FontAttributes="Bold"
+                    CornerRadius="16" HeightRequest="60" Margin="20,28,20,40"/>
 
         </VerticalStackLayout>
     </ScrollView>
