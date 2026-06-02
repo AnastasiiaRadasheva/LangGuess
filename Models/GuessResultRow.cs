@@ -44,10 +44,10 @@ public class GuessResultRow
     };
 
     public Color ArrowColor(string arrow) => arrow == "↑"
-        ? Color.FromArgb("#58A6FF")
+        ? Color.FromArgb("#A374FF")
         : Color.FromArgb("#FF8C42");
 
-    public Color AbbrColor      => Color.FromArgb("#0E1929");
+    public Color AbbrColor      => Color.FromArgb("#1A1435");
     public Color YearColor       => GetColor(YearStatus);
     public Color ParadigmColor   => GetColor(ParadigmStatus);
     public Color TypingColor     => GetColor(TypingStatus);

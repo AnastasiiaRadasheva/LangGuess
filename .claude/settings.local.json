@@ -4,7 +4,17 @@
       "Skill(anthropic-skills:docx)",
       "Skill(anthropic-skills:docx:*)",
       "Bash(extract-text \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Dokumentatsioon.docx\")",
-      "Bash(pandoc \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Dokumentatsioon.docx\" -o - -t markdown)"
+      "Bash(pandoc \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Dokumentatsioon.docx\" -o - -t markdown)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\edw1e\\\\source\\\\repos\\\\LangGuess\" -Force)",
+      "Bash(Select-Object Name, FullName)",
+      "Bash(Format-List)",
+      "Bash(dotnet build *)",
+      "Bash(dotnet restore *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(list\\(d.get\\('targets',{}\\).keys\\(\\)\\)\\)\")",
+      "PowerShell($j = Get-Content \"C:\\\\Users\\\\edw1e\\\\source\\\\repos\\\\LangGuess\\\\obj\\\\project.assets.json\" | ConvertFrom-Json; $j.targets.PSObject.Properties.Name)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }

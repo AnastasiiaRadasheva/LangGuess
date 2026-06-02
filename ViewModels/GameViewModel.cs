@@ -32,6 +32,7 @@ public class GameViewModel : BaseViewModel
     public ICommand GuessCommand        { get; }
     public ICommand GoToSettingsCommand { get; }
     public ICommand BackCommand         { get; }
+    public ICommand ReplayCommand       { get; }
 
     public GameViewModel(DatabaseService db, GameService game, AudioService audio)
     {
@@ -42,6 +43,7 @@ public class GameViewModel : BaseViewModel
         GuessCommand        = new RelayCommand<ProgrammingLanguage>(OnGuess, _ => !IsGameOver);
         GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage"));
         BackCommand         = new RelayCommand(() => Shell.Current.GoToAsync("//HomePage"));
+        ReplayCommand       = new RelayCommand(async () => await ResetGameAsync());
     }
 
     public async Task InitAsync()
@@ -53,17 +55,6 @@ public class GameViewModel : BaseViewModel
         AvailableLanguages.Clear();
         foreach (var l in all) AvailableLanguages.Add(l);
 
-        // Check if already played today
-        var history = await _db.GetTodayHistoryAsync();
-        if (history != null)
-        {
-            AlreadyPlayedToday = true;
-            IsGameOver = true;
-            IsWon = history.IsWon;
-            StatusMessage = history.IsWon
-                ? $"Juba mängitud! Vastus: {history.SecretLanguage}"
-                : $"Kaotasid eile. Vastus oli: {history.SecretLanguage}";
-        }
     }
 
     private async void OnGuess(ProgrammingLanguage? lang)
@@ -105,6 +96,20 @@ public class GameViewModel : BaseViewModel
                 await _audio.PlayWrongAsync();
         }
 
+        ((RelayCommand<ProgrammingLanguage>)GuessCommand).RaiseCanExecuteChanged();
+    }
+
+    private async Task ResetGameAsync()
+    {
+        GuessRows.Clear();
+        IsGameOver    = false;
+        IsWon         = false;
+        StatusMessage = "";
+        _secret = await _game.GetTodaysLanguageAsync();
+        var all = await _db.GetAllLanguagesAsync();
+        AvailableLanguages.Clear();
+        foreach (var l in all) AvailableLanguages.Add(l);
+        OnPropertyChanged(nameof(AttemptsLeft));
         ((RelayCommand<ProgrammingLanguage>)GuessCommand).RaiseCanExecuteChanged();
     }
 

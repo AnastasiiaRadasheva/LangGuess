@@ -59,14 +59,14 @@ public partial class GamePage : ContentPage
             Text              = lang.Abbr,
             FontSize          = 16,
             FontAttributes    = FontAttributes.Bold,
-            TextColor         = Color.FromArgb("#58A6FF"),
+            TextColor         = Color.FromArgb("#A374FF"),
             HorizontalOptions = LayoutOptions.Center
         };
         var name = new Label
         {
             Text              = lang.Name,
             FontSize          = 9,
-            TextColor         = Color.FromArgb("#8B949E"),
+            TextColor         = Color.FromArgb("#9B8EC4"),
             HorizontalOptions = LayoutOptions.Center,
             MaxLines          = 1,
             LineBreakMode     = LineBreakMode.TailTruncation
@@ -84,8 +84,8 @@ public partial class GamePage : ContentPage
         {
             WidthRequest    = 80,
             HeightRequest   = 84,
-            BackgroundColor = Color.FromArgb("#0E1B2E"),
-            Stroke          = new SolidColorBrush(Color.FromArgb("#2D5099")),
+            BackgroundColor = Color.FromArgb("#1A1435"),
+            Stroke          = new SolidColorBrush(Color.FromArgb("#5E3BA8")),
             StrokeThickness = 1.5,
             StrokeShape     = new RoundRectangle { CornerRadius = 14 },
             Padding         = new Thickness(6, 6),
@@ -181,8 +181,8 @@ public partial class GamePage : ContentPage
     {
         WidthRequest    = 80,
         HeightRequest   = 80,
-        BackgroundColor = Color.FromArgb("#1A2D4A"),
-        Stroke          = new SolidColorBrush(Color.FromArgb("#58A6FF")),
+        BackgroundColor = Color.FromArgb("#2A1A50"),
+        Stroke          = new SolidColorBrush(Color.FromArgb("#A374FF")),
         StrokeThickness = 2,
         StrokeShape     = new RoundRectangle { CornerRadius = 14 },
         Padding         = new Thickness(6, 8),
@@ -200,14 +200,14 @@ public partial class GamePage : ContentPage
                     Text           = lang.Abbr,
                     FontSize       = 16,
                     FontAttributes = FontAttributes.Bold,
-                    TextColor      = Color.FromArgb("#58A6FF"),
+                    TextColor      = Color.FromArgb("#A374FF"),
                     HorizontalOptions = LayoutOptions.Center
                 },
                 new Label
                 {
                     Text          = lang.Name,
                     FontSize      = 9,
-                    TextColor     = Color.FromArgb("#C9D1D9"),
+                    TextColor     = Color.FromArgb("#E2D9F3"),
                     HorizontalOptions = LayoutOptions.Center,
                     MaxLines      = 1,
                     LineBreakMode = LineBreakMode.TailTruncation
@@ -240,16 +240,16 @@ public partial class GamePage : ContentPage
     private void UpdateDropZoneGlow()
     {
         DropZone.BackgroundColor = HitTestDropZone()
-            ? Color.FromArgb("#1A2D1A")
-            : Color.FromArgb("#0E1929");
+            ? Color.FromArgb("#2A1A50")
+            : Color.FromArgb("#170F2E");
     }
 
     private void HighlightDropZone(bool on)
     {
         DropZone.Stroke          = new SolidColorBrush(on
-            ? Color.FromArgb("#44CC66")
-            : Color.FromArgb("#2D5099"));
+            ? Color.FromArgb("#A374FF")
+            : Color.FromArgb("#5E3BA8"));
         DropZone.StrokeThickness = on ? 2.5 : 2;
-        if (!on) DropZone.BackgroundColor = Color.FromArgb("#0E1929");
+        if (!on) DropZone.BackgroundColor = Color.FromArgb("#170F2E");
     }
 }

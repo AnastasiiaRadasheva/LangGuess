@@ -100,6 +100,12 @@ public class DatabaseService
             .OrderByDescending(h => h.Date).ToListAsync();
     }
 
+    public async Task ClearAllHistoryAsync()
+    {
+        await InitAsync();
+        await _db!.DeleteAllAsync<GameHistory>();
+    }
+
     public async Task<int> GetStreakAsync()
     {
         await InitAsync();

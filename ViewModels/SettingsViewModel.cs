@@ -44,7 +44,10 @@ public class SettingsViewModel : BaseViewModel
         set { SetField(ref _soundEnabled, value); _settings.SoundEnabled = value; }
     }
 
-    public ICommand BackCommand { get; }
+    public ICommand BackCommand         { get; }
+    public ICommand ClearHistoryCommand { get; }
+
+    public bool HasHistory => History.Count > 0;
 
     public SettingsViewModel(SettingsService settings, LocalizationService loc, DatabaseService db)
     {
@@ -58,6 +61,12 @@ public class SettingsViewModel : BaseViewModel
         if (_selectedLanguageIndex < 0) _selectedLanguageIndex = 0;
 
         BackCommand = new RelayCommand(() => Shell.Current.GoToAsync("//HomePage"));
+        ClearHistoryCommand = new RelayCommand(async () =>
+        {
+            await _db.ClearAllHistoryAsync();
+            History.Clear();
+            OnPropertyChanged(nameof(HasHistory));
+        });
     }
 
     public async Task LoadHistoryAsync()
@@ -65,5 +74,6 @@ public class SettingsViewModel : BaseViewModel
         var all = await _db.GetAllHistoryAsync();
         History.Clear();
         foreach (var h in all) History.Add(h);
+        OnPropertyChanged(nameof(HasHistory));
     }
 }

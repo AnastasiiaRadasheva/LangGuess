@@ -2,15 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:svc="clr-namespace:LangGuess.Services"
-             xmlns:vm="clr-namespace:LangGuess.ViewModels"
              x:Class="LangGuess.Views.HomePage"
-             BackgroundColor="#0D1117">
+             BackgroundColor="#0F0B1A">
 
     <ScrollView>
         <VerticalStackLayout Spacing="0" Padding="0">
 
             <!-- ── TOP BAR ── -->
-            <Grid BackgroundColor="#161B22" Padding="16,14">
+            <Grid BackgroundColor="#1C1730" Padding="16,14">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -18,15 +17,15 @@
 
                 <Label Grid.Column="0"
                        Text="LangGuess"
-                       TextColor="#58A6FF"
+                       TextColor="#A374FF"
                        FontSize="22"
                        FontAttributes="Bold"
                        VerticalOptions="Center"/>
 
                 <Button Grid.Column="1"
                         Text="⚙"
-                        BackgroundColor="#21262D"
-                        TextColor="#8B949E"
+                        BackgroundColor="#2A1F45"
+                        TextColor="#9B8EC4"
                         FontSize="18"
                         CornerRadius="10"
                         Padding="10,6"
@@ -36,83 +35,79 @@
             <!-- ── HERO SECTION ── -->
             <VerticalStackLayout Spacing="16" Padding="28,40,28,32" HorizontalOptions="Center">
 
-                <!-- Big icon -->
-                <Border BackgroundColor="#0E1929"
+                <Border BackgroundColor="#170F2E"
                         StrokeShape="RoundRectangle 30"
-                        Stroke="#2D5099"
+                        Stroke="#5E3BA8"
                         StrokeThickness="2"
                         WidthRequest="110"
                         HeightRequest="110"
                         HorizontalOptions="Center">
                     <Label Text="&lt;/&gt;"
-                           TextColor="#58A6FF"
+                           TextColor="#A374FF"
                            FontSize="42"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"/>
                 </Border>
 
-                <!-- Welcome text (from .resx) -->
                 <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[Welcome]}"
-                       TextColor="#E6EDF3"
+                       TextColor="#E2D9F3"
                        FontSize="24"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
                        HorizontalTextAlignment="Center"/>
 
                 <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[WelcomeSub]}"
-                       TextColor="#8B949E"
+                       TextColor="#9B8EC4"
                        FontSize="14"
                        HorizontalOptions="Center"
                        HorizontalTextAlignment="Center"/>
             </VerticalStackLayout>
 
             <!-- ── HOW TO PLAY ── -->
-            <Border BackgroundColor="#161B22"
+            <Border BackgroundColor="#1C1730"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#21262D"
+                    Stroke="#3A2D5C"
                     StrokeThickness="1"
                     Margin="20,0"
                     Padding="20,16">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="How to play"
-                           TextColor="#58A6FF"
+                           TextColor="#A374FF"
                            FontSize="14"
                            FontAttributes="Bold"/>
                     <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[HowTo]}"
-                           TextColor="#8B949E"
+                           TextColor="#9B8EC4"
                            FontSize="12"
                            LineBreakMode="WordWrap"/>
 
-                    <!-- Legend -->
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8" Margin="0,4,0,0">
-                        <Border Grid.Column="0" BackgroundColor="#1A6B2A" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
-                            <Label Text="✓ Correct" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
+                        <Border Grid.Column="0" BackgroundColor="#1A5C2E" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
+                            <Label Text="Correct" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
                         </Border>
-                        <Border Grid.Column="1" BackgroundColor="#7A5100" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
-                            <Label Text="~ Close" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
+                        <Border Grid.Column="1" BackgroundColor="#5C4500" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
+                            <Label Text="Close" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
                         </Border>
-                        <Border Grid.Column="2" BackgroundColor="#6B1515" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
-                            <Label Text="✗ Wrong" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
+                        <Border Grid.Column="2" BackgroundColor="#5C1A1A" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
+                            <Label Text="Wrong" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
                         </Border>
                     </Grid>
                 </VerticalStackLayout>
             </Border>
 
             <!-- ── LANGUAGE SELECTOR ── -->
-            <Border BackgroundColor="#161B22"
+            <Border BackgroundColor="#1C1730"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#21262D"
+                    Stroke="#3A2D5C"
                     StrokeThickness="1"
                     Margin="20,16,20,0"
                     Padding="20,16">
                 <VerticalStackLayout Spacing="12">
                     <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ChooseLang]}"
-                           TextColor="#C9D1D9"
+                           TextColor="#E2D9F3"
                            FontSize="14"
                            FontAttributes="Bold"/>
 
-                    <!-- Language buttons -->
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                         <Button Grid.Column="0"
                                 Text="English"
@@ -146,22 +141,22 @@
             </Border>
 
             <!-- ── DARK MODE TOGGLE ── -->
-            <Border BackgroundColor="#161B22"
+            <Border BackgroundColor="#1C1730"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#21262D"
+                    Stroke="#3A2D5C"
                     StrokeThickness="1"
                     Margin="20,16,20,0"
                     Padding="20,14">
                 <Grid ColumnDefinitions="*,Auto">
                     <Label Grid.Column="0"
                            Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ChooseTheme]}"
-                           TextColor="#C9D1D9"
+                           TextColor="#E2D9F3"
                            FontSize="14"
                            FontAttributes="Bold"
                            VerticalOptions="Center"/>
                     <Switch Grid.Column="1"
                             IsToggled="{Binding IsDark}"
-                            OnColor="#58A6FF"
+                            OnColor="#A374FF"
                             ThumbColor="White"
                             VerticalOptions="Center"/>
                 </Grid>
@@ -170,7 +165,7 @@
             <!-- ── PLAY BUTTON ── -->
             <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayBtn]}"
                     Command="{Binding PlayCommand}"
-                    BackgroundColor="#238636"
+                    BackgroundColor="#5E3BA8"
                     TextColor="White"
                     FontSize="18"
                     FontAttributes="Bold"

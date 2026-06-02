@@ -30,4 +30,6 @@
   <data name="PlayBtn"       xml:space="preserve"><value>Играть</value></data>
   <data name="ChooseLang"    xml:space="preserve"><value>Язык интерфейса</value></data>
   <data name="ChooseTheme"   xml:space="preserve"><value>Тёмный режим</value></data>
+  <data name="PlayAgain"     xml:space="preserve"><value>Играть снова</value></data>
+  <data name="ClearHistory"  xml:space="preserve"><value>Очистить историю</value></data>
 </root>

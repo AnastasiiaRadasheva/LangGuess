@@ -30,4 +30,6 @@
   <data name="PlayBtn"       xml:space="preserve"><value>Mängi</value></data>
   <data name="ChooseLang"    xml:space="preserve"><value>Liidese keel</value></data>
   <data name="ChooseTheme"   xml:space="preserve"><value>Tume režiim</value></data>
+  <data name="PlayAgain"     xml:space="preserve"><value>Mängi uuesti</value></data>
+  <data name="ClearHistory"  xml:space="preserve"><value>Kustuta ajalugu</value></data>
 </root>

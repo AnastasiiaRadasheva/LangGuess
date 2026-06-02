@@ -35,12 +35,12 @@ public class HomeViewModel : BaseViewModel
     public Color Lang2Text  => ButtonFg(2);
 
     private Color ButtonBg(int idx) => idx == _selectedLanguageIndex
-        ? Color.FromArgb("#1F6FEB")
-        : Color.FromArgb("#21262D");
+        ? Color.FromArgb("#5E3BA8")
+        : Color.FromArgb("#2A1F45");
 
     private Color ButtonFg(int idx) => idx == _selectedLanguageIndex
         ? Colors.White
-        : Color.FromArgb("#8B949E");
+        : Color.FromArgb("#9B8EC4");
 
     private bool _isDark;
     public bool IsDark

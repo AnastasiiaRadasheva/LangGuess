@@ -4,27 +4,24 @@
              xmlns:models="clr-namespace:LangGuess.Models"
              xmlns:svc="clr-namespace:LangGuess.Services"
              x:Class="LangGuess.Views.GamePage"
-             BackgroundColor="#0D1117">
+             BackgroundColor="#0F0B1A">
 
-    <!-- Root AbsoluteLayout needed for drag ghost overlay -->
     <AbsoluteLayout x:Name="RootLayout">
 
         <Grid AbsoluteLayout.LayoutBounds="0,0,1,1"
               AbsoluteLayout.LayoutFlags="SizeProportional"
               RowSpacing="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>  <!-- header -->
-                <RowDefinition Height="Auto"/>  <!-- column headers -->
-                <RowDefinition Height="*"/>     <!-- guess rows -->
-                <RowDefinition Height="Auto"/>  <!-- drop zone -->
-                <RowDefinition Height="Auto"/>  <!-- status / attempts -->
-                <RowDefinition Height="110"/>   <!-- language cards -->
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="110"/>
             </Grid.RowDefinitions>
 
             <!-- ── HEADER ── -->
-            <Grid Grid.Row="0"
-                  BackgroundColor="#161B22"
-                  Padding="16,12">
+            <Grid Grid.Row="0" BackgroundColor="#1C1730" Padding="16,12">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -35,32 +32,32 @@
                 <Button Grid.Column="0"
                         Text="&#8592;"
                         BackgroundColor="Transparent"
-                        TextColor="#8B949E"
+                        TextColor="#9B8EC4"
                         FontSize="20"
                         Padding="0,0,8,0"
                         Command="{Binding BackCommand}"/>
 
                 <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
                     <Label Text="LangGuess"
-                           TextColor="#58A6FF"
+                           TextColor="#A374FF"
                            FontSize="22"
                            FontAttributes="Bold"/>
                     <Label Text="Guess today's language"
-                           TextColor="#484F58"
+                           TextColor="#5C5080"
                            FontSize="11"/>
                 </VerticalStackLayout>
 
                 <Border Grid.Column="2"
-                        BackgroundColor="#21262D"
+                        BackgroundColor="#2A1F45"
                         StrokeShape="RoundRectangle 10"
-                        Stroke="#30363D"
+                        Stroke="#3A2D5C"
                         StrokeThickness="1"
                         Padding="10,6"
                         Margin="0,0,10,0"
                         VerticalOptions="Center">
                     <HorizontalStackLayout Spacing="4">
                         <Label Text="Streak:"
-                               TextColor="#8B949E"
+                               TextColor="#9B8EC4"
                                FontSize="12"
                                VerticalOptions="Center"/>
                         <Label Text="{Binding Streak}"
@@ -73,158 +70,120 @@
 
                 <Button Grid.Column="3"
                         Text="⚙"
-                        BackgroundColor="#21262D"
-                        TextColor="#8B949E"
+                        BackgroundColor="#2A1F45"
+                        TextColor="#9B8EC4"
                         FontSize="18"
                         CornerRadius="10"
                         Padding="10,6"
                         Command="{Binding GoToSettingsCommand}"/>
             </Grid>
 
-            <!-- ── COLUMN HEADERS (horizontally scrollable) ── -->
+            <!-- ── COLUMN HEADERS ── -->
             <ScrollView Grid.Row="1"
                         x:Name="HeaderScroll"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
-                        BackgroundColor="#161B22">
+                        BackgroundColor="#1C1730">
                 <Grid WidthRequest="560"
                       ColumnSpacing="2"
                       Padding="4,6,4,4"
                       ColumnDefinitions="88,56,56,52,60,52,56,56">
-
-                    <Border Grid.Column="0" BackgroundColor="#1C2128" StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="4,4">
+                    <Border Grid.Column="0" BackgroundColor="#231D3A" StrokeShape="RoundRectangle 6" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,4">
                         <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColLang]}" Style="{StaticResource ColHeader}"/>
                     </Border>
-                    <Border Grid.Column="1" BackgroundColor="#1C2128" StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="4,4">
+                    <Border Grid.Column="1" BackgroundColor="#231D3A" StrokeShape="RoundRectangle 6" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,4">
                         <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColYear]}" Style="{StaticResource ColHeader}"/>
                     </Border>
-                    <Border Grid.Column="2" BackgroundColor="#1C2128" StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="4,4">
+                    <Border Grid.Column="2" BackgroundColor="#231D3A" StrokeShape="RoundRectangle 6" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,4">
                         <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPara]}" Style="{StaticResource ColHeader}"/>
                     </Border>
-                    <Border Grid.Column="3" BackgroundColor="#1C2128" StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="4,4">
+                    <Border Grid.Column="3" BackgroundColor="#231D3A" StrokeShape="RoundRectangle 6" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,4">
                         <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColType]}" Style="{StaticResource ColHeader}"/>
                     </Border>
-                    <Border Grid.Column="4" BackgroundColor="#1C2128" StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="4,4">
+                    <Border Grid.Column="4" BackgroundColor="#231D3A" StrokeShape="RoundRectangle 6" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,4">
                         <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColComp]}" Style="{StaticResource ColHeader}"/>
                     </Border>
-                    <Border Grid.Column="5" BackgroundColor="#1C2128" StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="4,4">
+                    <Border Grid.Column="5" BackgroundColor="#231D3A" StrokeShape="RoundRectangle 6" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,4">
                         <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPlat]}" Style="{StaticResource ColHeader}"/>
                     </Border>
-                    <Border Grid.Column="6" BackgroundColor="#1C2128" StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="4,4">
+                    <Border Grid.Column="6" BackgroundColor="#231D3A" StrokeShape="RoundRectangle 6" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,4">
                         <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPop]}" Style="{StaticResource ColHeader}"/>
                     </Border>
-                    <Border Grid.Column="7" BackgroundColor="#1C2128" StrokeShape="RoundRectangle 6" Stroke="#30363D" StrokeThickness="1" Padding="4,4">
+                    <Border Grid.Column="7" BackgroundColor="#231D3A" StrokeShape="RoundRectangle 6" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,4">
                         <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColGC]}" Style="{StaticResource ColHeader}"/>
                     </Border>
                 </Grid>
             </ScrollView>
 
-            <!-- ── GUESS ROWS (DataTemplate, horizontally scrollable) ── -->
+            <!-- ── GUESS ROWS ── -->
             <ScrollView Grid.Row="2"
                         x:Name="RowsScroll"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never">
-                <CollectionView ItemsSource="{Binding GuessRows}"
-                                WidthRequest="560">
+                <CollectionView ItemsSource="{Binding GuessRows}" WidthRequest="560">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:GuessResultRow">
-                            <Grid ColumnSpacing="2"
-                                  Margin="4,2,4,0"
+                            <Grid ColumnSpacing="2" Margin="4,2,4,0"
                                   ColumnDefinitions="88,56,56,52,60,52,56,56">
 
-                                <!-- Language name -->
                                 <Border Grid.Column="0"
                                         BackgroundColor="{Binding AbbrColor}"
-                                        StrokeShape="RoundRectangle 8"
-                                        Stroke="#30363D"
-                                        StrokeThickness="1"
-                                        Padding="4,6">
+                                        StrokeShape="RoundRectangle 8" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,6">
                                     <VerticalStackLayout Spacing="1" HorizontalOptions="Center" VerticalOptions="Center">
                                         <Label Text="{Binding Abbr}"
-                                               TextColor="#58A6FF"
-                                               FontSize="13"
-                                               FontAttributes="Bold"
+                                               TextColor="#A374FF" FontSize="13" FontAttributes="Bold"
                                                HorizontalOptions="Center"/>
                                         <Label Text="{Binding LanguageName}"
-                                               TextColor="#C9D1D9"
-                                               FontSize="9"
-                                               HorizontalOptions="Center"
-                                               MaxLines="1"
+                                               TextColor="#E2D9F3" FontSize="9"
+                                               HorizontalOptions="Center" MaxLines="1"
                                                LineBreakMode="TailTruncation"/>
                                     </VerticalStackLayout>
                                 </Border>
 
-                                <!-- Year + arrow -->
-                                <Border Grid.Column="1"
-                                        BackgroundColor="{Binding YearColor}"
-                                        StrokeShape="RoundRectangle 8"
-                                        Stroke="#30363D"
-                                        StrokeThickness="1"
-                                        Padding="2,4">
+                                <Border Grid.Column="1" BackgroundColor="{Binding YearColor}"
+                                        StrokeShape="RoundRectangle 8" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,4">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Year}"
-                                               TextColor="White"
-                                               FontSize="10"
-                                               FontAttributes="Bold"
-                                               HorizontalOptions="Center"/>
-                                        <Label Text="{Binding YearArrow}"
-                                               TextColor="{Binding YearArrowColor}"
-                                               FontSize="16"
-                                               FontAttributes="Bold"
-                                               HorizontalOptions="Center"
+                                        <Label Text="{Binding Year}" TextColor="White" FontSize="10"
+                                               FontAttributes="Bold" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding YearArrow}" TextColor="{Binding YearArrowColor}"
+                                               FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"
                                                IsVisible="{Binding YearArrow, Converter={StaticResource NotEmptyBool}}"/>
                                     </VerticalStackLayout>
                                 </Border>
 
-                                <!-- Paradigm -->
                                 <Border Grid.Column="2" BackgroundColor="{Binding ParadigmColor}"
-                                        StrokeShape="RoundRectangle 8" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                        StrokeShape="RoundRectangle 8" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,4">
                                     <Label Text="{Binding Paradigm}" Style="{StaticResource CellLabel}" FontSize="9"/>
                                 </Border>
 
-                                <!-- Typing -->
                                 <Border Grid.Column="3" BackgroundColor="{Binding TypingColor}"
-                                        StrokeShape="RoundRectangle 8" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                        StrokeShape="RoundRectangle 8" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,4">
                                     <Label Text="{Binding Typing}" Style="{StaticResource CellLabel}" FontSize="9"/>
                                 </Border>
 
-                                <!-- Compilation -->
                                 <Border Grid.Column="4" BackgroundColor="{Binding CompilationColor}"
-                                        StrokeShape="RoundRectangle 8" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                        StrokeShape="RoundRectangle 8" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,4">
                                     <Label Text="{Binding Compilation}" Style="{StaticResource CellLabel}" FontSize="9"/>
                                 </Border>
 
-                                <!-- Platform -->
                                 <Border Grid.Column="5" BackgroundColor="{Binding PlatformColor}"
-                                        StrokeShape="RoundRectangle 8" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                        StrokeShape="RoundRectangle 8" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,4">
                                     <Label Text="{Binding Platform}" Style="{StaticResource CellLabel}" FontSize="9"/>
                                 </Border>
 
-                                <!-- Popularity + arrow -->
-                                <Border Grid.Column="6"
-                                        BackgroundColor="{Binding PopularityColor}"
-                                        StrokeShape="RoundRectangle 8"
-                                        Stroke="#30363D"
-                                        StrokeThickness="1"
-                                        Padding="2,4">
+                                <Border Grid.Column="6" BackgroundColor="{Binding PopularityColor}"
+                                        StrokeShape="RoundRectangle 8" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,4">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Popularity}"
-                                               TextColor="White"
-                                               FontSize="8"
-                                               FontAttributes="Bold"
-                                               HorizontalOptions="Center"/>
-                                        <Label Text="{Binding PopArrow}"
-                                               TextColor="{Binding PopArrowColor}"
-                                               FontSize="14"
-                                               FontAttributes="Bold"
-                                               HorizontalOptions="Center"
+                                        <Label Text="{Binding Popularity}" TextColor="White" FontSize="8"
+                                               FontAttributes="Bold" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding PopArrow}" TextColor="{Binding PopArrowColor}"
+                                               FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"
                                                IsVisible="{Binding PopArrow, Converter={StaticResource NotEmptyBool}}"/>
                                     </VerticalStackLayout>
                                 </Border>
 
-                                <!-- GCType (Memory) -->
                                 <Border Grid.Column="7" BackgroundColor="{Binding GCTypeColor}"
-                                        StrokeShape="RoundRectangle 8" Stroke="#30363D" StrokeThickness="1" Padding="2,4">
+                                        StrokeShape="RoundRectangle 8" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,4">
                                     <Label Text="{Binding GCType}" Style="{StaticResource CellLabel}" FontSize="9"/>
                                 </Border>
 
@@ -239,35 +198,48 @@
                     Grid.Row="3"
                     Margin="12,8"
                     HeightRequest="60"
-                    BackgroundColor="#0E1929"
-                    Stroke="#2D5099"
+                    BackgroundColor="#170F2E"
+                    Stroke="#5E3BA8"
                     StrokeThickness="2"
                     StrokeShape="RoundRectangle 16">
                 <Label x:Name="DropLabel"
                        Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[DragHere]}"
-                       TextColor="#667788"
+                       TextColor="#5C5080"
                        FontSize="13"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"/>
             </Border>
 
-            <!-- ── STATUS / ATTEMPTS ── -->
-            <VerticalStackLayout Grid.Row="4"
-                                 Spacing="2"
-                                 Padding="12,0,12,4">
+            <!-- ── STATUS / ATTEMPTS / PLAY AGAIN ── -->
+            <VerticalStackLayout Grid.Row="4" Spacing="4" Padding="12,0,12,4">
+
+                <!-- Status message when game over -->
                 <Label Text="{Binding StatusMessage}"
                        TextColor="#F0A500"
                        FontSize="14"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
                        IsVisible="{Binding IsGameOver}"/>
+
+                <!-- Play again button -->
+                <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayAgain]}"
+                        Command="{Binding ReplayCommand}"
+                        BackgroundColor="#3D1E6B"
+                        TextColor="#E2D9F3"
+                        FontSize="13"
+                        CornerRadius="10"
+                        HeightRequest="38"
+                        Margin="40,0"
+                        IsVisible="{Binding IsGameOver}"/>
+
+                <!-- Attempts counter -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="6"
                                        IsVisible="{Binding IsGameOver, Converter={StaticResource InvertBool}}">
                     <Label Text="Attempts:"
-                           TextColor="#484F58"
+                           TextColor="#5C5080"
                            FontSize="12"
                            VerticalOptions="Center"/>
-                    <Label TextColor="#58A6FF"
+                    <Label TextColor="#A374FF"
                            FontSize="12"
                            FontAttributes="Bold"
                            VerticalOptions="Center">
@@ -280,17 +252,15 @@
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 
-            <!-- ── LANGUAGE CARDS (filled from code-behind) ── -->
-            <Grid Grid.Row="5" BackgroundColor="#161B22">
+            <!-- ── LANGUAGE CARDS ── -->
+            <Grid Grid.Row="5" BackgroundColor="#1C1730">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <BoxView Grid.Row="0" HeightRequest="1" BackgroundColor="#21262D" Margin="0"/>
+                <BoxView Grid.Row="0" HeightRequest="1" BackgroundColor="#3A2D5C" Margin="0"/>
                 <ScrollView Grid.Row="1" Orientation="Horizontal">
-                    <HorizontalStackLayout x:Name="LangLayout"
-                                           Spacing="8"
-                                           Padding="10,8"/>
+                    <HorizontalStackLayout x:Name="LangLayout" Spacing="8" Padding="10,8"/>
                 </ScrollView>
             </Grid>
         </Grid>
