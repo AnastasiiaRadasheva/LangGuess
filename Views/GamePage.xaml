@@ -15,7 +15,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="115"/>
             </Grid.RowDefinitions>
 
@@ -208,19 +207,8 @@
                 </CollectionView>
             </ScrollView>
 
-            <!-- ── DROP ZONE ── -->
-            <Border x:Name="DropZone" Grid.Row="3" Margin="12,8" HeightRequest="58"
-                    BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#170F2E}"
-                    Stroke="{AppThemeBinding Light=#7C3AED, Dark=#5E3BA8}"
-                    StrokeThickness="2" StrokeShape="RoundRectangle 16">
-                <Label x:Name="DropLabel"
-                       Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[DragHere]}"
-                       TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
-                       FontSize="13" HorizontalOptions="Center" VerticalOptions="Center"/>
-            </Border>
-
             <!-- ── STATUS / ATTEMPTS / PLAY AGAIN ── -->
-            <VerticalStackLayout Grid.Row="4" Spacing="4" Padding="12,0,12,4">
+            <VerticalStackLayout Grid.Row="3" Spacing="4" Padding="12,0,12,4">
                 <Label Text="{Binding StatusMessage}"
                        TextColor="#F0A500" FontSize="14" FontAttributes="Bold"
                        HorizontalOptions="Center" IsVisible="{Binding IsGameOver}"/>
@@ -246,7 +234,7 @@
             </VerticalStackLayout>
 
             <!-- ── LANGUAGE CARDS ── -->
-            <Grid Grid.Row="5"
+            <Grid Grid.Row="4"
                   BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
