@@ -33,7 +33,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0"
-                        Text="🏠"
+                        Text="&#8592;"
                         BackgroundColor="Transparent"
                         TextColor="#8B949E"
                         FontSize="20"
@@ -41,7 +41,7 @@
                         Command="{Binding BackCommand}"/>
 
                 <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
-                    <Label Text="🎯 LangGuess"
+                    <Label Text="LangGuess"
                            TextColor="#58A6FF"
                            FontSize="22"
                            FontAttributes="Bold"/>
@@ -59,7 +59,10 @@
                         Margin="0,0,10,0"
                         VerticalOptions="Center">
                     <HorizontalStackLayout Spacing="4">
-                        <Label Text="🔥" FontSize="14" VerticalOptions="Center"/>
+                        <Label Text="Streak:"
+                               TextColor="#8B949E"
+                               FontSize="12"
+                               VerticalOptions="Center"/>
                         <Label Text="{Binding Streak}"
                                TextColor="#F0A500"
                                FontSize="15"
@@ -240,17 +243,12 @@
                     Stroke="#2D5099"
                     StrokeThickness="2"
                     StrokeShape="RoundRectangle 16">
-                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
-                    <Label Text="⬆"
-                           TextColor="#2D5099"
-                           FontSize="18"
-                           VerticalOptions="Center"/>
-                    <Label x:Name="DropLabel"
-                           Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[DragHere]}"
-                           TextColor="#667788"
-                           FontSize="13"
-                           VerticalOptions="Center"/>
-                </HorizontalStackLayout>
+                <Label x:Name="DropLabel"
+                       Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[DragHere]}"
+                       TextColor="#667788"
+                       FontSize="13"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
             </Border>
 
             <!-- ── STATUS / ATTEMPTS ── -->

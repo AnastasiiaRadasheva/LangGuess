@@ -17,7 +17,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0"
-                       Text="🎯 LangGuess"
+                       Text="LangGuess"
                        TextColor="#58A6FF"
                        FontSize="22"
                        FontAttributes="Bold"
@@ -75,14 +75,10 @@
                     Margin="20,0"
                     Padding="20,16">
                 <VerticalStackLayout Spacing="10">
-                    <HorizontalStackLayout Spacing="8">
-                        <Label Text="📖" FontSize="16" VerticalOptions="Center"/>
-                        <Label Text="How to play"
-                               TextColor="#58A6FF"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
+                    <Label Text="How to play"
+                           TextColor="#58A6FF"
+                           FontSize="14"
+                           FontAttributes="Bold"/>
                     <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[HowTo]}"
                            TextColor="#8B949E"
                            FontSize="12"
@@ -111,14 +107,10 @@
                     Margin="20,16,20,0"
                     Padding="20,16">
                 <VerticalStackLayout Spacing="12">
-                    <HorizontalStackLayout Spacing="8">
-                        <Label Text="🌐" FontSize="16" VerticalOptions="Center"/>
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ChooseLang]}"
-                               TextColor="#C9D1D9"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ChooseLang]}"
+                           TextColor="#C9D1D9"
+                           FontSize="14"
+                           FontAttributes="Bold"/>
 
                     <!-- Language buttons -->
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
@@ -161,14 +153,12 @@
                     Margin="20,16,20,0"
                     Padding="20,14">
                 <Grid ColumnDefinitions="*,Auto">
-                    <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
-                        <Label Text="🌙" FontSize="16" VerticalOptions="Center"/>
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ChooseTheme]}"
-                               TextColor="#C9D1D9"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
+                    <Label Grid.Column="0"
+                           Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ChooseTheme]}"
+                           TextColor="#C9D1D9"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"/>
                     <Switch Grid.Column="1"
                             IsToggled="{Binding IsDark}"
                             OnColor="#58A6FF"

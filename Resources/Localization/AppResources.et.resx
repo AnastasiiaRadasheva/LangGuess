@@ -27,7 +27,7 @@
   <data name="Welcome"       xml:space="preserve"><value>Tere tulemast LangGuess'i!</value></data>
   <data name="WelcomeSub"    xml:space="preserve"><value>Arva tänane salapärane programmeerimiskeel</value></data>
   <data name="HowTo"         xml:space="preserve"><value>Lohista või puuduta keelekaardika arvamiseks. Roheline = õige, kollane = lähedal, punane = vale. Sul on 6 katset.</value></data>
-  <data name="PlayBtn"       xml:space="preserve"><value>▶  Mängi</value></data>
+  <data name="PlayBtn"       xml:space="preserve"><value>Mängi</value></data>
   <data name="ChooseLang"    xml:space="preserve"><value>Liidese keel</value></data>
   <data name="ChooseTheme"   xml:space="preserve"><value>Tume režiim</value></data>
 </root>
