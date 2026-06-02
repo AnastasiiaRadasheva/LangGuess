@@ -21,6 +21,7 @@ public static class MauiProgram
             });
 
         // Services
+        builder.Services.AddSingleton(LocalizationService.Instance);
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddSingleton<GameService>();
         builder.Services.AddSingleton<SettingsService>();
