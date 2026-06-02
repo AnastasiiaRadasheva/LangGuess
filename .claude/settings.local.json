@@ -14,7 +14,11 @@
       "PowerShell($j = Get-Content \"C:\\\\Users\\\\edw1e\\\\source\\\\repos\\\\LangGuess\\\\obj\\\\project.assets.json\" | ConvertFrom-Json; $j.targets.PSObject.Properties.Name)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Read(//c/Users/edw1e/Downloads/**)",
+      "Bash(powershell -Command ' *)",
+      "Bash(copy \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Nouded.docx\" \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Nouded_copy.docx\")",
+      "PowerShell(& \"C:\\\\Users\\\\edw1e\\\\Desktop\\\\MakeDoc.ps1\")"
     ]
   }
 }
