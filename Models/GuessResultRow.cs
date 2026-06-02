@@ -22,22 +22,40 @@ public class GuessResultRow
 
     public string Popularity { get; set; } = "";
     public GuessStatus PopularityStatus { get; set; }
+    public string PopArrow { get; set; } = "";
+
+    public string GCType { get; set; } = "";
+    public GuessStatus GCTypeStatus { get; set; }
+
+    public string YearArrow { get; set; } = "";
 
     public bool IsWin { get; set; }
 
+    // Displayed text with arrow appended for numeric/ordered fields
+    public string YearDisplay => YearArrow == "" ? Year : $"{Year} {YearArrow}";
+    public string PopDisplay  => PopArrow  == "" ? Popularity : $"{Popularity}\n{PopArrow}";
+
     public Color GetColor(GuessStatus s) => s switch
     {
-        GuessStatus.Green  => Color.FromArgb("#238636"),
-        GuessStatus.Yellow => Color.FromArgb("#9E6A03"),
-        GuessStatus.Red    => Color.FromArgb("#8B1B1B"),
-        _                  => Color.FromArgb("#1F2430")
+        GuessStatus.Green  => Color.FromArgb("#1A6B2A"),
+        GuessStatus.Yellow => Color.FromArgb("#7A5100"),
+        GuessStatus.Red    => Color.FromArgb("#6B1515"),
+        _                  => Color.FromArgb("#161B22")
     };
 
-    public Color AbbrColor  => Color.FromArgb("#1F2430");
+    public Color ArrowColor(string arrow) => arrow == "↑"
+        ? Color.FromArgb("#58A6FF")
+        : Color.FromArgb("#FF8C42");
+
+    public Color AbbrColor      => Color.FromArgb("#0E1929");
     public Color YearColor       => GetColor(YearStatus);
     public Color ParadigmColor   => GetColor(ParadigmStatus);
     public Color TypingColor     => GetColor(TypingStatus);
     public Color CompilationColor=> GetColor(CompilationStatus);
     public Color PlatformColor   => GetColor(PlatformStatus);
     public Color PopularityColor => GetColor(PopularityStatus);
+    public Color GCTypeColor     => GetColor(GCTypeStatus);
+
+    public Color YearArrowColor => YearArrow == "" ? Colors.Transparent : ArrowColor(YearArrow);
+    public Color PopArrowColor  => PopArrow  == "" ? Colors.Transparent : ArrowColor(PopArrow);
 }

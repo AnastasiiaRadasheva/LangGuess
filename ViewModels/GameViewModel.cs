@@ -31,6 +31,7 @@ public class GameViewModel : BaseViewModel
 
     public ICommand GuessCommand        { get; }
     public ICommand GoToSettingsCommand { get; }
+    public ICommand BackCommand         { get; }
 
     public GameViewModel(DatabaseService db, GameService game, AudioService audio)
     {
@@ -39,7 +40,8 @@ public class GameViewModel : BaseViewModel
         _audio = audio;
 
         GuessCommand        = new RelayCommand<ProgrammingLanguage>(OnGuess, _ => !IsGameOver);
-        GoToSettingsCommand = new RelayCommand(OnGoToSettings);
+        GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage"));
+        BackCommand         = new RelayCommand(() => Shell.Current.GoToAsync("//HomePage"));
     }
 
     public async Task InitAsync()
@@ -119,8 +121,4 @@ public class GameViewModel : BaseViewModel
         });
     }
 
-    private static void OnGoToSettings()
-    {
-        Shell.Current.GoToAsync("//SettingsPage");
-    }
 }

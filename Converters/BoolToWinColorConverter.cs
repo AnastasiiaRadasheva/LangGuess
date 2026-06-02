@@ -28,3 +28,13 @@ public class InvertBoolConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => value is bool b && !b;
 }
+
+// Returns true if string is non-empty (used to show/hide arrow labels)
+public class NotEmptyBoolConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is string s && s.Length > 0;
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}

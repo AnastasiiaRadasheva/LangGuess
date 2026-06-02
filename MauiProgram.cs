@@ -34,10 +34,12 @@ public static class MauiProgram
         });
 
         // ViewModels
+        builder.Services.AddTransient<HomeViewModel>();
         builder.Services.AddTransient<GameViewModel>();
         builder.Services.AddTransient<SettingsViewModel>();
 
-        // Views — страницы с заранее установленным ViewModel
+        // Views
+        builder.Services.AddTransient<HomePage>();
         builder.Services.AddTransient<GamePage>();
         builder.Services.AddTransient<SettingsPage>();
 

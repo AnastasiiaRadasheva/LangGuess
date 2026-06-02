@@ -5,6 +5,10 @@
        x:Class="LangGuess.AppShell"
        Shell.NavBarIsVisible="False">
 
+    <ShellContent x:Name="HomeContent"
+                  Route="HomePage"
+                  ContentTemplate="{DataTemplate views:HomePage}"/>
+
     <ShellContent x:Name="GameContent"
                   Route="GamePage"
                   ContentTemplate="{DataTemplate views:GamePage}"/>

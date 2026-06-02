@@ -8,6 +8,7 @@
     <conv:BoolToWinColorConverter x:Key="BoolToWinColor"/>
     <conv:BoolToWinTextConverter  x:Key="BoolToWinText"/>
     <conv:InvertBoolConverter     x:Key="InvertBool"/>
+    <conv:NotEmptyBoolConverter   x:Key="NotEmptyBool"/>
 
     <!-- ── LangGuess cell styles ── -->
     <Style x:Key="ColHeader" TargetType="Label">

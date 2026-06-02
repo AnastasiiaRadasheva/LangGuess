@@ -24,7 +24,6 @@ public partial class GamePage : ContentPage
     {
         base.OnAppearing();
 
-        // Резолвим ViewModel из DI если Shell создал страницу без него
         if (BindingContext is not GameViewModel)
             BindingContext = IPlatformApplication.Current!.Services
                                 .GetRequiredService<GameViewModel>();
@@ -33,6 +32,10 @@ public partial class GamePage : ContentPage
         _vm.AvailableLanguages.CollectionChanged += (_, _) => RefreshLangCards();
         await _vm.InitAsync();
         RefreshLangCards();
+
+        // Sync header scroll with rows scroll
+        RowsScroll.Scrolled += (_, e) =>
+            HeaderScroll.ScrollToAsync(e.ScrollX, 0, false);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -69,21 +72,29 @@ public partial class GamePage : ContentPage
             LineBreakMode     = LineBreakMode.TailTruncation
         };
 
+        var ext = new Label
+        {
+            Text              = lang.FileExt,
+            FontSize          = 8,
+            TextColor         = Color.FromArgb("#484F58"),
+            HorizontalOptions = LayoutOptions.Center
+        };
+
         var card = new Border
         {
             WidthRequest    = 80,
-            HeightRequest   = 80,
+            HeightRequest   = 84,
             BackgroundColor = Color.FromArgb("#0E1B2E"),
             Stroke          = new SolidColorBrush(Color.FromArgb("#2D5099")),
             StrokeThickness = 1.5,
             StrokeShape     = new RoundRectangle { CornerRadius = 14 },
-            Padding         = new Thickness(6, 8),
+            Padding         = new Thickness(6, 6),
             Content         = new VerticalStackLayout
             {
-                Spacing           = 3,
+                Spacing           = 2,
                 VerticalOptions   = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
-                Children          = { abbr, name }
+                Children          = { abbr, name, ext }
             }
         };
 

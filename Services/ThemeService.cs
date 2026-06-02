@@ -20,9 +20,9 @@ public class ThemeService
         Apply();
     }
 
-    private static void Apply()
+    private void Apply()
     {
         if (Application.Current == null) return;
-        Application.Current.UserAppTheme = AppTheme.Dark;
+        Application.Current.UserAppTheme = IsDark ? AppTheme.Dark : AppTheme.Light;
     }
 }

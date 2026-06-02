@@ -14,6 +14,7 @@
   <data name="ColComp"       xml:space="preserve"><value>Comp</value></data>
   <data name="ColPlat"       xml:space="preserve"><value>Plat</value></data>
   <data name="ColPop"        xml:space="preserve"><value>Pop</value></data>
+  <data name="ColGC"         xml:space="preserve"><value>Mem</value></data>
   <data name="Settings"      xml:space="preserve"><value>Settings</value></data>
   <data name="LanguageLabel" xml:space="preserve"><value>Interface language</value></data>
   <data name="ThemeLabel"    xml:space="preserve"><value>Dark mode</value></data>
@@ -23,4 +24,10 @@
   <data name="HistoryTitle"  xml:space="preserve"><value>Game history</value></data>
   <data name="NoHistory"     xml:space="preserve"><value>No games played yet</value></data>
   <data name="Back"          xml:space="preserve"><value>Back</value></data>
+  <data name="Welcome"       xml:space="preserve"><value>Welcome to LangGuess!</value></data>
+  <data name="WelcomeSub"    xml:space="preserve"><value>Guess today's mystery programming language</value></data>
+  <data name="HowTo"         xml:space="preserve"><value>Drag or tap a language card to guess. Green = correct, Yellow = close, Red = wrong. You have 6 attempts.</value></data>
+  <data name="PlayBtn"       xml:space="preserve"><value>▶  Play</value></data>
+  <data name="ChooseLang"    xml:space="preserve"><value>Interface language</value></data>
+  <data name="ChooseTheme"   xml:space="preserve"><value>Dark mode</value></data>
 </root>

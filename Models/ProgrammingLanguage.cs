@@ -34,6 +34,13 @@ public class ProgrammingLanguage
     [NotNull]
     public string Popularity { get; set; } = "";
 
+    // Manual | GC | ARC | Own
+    [NotNull]
+    public string GCType { get; set; } = "";
+
+    // File extension e.g. .py  .js  .java
+    public string FileExt { get; set; } = "";
+
     // 2-3 char abbreviation used as icon
     public string Abbr { get; set; } = "";
 }

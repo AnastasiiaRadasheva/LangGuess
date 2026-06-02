@@ -20,23 +20,30 @@ public class GameService
 
     public GuessResultRow Compare(ProgrammingLanguage guess, ProgrammingLanguage secret)
     {
+        var yearStatus = CompareYear(guess.Year, secret.Year);
+        var popStatus  = ComparePopularity(guess.Popularity, secret.Popularity);
+
         return new GuessResultRow
         {
-            LanguageName   = guess.Name,
-            Abbr           = guess.Abbr,
-            Year           = guess.Year.ToString(),
-            YearStatus     = CompareYear(guess.Year, secret.Year),
-            Paradigm       = ShortenParadigm(guess.Paradigm),
-            ParadigmStatus = guess.Paradigm == secret.Paradigm ? GuessStatus.Green : GuessStatus.Red,
-            Typing         = guess.Typing == "Dynamic" ? "Dyn" : "Stat",
-            TypingStatus   = guess.Typing == secret.Typing ? GuessStatus.Green : GuessStatus.Red,
-            Compilation    = ShortenCompilation(guess.Compilation),
+            LanguageName      = guess.Name,
+            Abbr              = guess.Abbr,
+            Year              = guess.Year.ToString(),
+            YearStatus        = yearStatus,
+            YearArrow         = yearStatus == GuessStatus.Green ? "" : guess.Year < secret.Year ? "↑" : "↓",
+            Paradigm          = ShortenParadigm(guess.Paradigm),
+            ParadigmStatus    = guess.Paradigm == secret.Paradigm ? GuessStatus.Green : GuessStatus.Red,
+            Typing            = guess.Typing == "Dynamic" ? "Dyn" : "Stat",
+            TypingStatus      = guess.Typing == secret.Typing ? GuessStatus.Green : GuessStatus.Red,
+            Compilation       = ShortenCompilation(guess.Compilation),
             CompilationStatus = guess.Compilation == secret.Compilation ? GuessStatus.Green : GuessStatus.Red,
-            Platform       = ShortenPlatform(guess.Platform),
-            PlatformStatus = guess.Platform == secret.Platform ? GuessStatus.Green : GuessStatus.Red,
-            Popularity     = guess.Popularity,
-            PopularityStatus = ComparePopularity(guess.Popularity, secret.Popularity),
-            IsWin          = guess.Id == secret.Id,
+            Platform          = ShortenPlatform(guess.Platform),
+            PlatformStatus    = guess.Platform == secret.Platform ? GuessStatus.Green : GuessStatus.Red,
+            Popularity        = guess.Popularity,
+            PopularityStatus  = popStatus,
+            PopArrow          = PopDirection(guess.Popularity, secret.Popularity, popStatus),
+            GCType            = guess.GCType,
+            GCTypeStatus      = guess.GCType == secret.GCType ? GuessStatus.Green : GuessStatus.Red,
+            IsWin             = guess.Id == secret.Id,
         };
     }
 
@@ -52,6 +59,15 @@ public class GameService
         string[] order = ["Top5", "Top20", "Niche"];
         int gi = Array.IndexOf(order, g), si = Array.IndexOf(order, s);
         return Math.Abs(gi - si) == 1 ? GuessStatus.Yellow : GuessStatus.Red;
+    }
+
+    // ↑ = secret is MORE popular (lower index), ↓ = less popular
+    private static string PopDirection(string g, string s, GuessStatus status)
+    {
+        if (status == GuessStatus.Green) return "";
+        string[] order = ["Top5", "Top20", "Niche"];
+        int gi = Array.IndexOf(order, g), si = Array.IndexOf(order, s);
+        return gi > si ? "↑" : "↓";
     }
 
     private static string ShortenParadigm(string p) => p switch

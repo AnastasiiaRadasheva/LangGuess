@@ -57,7 +57,7 @@ public class SettingsViewModel : BaseViewModel
         _selectedLanguageIndex = LanguageCodes.IndexOf(settings.Language);
         if (_selectedLanguageIndex < 0) _selectedLanguageIndex = 0;
 
-        BackCommand = new RelayCommand(() => Shell.Current.GoToAsync("//GamePage"));
+        BackCommand = new RelayCommand(() => Shell.Current.GoToAsync("//HomePage"));
     }
 
     public async Task LoadHistoryAsync()

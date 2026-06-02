@@ -29,7 +29,7 @@ public class AudioService
         catch { /* файл не найден — молча пропускаем */ }
     }
 
-    public Task PlayCorrectAsync() => PlayAsync("correct.mp3");
-    public Task PlayWrongAsync()   => PlayAsync("wrong.mp3");
-    public Task PlayWinAsync()     => PlayAsync("win.mp3");
+    public Task PlayCorrectAsync() => PlayAsync("correct.wav");
+    public Task PlayWrongAsync()   => PlayAsync("wrong.wav");
+    public Task PlayWinAsync()     => PlayAsync("win.wav");
 }
