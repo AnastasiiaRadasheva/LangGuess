@@ -12,6 +12,7 @@ public class GameViewModel : BaseViewModel
     private readonly AudioService    _audio;
 
     private ProgrammingLanguage? _secret;
+    private List<ProgrammingLanguage>? _allLanguages; // cached
     private int _streak;
     private bool _isWon;
     private bool _isGameOver;
@@ -23,7 +24,8 @@ public class GameViewModel : BaseViewModel
 
     public int  Streak              { get => _streak;           private set => SetField(ref _streak, value); }
     public bool IsWon               { get => _isWon;            private set => SetField(ref _isWon, value); }
-    public bool IsGameOver          { get => _isGameOver;       private set => SetField(ref _isGameOver, value); }
+    public bool IsGameOver          { get => _isGameOver;       private set { SetField(ref _isGameOver, value); OnPropertyChanged(nameof(IsLost)); } }
+    public bool IsLost              => IsGameOver && !IsWon;
     public string StatusMessage     { get => _statusMessage;    private set => SetField(ref _statusMessage, value); }
     public bool AlreadyPlayedToday  { get => _alreadyPlayedToday; private set => SetField(ref _alreadyPlayedToday, value); }
     public int AttemptsLeft         => GameService.MaxAttempts - GuessRows.Count;
@@ -41,7 +43,7 @@ public class GameViewModel : BaseViewModel
         _audio = audio;
 
         GuessCommand        = new RelayCommand<ProgrammingLanguage>(OnGuess, _ => !IsGameOver);
-        GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage"));
+        GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage?from=game"));
         BackCommand         = new RelayCommand(() => Shell.Current.GoToAsync("//HomePage"));
         ReplayCommand       = new RelayCommand(async () => await ResetGameAsync());
     }
@@ -51,9 +53,9 @@ public class GameViewModel : BaseViewModel
         _secret = await _game.GetTodaysLanguageAsync();
         Streak  = await _db.GetStreakAsync();
 
-        var all = await _db.GetAllLanguagesAsync();
+        _allLanguages ??= await _db.GetAllLanguagesAsync();
         AvailableLanguages.Clear();
-        foreach (var l in all) AvailableLanguages.Add(l);
+        foreach (var l in _allLanguages) AvailableLanguages.Add(l);
 
     }
 
@@ -79,8 +81,9 @@ public class GameViewModel : BaseViewModel
         }
         else if (GuessRows.Count >= GameService.MaxAttempts)
         {
+            IsWon = false;
             IsGameOver = true;
-            StatusMessage = $"Vastus oli: {_secret.Name}";
+            StatusMessage = _secret.Name;
             OnPropertyChanged(nameof(SecretName));
             await _audio.PlayWrongAsync();
             await SaveHistoryAsync(false);
@@ -106,9 +109,9 @@ public class GameViewModel : BaseViewModel
         IsWon         = false;
         StatusMessage = "";
         _secret = await _game.GetTodaysLanguageAsync();
-        var all = await _db.GetAllLanguagesAsync();
+        _allLanguages ??= await _db.GetAllLanguagesAsync();
         AvailableLanguages.Clear();
-        foreach (var l in all) AvailableLanguages.Add(l);
+        foreach (var l in _allLanguages) AvailableLanguages.Add(l);
         OnPropertyChanged(nameof(AttemptsLeft));
         ((RelayCommand<ProgrammingLanguage>)GuessCommand).RaiseCanExecuteChanged();
     }

@@ -26,10 +26,12 @@
   <data name="Back"          xml:space="preserve"><value>Back</value></data>
   <data name="Welcome"       xml:space="preserve"><value>Welcome to LangGuess!</value></data>
   <data name="WelcomeSub"    xml:space="preserve"><value>Guess today's mystery programming language</value></data>
-  <data name="HowTo"         xml:space="preserve"><value>Drag or tap a language card to guess. Green = correct, Yellow = close, Red = wrong. You have 6 attempts.</value></data>
+  <data name="HowTo"         xml:space="preserve"><value>Tap a card or swipe it up to guess. Green = correct, Yellow = close, Red = wrong. You have 6 attempts.</value></data>
   <data name="PlayBtn"       xml:space="preserve"><value>Play</value></data>
   <data name="ChooseLang"    xml:space="preserve"><value>Interface language</value></data>
   <data name="ChooseTheme"   xml:space="preserve"><value>Dark mode</value></data>
   <data name="PlayAgain"     xml:space="preserve"><value>Play again</value></data>
   <data name="ClearHistory"  xml:space="preserve"><value>Clear history</value></data>
+  <data name="WinMsg"        xml:space="preserve"><value>You guessed it!</value></data>
+  <data name="LossMsg"       xml:space="preserve"><value>You lost! The answer was:</value></data>
 </root>

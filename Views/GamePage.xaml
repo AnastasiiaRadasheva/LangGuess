@@ -15,7 +15,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="115"/>
+                <RowDefinition Height="130"/>
             </Grid.RowDefinitions>
 
             <!-- ── HEADER ── -->
@@ -208,15 +208,42 @@
             </ScrollView>
 
             <!-- ── STATUS / ATTEMPTS / PLAY AGAIN ── -->
-            <VerticalStackLayout Grid.Row="3" Spacing="4" Padding="12,0,12,4">
-                <Label Text="{Binding StatusMessage}"
-                       TextColor="#F0A500" FontSize="14" FontAttributes="Bold"
-                       HorizontalOptions="Center" IsVisible="{Binding IsGameOver}"/>
-                <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayAgain]}"
-                        Command="{Binding ReplayCommand}"
-                        BackgroundColor="{AppThemeBinding Light=#7C3AED, Dark=#3D1E6B}"
-                        TextColor="White" FontSize="13" CornerRadius="10"
-                        HeightRequest="38" Margin="40,0" IsVisible="{Binding IsGameOver}"/>
+            <VerticalStackLayout Grid.Row="3" Spacing="6" Padding="12,4,12,4">
+
+                <!-- WIN banner -->
+                <Border IsVisible="{Binding IsWon}"
+                        BackgroundColor="#1A5C2E" StrokeShape="RoundRectangle 12"
+                        Stroke="#2EA043" StrokeThickness="1.5" Padding="12,8">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[WinMsg]}"
+                               TextColor="#6EE7A0" FontSize="15" FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayAgain]}"
+                                Command="{Binding ReplayCommand}"
+                                BackgroundColor="#2EA043" TextColor="White"
+                                FontSize="12" CornerRadius="8" HeightRequest="34" Padding="20,0"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- LOSS banner -->
+                <Border IsVisible="{Binding IsLost}"
+                        BackgroundColor="#5C1A1A" StrokeShape="RoundRectangle 12"
+                        Stroke="#C0392B" StrokeThickness="1.5" Padding="12,8">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[LossMsg]}"
+                               TextColor="#FF8080" FontSize="15" FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                        <Label Text="{Binding StatusMessage}"
+                               TextColor="White" FontSize="13" FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayAgain]}"
+                                Command="{Binding ReplayCommand}"
+                                BackgroundColor="#C0392B" TextColor="White"
+                                FontSize="12" CornerRadius="8" HeightRequest="34" Padding="20,0"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- In-progress attempts counter -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="6"
                                        IsVisible="{Binding IsGameOver, Converter={StaticResource InvertBool}}">
                     <Label Text="Attempts:"

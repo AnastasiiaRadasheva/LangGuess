@@ -63,7 +63,7 @@ public class HomeViewModel : BaseViewModel
         if (_selectedLanguageIndex < 0) _selectedLanguageIndex = 0;
 
         PlayCommand         = new RelayCommand(() => Shell.Current.GoToAsync("//GamePage"));
-        GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage"));
+        GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage?from=home"));
         SelectLangCommand   = new RelayCommand<string>(idx =>
         {
             if (int.TryParse(idx, out int i))

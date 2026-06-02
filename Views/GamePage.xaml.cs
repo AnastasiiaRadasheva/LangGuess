@@ -47,7 +47,7 @@ public partial class GamePage : ContentPage
         var abbr = new Label
         {
             Text              = lang.Abbr,
-            FontSize          = 16,
+            FontSize          = 20,
             FontAttributes    = FontAttributes.Bold,
             TextColor         = isDark ? Color.FromArgb("#A374FF") : Color.FromArgb("#6D28D9"),
             HorizontalOptions = LayoutOptions.Center
@@ -55,7 +55,7 @@ public partial class GamePage : ContentPage
         var name = new Label
         {
             Text              = lang.Name,
-            FontSize          = 9,
+            FontSize          = 11,
             TextColor         = isDark ? Color.FromArgb("#9B8EC4") : Color.FromArgb("#5C4F7C"),
             HorizontalOptions = LayoutOptions.Center,
             MaxLines          = 1,
@@ -64,23 +64,23 @@ public partial class GamePage : ContentPage
         var ext = new Label
         {
             Text              = lang.FileExt,
-            FontSize          = 8,
+            FontSize          = 10,
             TextColor         = isDark ? Color.FromArgb("#5C5080") : Color.FromArgb("#8B7DC5"),
             HorizontalOptions = LayoutOptions.Center
         };
 
         var card = new Border
         {
-            WidthRequest    = 80,
-            HeightRequest   = 84,
+            WidthRequest    = 96,
+            HeightRequest   = 100,
             BackgroundColor = isDark ? Color.FromArgb("#1A1435") : Color.FromArgb("#E3DBFF"),
             Stroke          = new SolidColorBrush(isDark ? Color.FromArgb("#5E3BA8") : Color.FromArgb("#7C3AED")),
             StrokeThickness = 1.5,
-            StrokeShape     = new RoundRectangle { CornerRadius = 14 },
-            Padding         = new Thickness(6, 6),
+            StrokeShape     = new RoundRectangle { CornerRadius = 16 },
+            Padding         = new Thickness(8, 8),
             Content         = new VerticalStackLayout
             {
-                Spacing           = 2,
+                Spacing           = 3,
                 VerticalOptions   = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
                 Children          = { abbr, name, ext }

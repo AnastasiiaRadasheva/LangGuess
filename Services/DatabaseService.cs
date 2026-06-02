@@ -7,40 +7,25 @@ public class DatabaseService
 {
     private SQLiteAsyncConnection? _db;
 
-    private const int DbVersion = 2;
+    private const int DbVersion = 3;
 
     private static readonly List<ProgrammingLanguage> SeedLanguages = new()
     {
-        new() { Name="Python",      Year=1991, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="Universal", Popularity="Top5",  GCType="GC",     FileExt=".py",   Abbr="PY"  },
-        new() { Name="Java",        Year=1995, Paradigm="OOP",        Typing="Static",  Compilation="JVM",         Platform="Universal", Popularity="Top5",  GCType="GC",     FileExt=".java", Abbr="JV"  },
-        new() { Name="C",           Year=1972, Paradigm="Procedural", Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Top5",  GCType="Manual", FileExt=".c",    Abbr="C"   },
-        new() { Name="C++",         Year=1985, Paradigm="Multi",      Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Top5",  GCType="Manual", FileExt=".cpp",  Abbr="C++" },
-        new() { Name="JavaScript",  Year=1995, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="Web",       Popularity="Top5",  GCType="GC",     FileExt=".js",   Abbr="JS"  },
-        new() { Name="TypeScript",  Year=2012, Paradigm="Multi",      Typing="Static",  Compilation="Transpiled",  Platform="Web",       Popularity="Top20", GCType="GC",     FileExt=".ts",   Abbr="TS"  },
-        new() { Name="C#",          Year=2000, Paradigm="Multi",      Typing="Static",  Compilation="Compiled",    Platform="Universal", Popularity="Top5",  GCType="GC",     FileExt=".cs",   Abbr="C#"  },
-        new() { Name="Go",          Year=2009, Paradigm="Procedural", Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Top20", GCType="GC",     FileExt=".go",   Abbr="GO"  },
-        new() { Name="Rust",        Year=2015, Paradigm="Multi",      Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Top20", GCType="Own",    FileExt=".rs",   Abbr="RS"  },
-        new() { Name="Kotlin",      Year=2011, Paradigm="Multi",      Typing="Static",  Compilation="JVM",         Platform="Mobile",    Popularity="Top20", GCType="GC",     FileExt=".kt",   Abbr="KT"  },
-        new() { Name="Swift",       Year=2014, Paradigm="OOP",        Typing="Static",  Compilation="Compiled",    Platform="Mobile",    Popularity="Top20", GCType="ARC",    FileExt=".swift",Abbr="SW"  },
-        new() { Name="Ruby",        Year=1995, Paradigm="OOP",        Typing="Dynamic", Compilation="Interpreted", Platform="Web",       Popularity="Top20", GCType="GC",     FileExt=".rb",   Abbr="RB"  },
-        new() { Name="PHP",         Year=1994, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="Web",       Popularity="Top20", GCType="GC",     FileExt=".php",  Abbr="PH"  },
-        new() { Name="Scala",       Year=2004, Paradigm="Multi",      Typing="Static",  Compilation="JVM",         Platform="Universal", Popularity="Top20", GCType="GC",     FileExt=".scala",Abbr="SC"  },
-        new() { Name="R",           Year=1993, Paradigm="Functional", Typing="Dynamic", Compilation="Interpreted", Platform="Universal", Popularity="Niche", GCType="GC",     FileExt=".r",    Abbr="R"   },
-        new() { Name="Perl",        Year=1987, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="System",    Popularity="Niche", GCType="GC",     FileExt=".pl",   Abbr="PL"  },
-        new() { Name="Haskell",     Year=1990, Paradigm="Functional", Typing="Static",  Compilation="Compiled",    Platform="Universal", Popularity="Niche", GCType="GC",     FileExt=".hs",   Abbr="HS"  },
-        new() { Name="Lua",         Year=1993, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="Universal", Popularity="Niche", GCType="GC",     FileExt=".lua",  Abbr="LU"  },
-        new() { Name="Dart",        Year=2011, Paradigm="OOP",        Typing="Static",  Compilation="Compiled",    Platform="Mobile",    Popularity="Top20", GCType="GC",     FileExt=".dart", Abbr="DT"  },
-        new() { Name="Elixir",      Year=2012, Paradigm="Functional", Typing="Dynamic", Compilation="JVM",         Platform="Web",       Popularity="Niche", GCType="GC",     FileExt=".ex",   Abbr="EX"  },
-        new() { Name="F#",          Year=2005, Paradigm="Functional", Typing="Static",  Compilation="Compiled",    Platform="Universal", Popularity="Niche", GCType="GC",     FileExt=".fs",   Abbr="FS"  },
-        new() { Name="Clojure",     Year=2007, Paradigm="Functional", Typing="Dynamic", Compilation="JVM",         Platform="Universal", Popularity="Niche", GCType="GC",     FileExt=".clj",  Abbr="CJ"  },
-        new() { Name="Bash",        Year=1989, Paradigm="Procedural", Typing="Dynamic", Compilation="Interpreted", Platform="System",    Popularity="Niche", GCType="GC",     FileExt=".sh",   Abbr="BS"  },
-        new() { Name="PowerShell",  Year=2006, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="System",    Popularity="Niche", GCType="GC",     FileExt=".ps1",  Abbr="PS"  },
-        new() { Name="Objective-C", Year=1984, Paradigm="OOP",        Typing="Static",  Compilation="Compiled",    Platform="Mobile",    Popularity="Niche", GCType="ARC",    FileExt=".m",    Abbr="OC"  },
-        new() { Name="Groovy",      Year=2003, Paradigm="Multi",      Typing="Dynamic", Compilation="JVM",         Platform="Universal", Popularity="Niche", GCType="GC",     FileExt=".groovy",Abbr="GR" },
-        new() { Name="Julia",       Year=2012, Paradigm="Multi",      Typing="Dynamic", Compilation="Compiled",    Platform="Universal", Popularity="Niche", GCType="GC",     FileExt=".jl",   Abbr="JL"  },
-        new() { Name="MATLAB",      Year=1984, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="Universal", Popularity="Niche", GCType="GC",     FileExt=".m",    Abbr="ML"  },
-        new() { Name="Fortran",     Year=1957, Paradigm="Procedural", Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Niche", GCType="Manual", FileExt=".f90",  Abbr="FO"  },
-        new() { Name="COBOL",       Year=1959, Paradigm="Procedural", Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Niche", GCType="Manual", FileExt=".cbl",  Abbr="CB"  },
+        new() { Name="Python",     Year=1991, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="Universal", Popularity="Top5",  GCType="GC",     FileExt=".py",    Abbr="PY"  },
+        new() { Name="Java",       Year=1995, Paradigm="OOP",        Typing="Static",  Compilation="JVM",         Platform="Universal", Popularity="Top5",  GCType="GC",     FileExt=".java",  Abbr="JV"  },
+        new() { Name="C",          Year=1972, Paradigm="Procedural", Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Top5",  GCType="Manual", FileExt=".c",     Abbr="C"   },
+        new() { Name="C++",        Year=1985, Paradigm="Multi",      Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Top5",  GCType="Manual", FileExt=".cpp",   Abbr="C++" },
+        new() { Name="JavaScript", Year=1995, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="Web",       Popularity="Top5",  GCType="GC",     FileExt=".js",    Abbr="JS"  },
+        new() { Name="TypeScript", Year=2012, Paradigm="Multi",      Typing="Static",  Compilation="Transpiled",  Platform="Web",       Popularity="Top20", GCType="GC",     FileExt=".ts",    Abbr="TS"  },
+        new() { Name="C#",         Year=2000, Paradigm="Multi",      Typing="Static",  Compilation="Compiled",    Platform="Universal", Popularity="Top5",  GCType="GC",     FileExt=".cs",    Abbr="C#"  },
+        new() { Name="Go",         Year=2009, Paradigm="Procedural", Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Top20", GCType="GC",     FileExt=".go",    Abbr="GO"  },
+        new() { Name="Rust",       Year=2015, Paradigm="Multi",      Typing="Static",  Compilation="Compiled",    Platform="System",    Popularity="Top20", GCType="Own",    FileExt=".rs",    Abbr="RS"  },
+        new() { Name="Kotlin",     Year=2011, Paradigm="Multi",      Typing="Static",  Compilation="JVM",         Platform="Mobile",    Popularity="Top20", GCType="GC",     FileExt=".kt",    Abbr="KT"  },
+        new() { Name="Swift",      Year=2014, Paradigm="OOP",        Typing="Static",  Compilation="Compiled",    Platform="Mobile",    Popularity="Top20", GCType="ARC",    FileExt=".swift", Abbr="SW"  },
+        new() { Name="Ruby",       Year=1995, Paradigm="OOP",        Typing="Dynamic", Compilation="Interpreted", Platform="Web",       Popularity="Top20", GCType="GC",     FileExt=".rb",    Abbr="RB"  },
+        new() { Name="PHP",        Year=1994, Paradigm="Multi",      Typing="Dynamic", Compilation="Interpreted", Platform="Web",       Popularity="Top20", GCType="GC",     FileExt=".php",   Abbr="PH"  },
+        new() { Name="Dart",       Year=2011, Paradigm="OOP",        Typing="Static",  Compilation="Compiled",    Platform="Mobile",    Popularity="Top20", GCType="GC",     FileExt=".dart",  Abbr="DT"  },
+        new() { Name="Scala",      Year=2004, Paradigm="Multi",      Typing="Static",  Compilation="JVM",         Platform="Universal", Popularity="Top20", GCType="GC",     FileExt=".scala", Abbr="SC"  },
     };
 
     private async Task InitAsync()

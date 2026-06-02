@@ -26,10 +26,12 @@
   <data name="Back"          xml:space="preserve"><value>Tagasi</value></data>
   <data name="Welcome"       xml:space="preserve"><value>Tere tulemast LangGuess'i!</value></data>
   <data name="WelcomeSub"    xml:space="preserve"><value>Arva tänane salapärane programmeerimiskeel</value></data>
-  <data name="HowTo"         xml:space="preserve"><value>Lohista või puuduta keelekaardika arvamiseks. Roheline = õige, kollane = lähedal, punane = vale. Sul on 6 katset.</value></data>
+  <data name="HowTo"         xml:space="preserve"><value>Puuduta kaarti või pühki üles arvamiseks. Roheline = õige, kollane = lähedal, punane = vale. Sul on 6 katset.</value></data>
   <data name="PlayBtn"       xml:space="preserve"><value>Mängi</value></data>
   <data name="ChooseLang"    xml:space="preserve"><value>Liidese keel</value></data>
   <data name="ChooseTheme"   xml:space="preserve"><value>Tume režiim</value></data>
   <data name="PlayAgain"     xml:space="preserve"><value>Mängi uuesti</value></data>
   <data name="ClearHistory"  xml:space="preserve"><value>Kustuta ajalugu</value></data>
+  <data name="WinMsg"        xml:space="preserve"><value>Sa arvasid õigesti!</value></data>
+  <data name="LossMsg"       xml:space="preserve"><value>Kaotasid! Vastus oli:</value></data>
 </root>

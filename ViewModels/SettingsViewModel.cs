@@ -5,6 +5,7 @@ using LangGuess.Services;
 
 namespace LangGuess.ViewModels;
 
+[QueryProperty(nameof(From), "from")]
 public class SettingsViewModel : BaseViewModel
 {
     private readonly SettingsService    _settings;
@@ -49,6 +50,13 @@ public class SettingsViewModel : BaseViewModel
 
     public bool HasHistory => History.Count > 0;
 
+    // Set by query parameter: "home" or "game"
+    private string _returnRoute = "//HomePage";
+    public string From
+    {
+        set => _returnRoute = value == "game" ? "//GamePage" : "//HomePage";
+    }
+
     public SettingsViewModel(SettingsService settings, LocalizationService loc, DatabaseService db)
     {
         _settings = settings;
@@ -60,7 +68,7 @@ public class SettingsViewModel : BaseViewModel
         _selectedLanguageIndex = LanguageCodes.IndexOf(settings.Language);
         if (_selectedLanguageIndex < 0) _selectedLanguageIndex = 0;
 
-        BackCommand = new RelayCommand(() => Shell.Current.GoToAsync("//HomePage"));
+        BackCommand = new RelayCommand(() => Shell.Current.GoToAsync(_returnRoute));
         ClearHistoryCommand = new RelayCommand(async () =>
         {
             await _db.ClearAllHistoryAsync();
