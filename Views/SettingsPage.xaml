@@ -5,18 +5,18 @@
              xmlns:models="clr-namespace:LangGuess.Models"
              xmlns:svc="clr-namespace:LangGuess.Services"
              x:Class="LangGuess.Views.SettingsPage"
-             BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0F0B1A}">
+             BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0A0714}">
 
     <ScrollView>
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
-            <Grid BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}" Padding="12,12">
+            <Grid BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}" Padding="12,12">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Text="←"
+                <Button Grid.Column="0" Text="&#8592;"
                         BackgroundColor="Transparent"
                         TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
                         FontSize="20" Command="{Binding BackCommand}" Padding="0"/>
@@ -26,11 +26,40 @@
                        FontSize="18" FontAttributes="Bold" VerticalOptions="Center" Margin="8,0"/>
             </Grid>
 
+            <!-- Player name card -->
+            <Border Margin="12,12,12,0"
+                    BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}"
+                    Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                    StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayerNameLabel]}"
+                           TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}" FontSize="12"/>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Border Grid.Column="0"
+                                BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0A0714}"
+                                Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                                StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="10,6">
+                            <Entry Text="{Binding PlayerName}"
+                                   Placeholder="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayerNameHint]}"
+                                   TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}"
+                                   PlaceholderColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
+                                   BackgroundColor="Transparent"
+                                   FontSize="14"/>
+                        </Border>
+                        <Button Grid.Column="1"
+                                Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[SaveBtn]}"
+                                Command="{Binding SaveNameCommand}"
+                                BackgroundColor="{AppThemeBinding Light=#6D28D9, Dark=#5E3BA8}"
+                                TextColor="White" FontSize="13" CornerRadius="8" Padding="14,8"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
             <!-- Settings card -->
             <Border Margin="12,12,12,0"
-                    BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}"
+                    BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}"
                     Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
-                    StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="16">
+                    StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                 <VerticalStackLayout Spacing="18">
 
                     <!-- Language -->
@@ -40,12 +69,11 @@
                         <Picker ItemsSource="{Binding LanguageOptions}"
                                 SelectedIndex="{Binding SelectedLanguageIndex}"
                                 TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}"
-                                BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0F0B1A}"
+                                BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0A0714}"
                                 FontSize="15"/>
                     </VerticalStackLayout>
 
-                    <BoxView HeightRequest="1"
-                             BackgroundColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"/>
+                    <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"/>
 
                     <!-- Dark mode -->
                     <Grid ColumnDefinitions="*,Auto">
@@ -60,18 +88,43 @@
                                 VerticalOptions="Center"/>
                     </Grid>
 
-                    <BoxView HeightRequest="1"
-                             BackgroundColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"/>
+                    <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"/>
 
-                    <!-- Sound -->
+                    <!-- Background music -->
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout Grid.Column="0" Spacing="2">
-                            <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[SoundLabel]}"
+                            <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[MusicLabel]}"
                                    TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}" FontSize="15"/>
-                            <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[SoundSub]}"
+                            <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[MusicSub]}"
                                    TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}" FontSize="12"/>
                         </VerticalStackLayout>
-                        <Switch Grid.Column="1" IsToggled="{Binding SoundEnabled}"
+                        <Switch Grid.Column="1" IsToggled="{Binding MusicEnabled}"
+                                OnColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                                VerticalOptions="Center"/>
+                    </Grid>
+
+                    <!-- Music volume slider -->
+                    <VerticalStackLayout Spacing="4" IsVisible="{Binding MusicEnabled}">
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[MusicVolLabel]}"
+                               TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}" FontSize="12"/>
+                        <Slider Minimum="0" Maximum="1"
+                                Value="{Binding MusicVolume}"
+                                MinimumTrackColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                                MaximumTrackColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                                ThumbColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"/>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"/>
+
+                    <!-- SFX -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[SfxLabel]}"
+                                   TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}" FontSize="15"/>
+                            <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[SfxSub]}"
+                                   TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}" FontSize="12"/>
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" IsToggled="{Binding SfxEnabled}"
                                 OnColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
                                 VerticalOptions="Center"/>
                     </Grid>
@@ -103,9 +156,9 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:GameHistory">
                         <Border Margin="0,3"
-                                BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}"
+                                BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}"
                                 Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
-                                StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="14,10">
+                                StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="14,10">
                             <Grid ColumnDefinitions="*,Auto,Auto">
                                 <VerticalStackLayout Grid.Column="0" Spacing="2">
                                     <Label Text="{Binding Date}"
@@ -124,7 +177,7 @@
                                     </Label.Text>
                                 </Label>
                                 <Border Grid.Column="2" Padding="8,4"
-                                        StrokeShape="RoundRectangle 8" StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 6" StrokeThickness="0"
                                         VerticalOptions="Center">
                                     <Border.BackgroundColor>
                                         <Binding Path="IsWon">

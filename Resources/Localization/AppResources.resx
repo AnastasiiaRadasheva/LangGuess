@@ -5,33 +5,53 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="AppTitle"      xml:space="preserve"><value>LangGuess</value></data>
-  <data name="DragHere"      xml:space="preserve"><value>Drag a language here to guess</value></data>
-  <data name="ColLang"       xml:space="preserve"><value>Lang</value></data>
-  <data name="ColYear"       xml:space="preserve"><value>Year</value></data>
-  <data name="ColPara"       xml:space="preserve"><value>Para</value></data>
-  <data name="ColType"       xml:space="preserve"><value>Type</value></data>
-  <data name="ColComp"       xml:space="preserve"><value>Comp</value></data>
-  <data name="ColPlat"       xml:space="preserve"><value>Plat</value></data>
-  <data name="ColPop"        xml:space="preserve"><value>Pop</value></data>
-  <data name="ColGC"         xml:space="preserve"><value>Mem</value></data>
-  <data name="Settings"      xml:space="preserve"><value>Settings</value></data>
-  <data name="LanguageLabel" xml:space="preserve"><value>Interface language</value></data>
-  <data name="ThemeLabel"    xml:space="preserve"><value>Dark mode</value></data>
-  <data name="ThemeSub"      xml:space="preserve"><value>Toggle dark / light theme</value></data>
-  <data name="SoundLabel"    xml:space="preserve"><value>Sound effects</value></data>
-  <data name="SoundSub"      xml:space="preserve"><value>Enable guess sounds</value></data>
-  <data name="HistoryTitle"  xml:space="preserve"><value>Game history</value></data>
-  <data name="NoHistory"     xml:space="preserve"><value>No games played yet</value></data>
-  <data name="Back"          xml:space="preserve"><value>Back</value></data>
-  <data name="Welcome"       xml:space="preserve"><value>Welcome to LangGuess!</value></data>
-  <data name="WelcomeSub"    xml:space="preserve"><value>Guess today's mystery programming language</value></data>
-  <data name="HowTo"         xml:space="preserve"><value>Tap a card or swipe it up to guess. Green = correct, Yellow = close, Red = wrong. You have 6 attempts.</value></data>
-  <data name="PlayBtn"       xml:space="preserve"><value>Play</value></data>
-  <data name="ChooseLang"    xml:space="preserve"><value>Interface language</value></data>
-  <data name="ChooseTheme"   xml:space="preserve"><value>Dark mode</value></data>
-  <data name="PlayAgain"     xml:space="preserve"><value>Play again</value></data>
-  <data name="ClearHistory"  xml:space="preserve"><value>Clear history</value></data>
-  <data name="WinMsg"        xml:space="preserve"><value>You guessed it!</value></data>
-  <data name="LossMsg"       xml:space="preserve"><value>You lost! The answer was:</value></data>
+  <data name="AppTitle"        xml:space="preserve"><value>LangGuess</value></data>
+  <data name="DragHere"        xml:space="preserve"><value>Drag a language here to guess</value></data>
+  <data name="ColLang"         xml:space="preserve"><value>Lang</value></data>
+  <data name="ColYear"         xml:space="preserve"><value>Year</value></data>
+  <data name="ColPara"         xml:space="preserve"><value>Para</value></data>
+  <data name="ColType"         xml:space="preserve"><value>Type</value></data>
+  <data name="ColComp"         xml:space="preserve"><value>Runs</value></data>
+  <data name="ColPlat"         xml:space="preserve"><value>Plat</value></data>
+  <data name="ColPop"          xml:space="preserve"><value>Open?</value></data>
+  <data name="ColGC"           xml:space="preserve"><value>Mem</value></data>
+  <data name="Settings"        xml:space="preserve"><value>Settings</value></data>
+  <data name="LanguageLabel"   xml:space="preserve"><value>Interface language</value></data>
+  <data name="ThemeLabel"      xml:space="preserve"><value>Dark mode</value></data>
+  <data name="ThemeSub"        xml:space="preserve"><value>Toggle dark / light theme</value></data>
+  <data name="MusicLabel"      xml:space="preserve"><value>Background music</value></data>
+  <data name="MusicSub"        xml:space="preserve"><value>Enable looping background track</value></data>
+  <data name="MusicVolLabel"   xml:space="preserve"><value>Music volume</value></data>
+  <data name="SfxLabel"        xml:space="preserve"><value>Sound effects</value></data>
+  <data name="SfxSub"          xml:space="preserve"><value>Sounds when tapping language cards</value></data>
+  <data name="SoundLabel"      xml:space="preserve"><value>Sound effects</value></data>
+  <data name="SoundSub"        xml:space="preserve"><value>Enable guess sounds</value></data>
+  <data name="PlayerNameLabel" xml:space="preserve"><value>Player name</value></data>
+  <data name="PlayerNameHint"  xml:space="preserve"><value>Enter your name...</value></data>
+  <data name="SaveBtn"         xml:space="preserve"><value>Save</value></data>
+  <data name="HistoryTitle"    xml:space="preserve"><value>Game history</value></data>
+  <data name="NoHistory"       xml:space="preserve"><value>No games played yet</value></data>
+  <data name="Back"            xml:space="preserve"><value>Back</value></data>
+  <data name="Welcome"         xml:space="preserve"><value>Welcome to LangGuess!</value></data>
+  <data name="WelcomeSub"      xml:space="preserve"><value>Guess today's mystery programming language</value></data>
+  <data name="HowTo"           xml:space="preserve"><value>Tap a card or swipe it up to guess. Green = correct, Yellow = close, Red = wrong. You have 6 attempts.</value></data>
+  <data name="PlayBtn"         xml:space="preserve"><value>Daily Challenge</value></data>
+  <data name="StreakBtn"       xml:space="preserve"><value>Streak Mode</value></data>
+  <data name="ChooseLang"      xml:space="preserve"><value>Interface language</value></data>
+  <data name="ChooseTheme"     xml:space="preserve"><value>Dark mode</value></data>
+  <data name="PlayAgain"       xml:space="preserve"><value>Play again</value></data>
+  <data name="ClearHistory"    xml:space="preserve"><value>Clear history</value></data>
+  <data name="WinMsg"          xml:space="preserve"><value>You guessed it!</value></data>
+  <data name="LossMsg"         xml:space="preserve"><value>You lost! The answer was:</value></data>
+  <data name="StreakTitle"     xml:space="preserve"><value>Streak Challenge</value></data>
+  <data name="StreakSub"       xml:space="preserve"><value>How many in a row can you guess?</value></data>
+  <data name="CurrentStreak"   xml:space="preserve"><value>Streak</value></data>
+  <data name="BestStreak"      xml:space="preserve"><value>Best</value></data>
+  <data name="NextBtn"         xml:space="preserve"><value>Next language!</value></data>
+  <data name="RestartBtn"      xml:space="preserve"><value>Try again</value></data>
+  <data name="StreakWinMsg"    xml:space="preserve"><value>Correct! Keep going!</value></data>
+  <data name="StreakLossMsg"   xml:space="preserve"><value>Streak broken! Answer was:</value></data>
+  <data name="LangInfoTitle"   xml:space="preserve"><value>Language guide</value></data>
+  <data name="WhoAreYou"       xml:space="preserve"><value>What is your name?</value></data>
+  <data name="Hello"           xml:space="preserve"><value>Hello,</value></data>
 </root>

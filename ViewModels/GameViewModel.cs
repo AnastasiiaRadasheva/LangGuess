@@ -12,24 +12,25 @@ public class GameViewModel : BaseViewModel
     private readonly AudioService    _audio;
 
     private ProgrammingLanguage? _secret;
-    private List<ProgrammingLanguage>? _allLanguages; // cached
-    private int _streak;
-    private bool _isWon;
-    private bool _isGameOver;
+    private List<ProgrammingLanguage>? _allLanguages;
+    private int    _streak;
+    private bool   _isWon;
+    private bool   _isGameOver;
     private string _statusMessage = "";
-    private bool _alreadyPlayedToday;
 
     public ObservableCollection<GuessResultRow> GuessRows { get; } = new();
     public ObservableCollection<ProgrammingLanguage> AvailableLanguages { get; } = new();
 
-    public int  Streak              { get => _streak;           private set => SetField(ref _streak, value); }
-    public bool IsWon               { get => _isWon;            private set => SetField(ref _isWon, value); }
-    public bool IsGameOver          { get => _isGameOver;       private set { SetField(ref _isGameOver, value); OnPropertyChanged(nameof(IsLost)); } }
-    public bool IsLost              => IsGameOver && !IsWon;
-    public string StatusMessage     { get => _statusMessage;    private set => SetField(ref _statusMessage, value); }
-    public bool AlreadyPlayedToday  { get => _alreadyPlayedToday; private set => SetField(ref _alreadyPlayedToday, value); }
-    public int AttemptsLeft         => GameService.MaxAttempts - GuessRows.Count;
-    public string? SecretName       => IsGameOver ? _secret?.Name : null;
+    // All languages for the info drawer (never filtered)
+    public List<ProgrammingLanguage> AllLanguages { get; private set; } = new();
+
+    public int  Streak          { get => _streak;        private set => SetField(ref _streak, value); }
+    public bool IsWon           { get => _isWon;         private set => SetField(ref _isWon, value); }
+    public bool IsGameOver      { get => _isGameOver;    private set { SetField(ref _isGameOver, value); OnPropertyChanged(nameof(IsLost)); } }
+    public bool IsLost          => IsGameOver && !IsWon;
+    public string StatusMessage { get => _statusMessage; private set => SetField(ref _statusMessage, value); }
+    public int AttemptsLeft     => GameService.MaxAttempts - GuessRows.Count;
+    public string? SecretName   => IsGameOver ? _secret?.Name : null;
 
     public ICommand GuessCommand        { get; }
     public ICommand GoToSettingsCommand { get; }
@@ -54,16 +55,17 @@ public class GameViewModel : BaseViewModel
         Streak  = await _db.GetStreakAsync();
 
         _allLanguages ??= await _db.GetAllLanguagesAsync();
+        AllLanguages = _allLanguages;
+
         AvailableLanguages.Clear();
         foreach (var l in _allLanguages) AvailableLanguages.Add(l);
-
     }
 
     private async void OnGuess(ProgrammingLanguage? lang)
     {
         if (lang == null || _secret == null || IsGameOver) return;
 
-        // Remove from available so it can't be guessed again
+        await _audio.PlayTapAsync();
         AvailableLanguages.Remove(lang);
 
         var row = _game.Compare(lang, _secret);
@@ -74,7 +76,7 @@ public class GameViewModel : BaseViewModel
         {
             IsWon = true;
             IsGameOver = true;
-            StatusMessage = "Õige! Arvasid ära! 🎉";
+            StatusMessage = _secret.Name;
             await _audio.PlayWinAsync();
             await SaveHistoryAsync(true);
             Streak = await _db.GetStreakAsync();
@@ -92,11 +94,9 @@ public class GameViewModel : BaseViewModel
         {
             bool anyGreen = row.YearStatus    == GuessStatus.Green ||
                             row.ParadigmStatus == GuessStatus.Green ||
-                            row.TypingStatus  == GuessStatus.Green;
-            if (anyGreen)
-                await _audio.PlayCorrectAsync();
-            else
-                await _audio.PlayWrongAsync();
+                            row.TypingStatus   == GuessStatus.Green;
+            if (anyGreen) await _audio.PlayCorrectAsync();
+            else          await _audio.PlayWrongAsync();
         }
 
         ((RelayCommand<ProgrammingLanguage>)GuessCommand).RaiseCanExecuteChanged();
@@ -128,5 +128,4 @@ public class GameViewModel : BaseViewModel
             GuessedLanguages = guessed
         });
     }
-
 }

@@ -17,4 +17,8 @@
                   Route="SettingsPage"
                   ContentTemplate="{DataTemplate views:SettingsPage}"/>
 
+    <ShellContent x:Name="StreakContent"
+                  Route="StreakPage"
+                  ContentTemplate="{DataTemplate views:StreakPage}"/>
+
 </Shell>

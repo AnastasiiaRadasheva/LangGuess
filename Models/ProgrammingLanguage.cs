@@ -43,4 +43,7 @@ public class ProgrammingLanguage
 
     // 2-3 char abbreviation used as icon
     public string Abbr { get; set; } = "";
+
+    // Short interesting description for the info drawer
+    public string Description { get; set; } = "";
 }

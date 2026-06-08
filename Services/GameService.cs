@@ -18,17 +18,24 @@ public class GameService
         return all[index];
     }
 
+    public async Task<ProgrammingLanguage?> GetRandomLanguageAsync(IEnumerable<int> excludeIds)
+    {
+        var all = await _db.GetAllLanguagesAsync();
+        var pool = all.Where(l => !excludeIds.Contains(l.Id)).ToList();
+        if (pool.Count == 0) pool = all; // reset if all used
+        return pool[Random.Shared.Next(pool.Count)];
+    }
+
     // Defined orderings for categorical columns
     private static readonly string[] ParadigmOrder    = ["Procedural", "OOP", "Multi", "Functional"];
     private static readonly string[] TypingOrder      = ["Static", "Dynamic"];
-    private static readonly string[] CompilationOrder = ["Compiled", "JVM", "Transpiled", "Interpreted"];
+    private static readonly string[] CompilationOrder = ["Native", "VM", "Script"];
     private static readonly string[] PlatformOrder    = ["System", "Mobile", "Web", "Universal"];
-    private static readonly string[] GCTypeOrder      = ["Manual", "Own", "ARC", "GC"];
+    private static readonly string[] GCTypeOrder      = ["Manual", "Auto"];
 
     public GuessResultRow Compare(ProgrammingLanguage guess, ProgrammingLanguage secret)
     {
         var yearStatus = CompareYear(guess.Year, secret.Year);
-        var popStatus  = ComparePopularity(guess.Popularity, secret.Popularity);
 
         return new GuessResultRow
         {
@@ -43,15 +50,17 @@ public class GameService
             Typing            = guess.Typing == "Dynamic" ? "Dyn" : "Stat",
             TypingStatus      = guess.Typing == secret.Typing ? GuessStatus.Green : GuessStatus.Red,
             TypingArrow       = CatArrow(guess.Typing, secret.Typing, TypingOrder),
-            Compilation       = ShortenCompilation(guess.Compilation),
+            Compilation       = guess.Compilation,
             CompilationStatus = guess.Compilation == secret.Compilation ? GuessStatus.Green : GuessStatus.Red,
             CompilationArrow  = CatArrow(guess.Compilation, secret.Compilation, CompilationOrder),
             Platform          = ShortenPlatform(guess.Platform),
             PlatformStatus    = guess.Platform == secret.Platform ? GuessStatus.Green : GuessStatus.Red,
             PlatformArrow     = CatArrow(guess.Platform, secret.Platform, PlatformOrder),
+            // Popularity is now Open Source (Yes/No)
             Popularity        = guess.Popularity,
-            PopularityStatus  = popStatus,
-            PopArrow          = PopDirection(guess.Popularity, secret.Popularity, popStatus),
+            PopularityStatus  = guess.Popularity == secret.Popularity ? GuessStatus.Green : GuessStatus.Red,
+            PopArrow          = "",
+            // GCType is now Manual/Auto
             GCType            = guess.GCType,
             GCTypeStatus      = guess.GCType == secret.GCType ? GuessStatus.Green : GuessStatus.Red,
             GCTypeArrow       = CatArrow(guess.GCType, secret.GCType, GCTypeOrder),
@@ -59,7 +68,6 @@ public class GameService
         };
     }
 
-    // ↑ = secret is higher in the order, ↓ = lower
     private static string CatArrow(string g, string s, string[] order)
     {
         if (g == s) return "";
@@ -74,23 +82,6 @@ public class GameService
         return d == 0 ? GuessStatus.Green : d <= 5 ? GuessStatus.Yellow : GuessStatus.Red;
     }
 
-    private static GuessStatus ComparePopularity(string g, string s)
-    {
-        if (g == s) return GuessStatus.Green;
-        string[] order = ["Top5", "Top20", "Niche"];
-        int gi = Array.IndexOf(order, g), si = Array.IndexOf(order, s);
-        return Math.Abs(gi - si) == 1 ? GuessStatus.Yellow : GuessStatus.Red;
-    }
-
-    // ↑ = secret is MORE popular (lower index), ↓ = less popular
-    private static string PopDirection(string g, string s, GuessStatus status)
-    {
-        if (status == GuessStatus.Green) return "";
-        string[] order = ["Top5", "Top20", "Niche"];
-        int gi = Array.IndexOf(order, g), si = Array.IndexOf(order, s);
-        return gi > si ? "↑" : "↓";
-    }
-
     private static string ShortenParadigm(string p) => p switch
     {
         "Procedural" => "Proc",
@@ -98,17 +89,9 @@ public class GameService
         _ => p
     };
 
-    private static string ShortenCompilation(string c) => c switch
-    {
-        "Interpreted" => "Interp",
-        "Transpiled"  => "Trans",
-        "Compiled"    => "Comp",
-        _ => c
-    };
-
     private static string ShortenPlatform(string p) => p switch
     {
-        "Universal" => "Uni",
+        "Universal" => "All",
         "System"    => "Sys",
         "Mobile"    => "Mob",
         _ => p

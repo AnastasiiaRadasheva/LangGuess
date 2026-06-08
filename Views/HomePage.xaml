@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:svc="clr-namespace:LangGuess.Services"
              x:Class="LangGuess.Views.HomePage"
-             BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0F0B1A}">
+             BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0A0714}">
 
     <ScrollView>
         <VerticalStackLayout Spacing="0" Padding="0">
 
             <!-- TOP BAR -->
-            <Grid BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}" Padding="16,14">
+            <Grid BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}" Padding="16,14">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -17,37 +17,78 @@
                 <Label Grid.Column="0" Text="LangGuess"
                        TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
                        FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
-                <Button Grid.Column="1" Text="⚙"
+                <Button Grid.Column="1" Text="&#9881;"
                         BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#2A1F45}"
                         TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
-                        FontSize="18" CornerRadius="10" Padding="10,6"
+                        FontSize="18" CornerRadius="8" Padding="10,6"
                         Command="{Binding GoToSettingsCommand}"/>
             </Grid>
 
-            <!-- HERO SECTION -->
-            <VerticalStackLayout Spacing="16" Padding="28,40,28,32" HorizontalOptions="Center">
+            <!-- NAME PROMPT (shown only if no name saved) -->
+            <Border IsVisible="{Binding HasNoName}"
+                    Margin="20,20,20,0"
+                    BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}"
+                    Stroke="{AppThemeBinding Light=#A374FF, Dark=#5E3BA8}"
+                    StrokeThickness="1.5" StrokeShape="RoundRectangle 14" Padding="20,18">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[WhoAreYou]}"
+                           TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                           FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Border BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0A0714}"
+                            Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                            StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,8">
+                        <Entry Text="{Binding NameInput}"
+                               Placeholder="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayerNameHint]}"
+                               TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}"
+                               PlaceholderColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
+                               BackgroundColor="Transparent"
+                               FontSize="16"/>
+                    </Border>
+                    <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[SaveBtn]}"
+                            Command="{Binding ConfirmNameCommand}"
+                            BackgroundColor="{AppThemeBinding Light=#6D28D9, Dark=#5E3BA8}"
+                            TextColor="White" FontSize="15" FontAttributes="Bold"
+                            CornerRadius="10" HeightRequest="48"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- HERO SECTION (shown when name exists) -->
+            <VerticalStackLayout IsVisible="{Binding HasName}"
+                                 Spacing="16" Padding="28,40,28,20" HorizontalOptions="Center">
+                <!-- Greeting -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[Hello]}"
+                           TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}"
+                           FontSize="20" VerticalOptions="Center"/>
+                    <Label Text="{Binding PlayerName}"
+                           TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                           FontSize="20" FontAttributes="Bold" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+
                 <Border BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#170F2E}"
-                        StrokeShape="RoundRectangle 30"
+                        StrokeShape="RoundRectangle 24"
                         Stroke="{AppThemeBinding Light=#7C3AED, Dark=#5E3BA8}"
-                        StrokeThickness="2" WidthRequest="110" HeightRequest="110"
+                        StrokeThickness="2" WidthRequest="100" HeightRequest="100"
                         HorizontalOptions="Center">
                     <Label Text="&lt;/&gt;"
                            TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
-                           FontSize="42" FontAttributes="Bold"
+                           FontSize="38" FontAttributes="Bold"
                            HorizontalOptions="Center" VerticalOptions="Center"/>
                 </Border>
+
                 <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[Welcome]}"
                        TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}"
-                       FontSize="24" FontAttributes="Bold"
+                       FontSize="22" FontAttributes="Bold"
                        HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                 <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[WelcomeSub]}"
                        TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}"
-                       FontSize="14" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                       FontSize="13" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
             </VerticalStackLayout>
 
             <!-- HOW TO PLAY -->
-            <Border BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#1C1730}"
-                    StrokeShape="RoundRectangle 16"
+            <Border IsVisible="{Binding HasName}"
+                    BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}"
+                    StrokeShape="RoundRectangle 14"
                     Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
                     StrokeThickness="1" Margin="20,0" Padding="20,16">
                 <VerticalStackLayout Spacing="10">
@@ -58,25 +99,55 @@
                            TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}"
                            FontSize="12" LineBreakMode="WordWrap"/>
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8" Margin="0,4,0,0">
-                        <Border Grid.Column="0" BackgroundColor="#1A5C2E" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
+                        <Border Grid.Column="0" BackgroundColor="#0F3D1A" StrokeShape="RoundRectangle 6" Stroke="Transparent" Padding="8,6">
                             <Label Text="Correct" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
                         </Border>
-                        <Border Grid.Column="1" BackgroundColor="#5C4500" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
+                        <Border Grid.Column="1" BackgroundColor="#5C4500" StrokeShape="RoundRectangle 6" Stroke="Transparent" Padding="8,6">
                             <Label Text="Close" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
                         </Border>
-                        <Border Grid.Column="2" BackgroundColor="#5C1A1A" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="8,6">
+                        <Border Grid.Column="2" BackgroundColor="#3D0F0F" StrokeShape="RoundRectangle 6" Stroke="Transparent" Padding="8,6">
                             <Label Text="Wrong" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
                         </Border>
                     </Grid>
                 </VerticalStackLayout>
             </Border>
 
-            <!-- PLAY BUTTON -->
-            <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayBtn]}"
-                    Command="{Binding PlayCommand}"
-                    BackgroundColor="{AppThemeBinding Light=#6D28D9, Dark=#5E3BA8}"
-                    TextColor="White" FontSize="18" FontAttributes="Bold"
-                    CornerRadius="16" HeightRequest="60" Margin="20,28,20,40"/>
+            <!-- PLAY BUTTONS -->
+            <VerticalStackLayout IsVisible="{Binding HasName}" Spacing="12" Margin="20,24,20,0">
+                <!-- Daily Challenge button -->
+                <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayBtn]}"
+                        Command="{Binding PlayCommand}"
+                        BackgroundColor="{AppThemeBinding Light=#6D28D9, Dark=#5E3BA8}"
+                        TextColor="White" FontSize="17" FontAttributes="Bold"
+                        CornerRadius="12" HeightRequest="56"/>
+
+                <!-- Streak Mode button -->
+                <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakBtn]}"
+                        Command="{Binding StreakCommand}"
+                        BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1E1540}"
+                        TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                        FontSize="17" FontAttributes="Bold"
+                        CornerRadius="12" HeightRequest="56"
+                        BorderColor="{AppThemeBinding Light=#7C3AED, Dark=#5E3BA8}"
+                        BorderWidth="1.5"/>
+            </VerticalStackLayout>
+
+            <!-- LANGUAGE SELECTOR -->
+            <Grid IsVisible="{Binding HasName}"
+                  Margin="20,24,20,36" ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                <Button Grid.Column="0" Text="EN"
+                        BackgroundColor="{Binding Lang0Color}" TextColor="{Binding Lang0Text}"
+                        FontSize="13" CornerRadius="8" HeightRequest="38"
+                        Command="{Binding SelectLangCommand}" CommandParameter="0"/>
+                <Button Grid.Column="1" Text="ET"
+                        BackgroundColor="{Binding Lang1Color}" TextColor="{Binding Lang1Text}"
+                        FontSize="13" CornerRadius="8" HeightRequest="38"
+                        Command="{Binding SelectLangCommand}" CommandParameter="1"/>
+                <Button Grid.Column="2" Text="RU"
+                        BackgroundColor="{Binding Lang2Color}" TextColor="{Binding Lang2Text}"
+                        FontSize="13" CornerRadius="8" HeightRequest="38"
+                        Command="{Binding SelectLangCommand}" CommandParameter="2"/>
+            </Grid>
 
         </VerticalStackLayout>
     </ScrollView>

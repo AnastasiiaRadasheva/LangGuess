@@ -7,8 +7,8 @@ namespace LangGuess.Views;
 public partial class GamePage : ContentPage
 {
     private GameViewModel _vm = null!;
+    private bool _drawerOpen = false;
 
-    // Pixels the card must be swiped upward to trigger a guess
     private const double SwipeThreshold = 60;
 
     public GamePage() => InitializeComponent();
@@ -25,6 +25,7 @@ public partial class GamePage : ContentPage
         _vm.AvailableLanguages.CollectionChanged += (_, _) => RefreshLangCards();
         await _vm.InitAsync();
         RefreshLangCards();
+        BuildDrawerList();
 
         RowsScroll.Scrolled += (_, e) =>
             HeaderScroll.ScrollToAsync(e.ScrollX, 0, false);
@@ -76,7 +77,7 @@ public partial class GamePage : ContentPage
             BackgroundColor = isDark ? Color.FromArgb("#1A1435") : Color.FromArgb("#E3DBFF"),
             Stroke          = new SolidColorBrush(isDark ? Color.FromArgb("#5E3BA8") : Color.FromArgb("#7C3AED")),
             StrokeThickness = 1.5,
-            StrokeShape     = new RoundRectangle { CornerRadius = 16 },
+            StrokeShape     = new RoundRectangle { CornerRadius = 8 },
             Padding         = new Thickness(8, 8),
             Content         = new VerticalStackLayout
             {
@@ -87,12 +88,9 @@ public partial class GamePage : ContentPage
             }
         };
 
-        // Tap = instant guess
         var tap = new TapGestureRecognizer();
         tap.Tapped += (_, _) => MakeGuess(lang);
         card.GestureRecognizers.Add(tap);
-
-        // 4-stage swipe-up gesture
         AttachSwipeGesture(card, lang, isDark);
 
         return card;
@@ -106,73 +104,145 @@ public partial class GamePage : ContentPage
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    //  4-STAGE SWIPE-UP GESTURE  (PanGestureRecognizer)
-    //
-    //  Stage 1 – Started  : finger touches card → scale up, highlight border
-    //  Stage 2 – Running  : finger moves up → card follows, border turns green
-    //                       when past threshold
-    //  Stage 3 – Completed: released past threshold → fly up + guess
-    //                       released below threshold  → spring back
-    //  Stage 4 – Canceled : gesture interrupted → spring back immediately
+    //  INFO DRAWER
+    // ─────────────────────────────────────────────────────────────────────────
+    private void BuildDrawerList()
+    {
+        DrawerLangList.Children.Clear();
+        bool isDark = Application.Current?.UserAppTheme != AppTheme.Light;
+
+        foreach (var lang in _vm.AllLanguages.OrderBy(l => l.Name))
+        {
+            var item = new Grid
+            {
+                Padding            = new Thickness(14, 12),
+                ColumnDefinitions  = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
+            };
+
+            var abbr = new Border
+            {
+                WidthRequest    = 44,
+                HeightRequest   = 44,
+                BackgroundColor = isDark ? Color.FromArgb("#1A1435") : Color.FromArgb("#DDD6FF"),
+                Stroke          = new SolidColorBrush(isDark ? Color.FromArgb("#5E3BA8") : Color.FromArgb("#7C3AED")),
+                StrokeThickness = 1,
+                StrokeShape     = new RoundRectangle { CornerRadius = 6 },
+                Margin          = new Thickness(0, 0, 12, 0),
+                Content         = new Label
+                {
+                    Text              = lang.Abbr,
+                    FontSize          = 13,
+                    FontAttributes    = FontAttributes.Bold,
+                    TextColor         = isDark ? Color.FromArgb("#A374FF") : Color.FromArgb("#6D28D9"),
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions   = LayoutOptions.Center
+                }
+            };
+
+            var nameLabel = new Label
+            {
+                Text           = $"{lang.Name}  ({lang.Year})",
+                FontSize       = 13,
+                FontAttributes = FontAttributes.Bold,
+                TextColor      = isDark ? Color.FromArgb("#E2D9F3") : Color.FromArgb("#1A1035")
+            };
+            var descLabel = new Label
+            {
+                Text      = lang.Description,
+                FontSize  = 11,
+                TextColor = isDark ? Color.FromArgb("#7B6FA8") : Color.FromArgb("#5C4F7C"),
+                LineBreakMode = LineBreakMode.WordWrap
+            };
+
+            var textStack = new VerticalStackLayout { Spacing = 3, Children = { nameLabel, descLabel } };
+
+            Grid.SetColumn(abbr, 0);
+            Grid.SetColumn(textStack, 1);
+            item.Children.Add(abbr);
+            item.Children.Add(textStack);
+
+            // Separator
+            var sep = new BoxView
+            {
+                HeightRequest   = 1,
+                BackgroundColor = isDark ? Color.FromArgb("#1E1640") : Color.FromArgb("#C4B5FD"),
+                Margin          = new Thickness(14, 0)
+            };
+
+            DrawerLangList.Children.Add(item);
+            DrawerLangList.Children.Add(sep);
+        }
+    }
+
+    private async void OnDrawerToggleClicked(object? sender, EventArgs e)
+    {
+        if (_drawerOpen) await CloseDrawerAsync();
+        else             await OpenDrawerAsync();
+    }
+
+    private void OnDrawerCloseClicked(object? sender, EventArgs e)
+        => _ = CloseDrawerAsync();
+
+    private void OnDimTapped(object? sender, TappedEventArgs e)
+        => _ = CloseDrawerAsync();
+
+    private async Task OpenDrawerAsync()
+    {
+        _drawerOpen    = true;
+        DrawerDim.IsVisible = true;
+        await Task.WhenAll(
+            DrawerPanel.TranslateToAsync(0, 0, 250, Easing.CubicOut),
+            DrawerDim.FadeToAsync(0.45, 250));
+    }
+
+    private async Task CloseDrawerAsync()
+    {
+        _drawerOpen = false;
+        await Task.WhenAll(
+            DrawerPanel.TranslateToAsync(-290, 0, 220, Easing.CubicIn),
+            DrawerDim.FadeToAsync(0, 220));
+        DrawerDim.IsVisible = false;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  4-STAGE SWIPE-UP GESTURE
     // ─────────────────────────────────────────────────────────────────────────
     private void AttachSwipeGesture(Border card, ProgrammingLanguage lang, bool isDark)
     {
-        var colorNormal = new SolidColorBrush(
-            isDark ? Color.FromArgb("#5E3BA8") : Color.FromArgb("#7C3AED"));
+        var colorNormal = new SolidColorBrush(isDark ? Color.FromArgb("#5E3BA8") : Color.FromArgb("#7C3AED"));
         var colorActive = new SolidColorBrush(Color.FromArgb("#A374FF"));
-        var colorReady  = new SolidColorBrush(Color.FromArgb("#2EA043")); // green = release to guess
+        var colorReady  = new SolidColorBrush(Color.FromArgb("#2EA043"));
 
         var pan = new PanGestureRecognizer();
         pan.PanUpdated += async (_, e) =>
         {
             switch (e.StatusType)
             {
-                // ── Stage 1: Started ──────────────────────────────────────────
                 case GestureStatus.Started:
-                    card.Stroke          = colorActive;
-                    card.StrokeThickness = 2.5;
+                    card.Stroke = colorActive; card.StrokeThickness = 2.5;
                     await card.ScaleToAsync(1.08, 80, Easing.CubicOut);
                     break;
-
-                // ── Stage 2: Running ──────────────────────────────────────────
                 case GestureStatus.Running:
-                    // Allow only upward movement (clamp to 0)
                     card.TranslationY = Math.Min(0, e.TotalY);
-                    // Border turns green when the card has passed the threshold
-                    card.Stroke = card.TranslationY < -SwipeThreshold
-                        ? colorReady
-                        : colorActive;
+                    card.Stroke = card.TranslationY < -SwipeThreshold ? colorReady : colorActive;
                     break;
-
-                // ── Stage 3: Completed ────────────────────────────────────────
                 case GestureStatus.Completed:
                     if (card.TranslationY < -SwipeThreshold)
                     {
-                        // Swiped far enough → fly card off-screen and guess
                         await Task.WhenAll(
                             card.TranslateToAsync(0, -400, 220, Easing.CubicIn),
-                            card.FadeToAsync(0, 200));
+                            card.FadeToAsync(0.0, 200));
                         MakeGuess(lang);
                     }
                     else
                     {
-                        // Not far enough → spring back to original position
-                        await Task.WhenAll(
-                            card.TranslateToAsync(0, 0, 280, Easing.SpringOut),
-                            card.ScaleToAsync(1.0, 220));
-                        card.Stroke          = colorNormal;
-                        card.StrokeThickness = 1.5;
+                        await Task.WhenAll(card.TranslateToAsync(0, 0, 280, Easing.SpringOut), card.ScaleToAsync(1.0, 220));
+                        card.Stroke = colorNormal; card.StrokeThickness = 1.5;
                     }
                     break;
-
-                // ── Stage 4: Canceled ─────────────────────────────────────────
                 case GestureStatus.Canceled:
-                    // Gesture interrupted → snap back immediately
-                    await Task.WhenAll(
-                        card.TranslateToAsync(0, 0, 200, Easing.SpringOut),
-                        card.ScaleToAsync(1.0, 180));
-                    card.Stroke          = colorNormal;
-                    card.StrokeThickness = 1.5;
+                    await Task.WhenAll(card.TranslateToAsync(0, 0, 200, Easing.SpringOut), card.ScaleToAsync(1.0, 180));
+                    card.Stroke = colorNormal; card.StrokeThickness = 1.5;
                     break;
             }
         };

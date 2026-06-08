@@ -3,12 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:LangGuess.Models"
              xmlns:svc="clr-namespace:LangGuess.Services"
-             x:Class="LangGuess.Views.GamePage"
+             x:Class="LangGuess.Views.StreakPage"
              BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0A0714}">
 
     <AbsoluteLayout x:Name="RootLayout">
-
-        <!-- ═══════════════════  MAIN CONTENT  ═══════════════════ -->
         <Grid AbsoluteLayout.LayoutBounds="0,0,1,1"
               AbsoluteLayout.LayoutFlags="SizeProportional"
               RowSpacing="0">
@@ -26,50 +24,60 @@
                   Padding="16,12">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Info drawer button -->
                 <Button Grid.Column="0"
-                        Text="&#9432;"
-                        BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#2A1F45}"
-                        TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
-                        FontSize="18" CornerRadius="6" Padding="10,6" Margin="0,0,6,0"
-                        Clicked="OnDrawerToggleClicked"/>
-
-                <Button Grid.Column="1"
                         Text="&#8592;"
                         BackgroundColor="Transparent"
                         TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
                         FontSize="20" Padding="0,0,8,0"
                         Command="{Binding BackCommand}"/>
 
-                <VerticalStackLayout Grid.Column="2" Spacing="0" VerticalOptions="Center">
-                    <Label Text="LangGuess"
+                <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakTitle]}"
                            TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
-                           FontSize="20" FontAttributes="Bold"/>
-                    <Label Text="Guess today's language"
+                           FontSize="18" FontAttributes="Bold"/>
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakSub]}"
                            TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
                            FontSize="10"/>
                 </VerticalStackLayout>
 
+                <!-- Current streak -->
+                <Border Grid.Column="2"
+                        BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1E1540}"
+                        StrokeShape="RoundRectangle 6"
+                        Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                        StrokeThickness="1" Padding="10,6" Margin="0,0,6,0"
+                        VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[CurrentStreak]}"
+                               TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#9B8EC4}"
+                               FontSize="9" HorizontalOptions="Center"/>
+                        <Label Text="{Binding CurrentStreak}"
+                               TextColor="#F0A500"
+                               FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Best streak -->
                 <Border Grid.Column="3"
                         BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1E1540}"
                         StrokeShape="RoundRectangle 6"
                         Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
-                        StrokeThickness="1" Padding="10,6" Margin="0,0,8,0"
+                        StrokeThickness="1" Padding="10,6" Margin="0,0,6,0"
                         VerticalOptions="Center">
-                    <HorizontalStackLayout Spacing="4">
-                        <Label Text="Streak:"
+                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[BestStreak]}"
                                TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#9B8EC4}"
-                               FontSize="12" VerticalOptions="Center"/>
-                        <Label Text="{Binding Streak}"
-                               TextColor="#F0A500"
-                               FontSize="15" FontAttributes="Bold" VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
+                               FontSize="9" HorizontalOptions="Center"/>
+                        <Label Text="{Binding BestStreak}"
+                               TextColor="#A374FF"
+                               FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
                 </Border>
 
                 <Button Grid.Column="4"
@@ -121,7 +129,6 @@
                         <DataTemplate x:DataType="models:GuessResultRow">
                             <Grid ColumnSpacing="2" Margin="4,2,4,0"
                                   ColumnDefinitions="88,56,56,52,60,52,56,56">
-
                                 <Border Grid.Column="0" BackgroundColor="{Binding AbbrColor}"
                                         StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,6">
                                     <VerticalStackLayout Spacing="1" HorizontalOptions="Center" VerticalOptions="Center">
@@ -132,7 +139,6 @@
                                                MaxLines="1" LineBreakMode="TailTruncation"/>
                                     </VerticalStackLayout>
                                 </Border>
-
                                 <Border Grid.Column="1" BackgroundColor="{Binding YearColor}"
                                         StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
@@ -142,7 +148,6 @@
                                                IsVisible="{Binding YearArrow, Converter={StaticResource NotEmptyBool}}"/>
                                     </VerticalStackLayout>
                                 </Border>
-
                                 <Border Grid.Column="2" BackgroundColor="{Binding ParadigmColor}"
                                         StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
@@ -152,7 +157,6 @@
                                                IsVisible="{Binding ParadigmArrow, Converter={StaticResource NotEmptyBool}}"/>
                                     </VerticalStackLayout>
                                 </Border>
-
                                 <Border Grid.Column="3" BackgroundColor="{Binding TypingColor}"
                                         StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
@@ -162,7 +166,6 @@
                                                IsVisible="{Binding TypingArrow, Converter={StaticResource NotEmptyBool}}"/>
                                     </VerticalStackLayout>
                                 </Border>
-
                                 <Border Grid.Column="4" BackgroundColor="{Binding CompilationColor}"
                                         StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
@@ -172,7 +175,6 @@
                                                IsVisible="{Binding CompilationArrow, Converter={StaticResource NotEmptyBool}}"/>
                                     </VerticalStackLayout>
                                 </Border>
-
                                 <Border Grid.Column="5" BackgroundColor="{Binding PlatformColor}"
                                         StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
@@ -182,14 +184,12 @@
                                                IsVisible="{Binding PlatformArrow, Converter={StaticResource NotEmptyBool}}"/>
                                     </VerticalStackLayout>
                                 </Border>
-
                                 <Border Grid.Column="6" BackgroundColor="{Binding PopularityColor}"
                                         StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
                                         <Label Text="{Binding Popularity}" Style="{StaticResource CellLabel}" FontSize="9"/>
                                     </VerticalStackLayout>
                                 </Border>
-
                                 <Border Grid.Column="7" BackgroundColor="{Binding GCTypeColor}"
                                         StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
                                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
@@ -199,47 +199,52 @@
                                                IsVisible="{Binding GCTypeArrow, Converter={StaticResource NotEmptyBool}}"/>
                                     </VerticalStackLayout>
                                 </Border>
-
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </ScrollView>
 
-            <!-- ── STATUS / ATTEMPTS / PLAY AGAIN ── -->
+            <!-- ── STATUS ── -->
             <VerticalStackLayout Grid.Row="3" Spacing="6" Padding="12,4,12,4">
 
+                <!-- WIN banner -->
                 <Border IsVisible="{Binding IsWon}"
                         BackgroundColor="#0F3D1A" StrokeShape="RoundRectangle 8"
                         Stroke="#2EA043" StrokeThickness="1.5" Padding="12,8">
                     <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[WinMsg]}"
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakWinMsg]}"
                                TextColor="#6EE7A0" FontSize="15" FontAttributes="Bold"
                                HorizontalOptions="Center"/>
-                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayAgain]}"
-                                Command="{Binding ReplayCommand}"
+                        <Label Text="{Binding StatusMessage}"
+                               TextColor="White" FontSize="13" FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[NextBtn]}"
+                                Command="{Binding NextCommand}"
                                 BackgroundColor="#2EA043" TextColor="White"
                                 FontSize="12" CornerRadius="6" HeightRequest="34" Padding="20,0"/>
                     </VerticalStackLayout>
                 </Border>
 
+                <!-- LOSS banner -->
                 <Border IsVisible="{Binding IsLost}"
                         BackgroundColor="#3D0F0F" StrokeShape="RoundRectangle 8"
                         Stroke="#C0392B" StrokeThickness="1.5" Padding="12,8">
                     <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[LossMsg]}"
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakLossMsg]}"
                                TextColor="#FF8080" FontSize="15" FontAttributes="Bold"
                                HorizontalOptions="Center"/>
                         <Label Text="{Binding StatusMessage}"
                                TextColor="White" FontSize="13" FontAttributes="Bold"
                                HorizontalOptions="Center"/>
-                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[PlayAgain]}"
-                                Command="{Binding ReplayCommand}"
+                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[RestartBtn]}"
+                                Command="{Binding RestartCommand}"
                                 BackgroundColor="#C0392B" TextColor="White"
                                 FontSize="12" CornerRadius="6" HeightRequest="34" Padding="20,0"/>
                     </VerticalStackLayout>
                 </Border>
 
+                <!-- Attempts counter -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="6"
                                        IsVisible="{Binding IsGameOver, Converter={StaticResource InvertBool}}">
                     <Label Text="Attempts:"
@@ -270,54 +275,5 @@
                 </ScrollView>
             </Grid>
         </Grid>
-
-        <!-- ═══════════════════  DRAWER OVERLAY  ═══════════════════ -->
-        <!-- Dim background tap-to-close -->
-        <BoxView x:Name="DrawerDim"
-                 AbsoluteLayout.LayoutBounds="0,0,1,1"
-                 AbsoluteLayout.LayoutFlags="SizeProportional"
-                 BackgroundColor="#000000" Opacity="0"
-                 IsVisible="False" InputTransparent="False">
-            <BoxView.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnDimTapped"/>
-            </BoxView.GestureRecognizers>
-        </BoxView>
-
-        <!-- Drawer panel (slides in from left) -->
-        <Grid x:Name="DrawerPanel"
-              AbsoluteLayout.LayoutBounds="0,0,290,1"
-              AbsoluteLayout.LayoutFlags="HeightProportional"
-              BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#0E0B1C}"
-              TranslationX="-290">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <!-- Drawer header -->
-            <Grid Grid.Row="0" Padding="16,16,16,10"
-                  BackgroundColor="{AppThemeBinding Light=#DDD6FF, Dark=#130D24}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0"
-                       Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[LangInfoTitle]}"
-                       TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
-                       FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
-                <Button Grid.Column="1"
-                        Text="&#10005;"
-                        BackgroundColor="Transparent"
-                        TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
-                        FontSize="18" Padding="4"
-                        Clicked="OnDrawerCloseClicked"/>
-            </Grid>
-
-            <!-- Language list -->
-            <ScrollView Grid.Row="1">
-                <VerticalStackLayout x:Name="DrawerLangList" Spacing="0" Padding="0"/>
-            </ScrollView>
-        </Grid>
-
     </AbsoluteLayout>
 </ContentPage>

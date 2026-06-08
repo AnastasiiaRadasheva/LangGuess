@@ -8,13 +8,13 @@ namespace LangGuess.ViewModels;
 [QueryProperty(nameof(From), "from")]
 public class SettingsViewModel : BaseViewModel
 {
-    private readonly SettingsService    _settings;
+    private readonly SettingsService     _settings;
     private readonly LocalizationService _loc;
-    private readonly DatabaseService    _db;
+    private readonly DatabaseService     _db;
+    private readonly AudioService        _audio;
 
     public ObservableCollection<GameHistory> History { get; } = new();
 
-    // Language options exposed for Picker
     public List<string> LanguageOptions { get; } = ["English", "Eesti", "Русский"];
     public List<string> LanguageCodes   { get; } = ["en", "et", "ru"];
 
@@ -38,37 +38,64 @@ public class SettingsViewModel : BaseViewModel
         set { SetField(ref _isDark, value); _settings.IsDark = value; }
     }
 
-    private bool _soundEnabled;
-    public bool SoundEnabled
+    private bool _musicEnabled;
+    public bool MusicEnabled
     {
-        get => _soundEnabled;
-        set { SetField(ref _soundEnabled, value); _settings.SoundEnabled = value; }
+        get => _musicEnabled;
+        set { SetField(ref _musicEnabled, value); _audio.MusicEnabled = value; }
+    }
+
+    private double _musicVolume;
+    public double MusicVolume
+    {
+        get => _musicVolume;
+        set { SetField(ref _musicVolume, value); _settings.MusicVolume = value; _audio.MusicVolume = value; }
+    }
+
+    private bool _sfxEnabled;
+    public bool SfxEnabled
+    {
+        get => _sfxEnabled;
+        set { SetField(ref _sfxEnabled, value); _settings.SfxEnabled = value; _audio.SfxEnabled = value; }
+    }
+
+    private string _playerName = "";
+    public string PlayerName
+    {
+        get => _playerName;
+        set { SetField(ref _playerName, value); }
     }
 
     public ICommand BackCommand         { get; }
     public ICommand ClearHistoryCommand { get; }
+    public ICommand SaveNameCommand     { get; }
 
     public bool HasHistory => History.Count > 0;
 
-    // Set by query parameter: "home" or "game"
     private string _returnRoute = "//HomePage";
     public string From
     {
         set => _returnRoute = value == "game" ? "//GamePage" : "//HomePage";
     }
 
-    public SettingsViewModel(SettingsService settings, LocalizationService loc, DatabaseService db)
+    public SettingsViewModel(SettingsService settings, LocalizationService loc,
+                             DatabaseService db, AudioService audio)
     {
         _settings = settings;
         _loc      = loc;
         _db       = db;
+        _audio    = audio;
 
-        _isDark       = settings.IsDark;
-        _soundEnabled = settings.SoundEnabled;
+        _isDark                = settings.IsDark;
+        _musicEnabled          = audio.MusicEnabled;
+        _musicVolume           = settings.MusicVolume;
+        _sfxEnabled            = settings.SfxEnabled;
+        _playerName            = settings.PlayerName;
         _selectedLanguageIndex = LanguageCodes.IndexOf(settings.Language);
         if (_selectedLanguageIndex < 0) _selectedLanguageIndex = 0;
 
         BackCommand = new RelayCommand(() => Shell.Current.GoToAsync(_returnRoute));
+        SaveNameCommand = new RelayCommand(() => _settings.PlayerName = _playerName);
         ClearHistoryCommand = new RelayCommand(async () =>
         {
             await _db.ClearAllHistoryAsync();

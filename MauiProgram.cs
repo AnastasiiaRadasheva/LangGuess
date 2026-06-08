@@ -13,7 +13,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
 
         builder
-            .UseMauiApp<App>()  // <-- уже регистрирует App в DI, AddSingleton<App>() НЕ нужен
+            .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf",  "OpenSansRegular");
@@ -27,7 +27,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<SettingsService>();
         builder.Services.AddSingleton<AudioService>();
 
-        // IAudioManager: lazy factory — безопасно на Android
         builder.Services.AddSingleton<IAudioManager>(_ =>
         {
             try { return AudioManager.Current; }
@@ -38,11 +37,13 @@ public static class MauiProgram
         builder.Services.AddTransient<HomeViewModel>();
         builder.Services.AddTransient<GameViewModel>();
         builder.Services.AddTransient<SettingsViewModel>();
+        builder.Services.AddTransient<StreakViewModel>();
 
         // Views
         builder.Services.AddTransient<HomePage>();
         builder.Services.AddTransient<GamePage>();
         builder.Services.AddTransient<SettingsPage>();
+        builder.Services.AddTransient<StreakPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

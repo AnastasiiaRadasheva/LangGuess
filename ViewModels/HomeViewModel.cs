@@ -26,7 +26,6 @@ public class HomeViewModel : BaseViewModel
         }
     }
 
-    // Active/inactive colors for each language button
     public Color Lang0Color => ButtonBg(0);
     public Color Lang1Color => ButtonBg(1);
     public Color Lang2Color => ButtonBg(2);
@@ -49,9 +48,23 @@ public class HomeViewModel : BaseViewModel
         set { SetField(ref _isDark, value); _settings.IsDark = value; }
     }
 
+    // Player name support
+    public string PlayerName    => _settings.PlayerName;
+    public bool   HasName       => _settings.HasName;
+    public bool   HasNoName     => !_settings.HasName;
+
+    private string _nameInput = "";
+    public string NameInput
+    {
+        get => _nameInput;
+        set => SetField(ref _nameInput, value);
+    }
+
     public ICommand PlayCommand         { get; }
+    public ICommand StreakCommand       { get; }
     public ICommand GoToSettingsCommand { get; }
     public ICommand SelectLangCommand   { get; }
+    public ICommand ConfirmNameCommand  { get; }
 
     public HomeViewModel(SettingsService settings, LocalizationService loc)
     {
@@ -63,11 +76,20 @@ public class HomeViewModel : BaseViewModel
         if (_selectedLanguageIndex < 0) _selectedLanguageIndex = 0;
 
         PlayCommand         = new RelayCommand(() => Shell.Current.GoToAsync("//GamePage"));
+        StreakCommand       = new RelayCommand(() => Shell.Current.GoToAsync("//StreakPage"));
         GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage?from=home"));
         SelectLangCommand   = new RelayCommand<string>(idx =>
         {
             if (int.TryParse(idx, out int i))
                 SelectedLanguageIndex = i;
+        });
+        ConfirmNameCommand  = new RelayCommand(() =>
+        {
+            if (string.IsNullOrWhiteSpace(_nameInput)) return;
+            _settings.PlayerName = _nameInput.Trim();
+            OnPropertyChanged(nameof(PlayerName));
+            OnPropertyChanged(nameof(HasName));
+            OnPropertyChanged(nameof(HasNoName));
         });
     }
 }

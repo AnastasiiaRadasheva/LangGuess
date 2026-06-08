@@ -6,19 +6,28 @@ public class SettingsService : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private const string LangKey  = "ui_language";
-    private const string ThemeKey = "app_theme";
-    private const string SoundKey = "sound_enabled";
+    private const string LangKey      = "ui_language";
+    private const string ThemeKey     = "app_theme";
+    private const string SoundKey     = "sound_enabled";
+    private const string NameKey      = "player_name";
+    private const string MusicVolKey  = "music_volume";
+    private const string SfxKey       = "sfx_enabled";
 
     private string _language;
-    private bool _isDark;
-    private bool _soundEnabled;
+    private bool   _isDark;
+    private bool   _soundEnabled;
+    private string _playerName;
+    private double _musicVolume;
+    private bool   _sfxEnabled;
 
     public SettingsService()
     {
-        _language     = Preferences.Get(LangKey,  "en");
-        _isDark       = Preferences.Get(ThemeKey, "dark") == "dark";
-        _soundEnabled = Preferences.Get(SoundKey, true);
+        _language     = Preferences.Get(LangKey,     "en");
+        _isDark       = Preferences.Get(ThemeKey,    "dark") == "dark";
+        _soundEnabled = Preferences.Get(SoundKey,    true);
+        _playerName   = Preferences.Get(NameKey,     "");
+        _musicVolume  = Preferences.Get(MusicVolKey, 0.5);
+        _sfxEnabled   = Preferences.Get(SfxKey,      true);
     }
 
     public string Language
@@ -44,6 +53,26 @@ public class SettingsService : INotifyPropertyChanged
     {
         get => _soundEnabled;
         set { _soundEnabled = value; Preferences.Set(SoundKey, value); Notify(); }
+    }
+
+    public string PlayerName
+    {
+        get => _playerName;
+        set { _playerName = value?.Trim() ?? ""; Preferences.Set(NameKey, _playerName); Notify(); }
+    }
+
+    public bool HasName => !string.IsNullOrEmpty(_playerName);
+
+    public double MusicVolume
+    {
+        get => _musicVolume;
+        set { _musicVolume = Math.Clamp(value, 0.0, 1.0); Preferences.Set(MusicVolKey, _musicVolume); Notify(); }
+    }
+
+    public bool SfxEnabled
+    {
+        get => _sfxEnabled;
+        set { _sfxEnabled = value; Preferences.Set(SfxKey, value); Notify(); }
     }
 
     private void Notify([System.Runtime.CompilerServices.CallerMemberName] string? p = null)
