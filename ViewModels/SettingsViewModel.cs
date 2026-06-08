@@ -49,7 +49,7 @@ public class SettingsViewModel : BaseViewModel
     public double MusicVolume
     {
         get => _musicVolume;
-        set { SetField(ref _musicVolume, value); _settings.MusicVolume = value; _audio.MusicVolume = value; /* persists only — no live player touch */ }
+        set { SetField(ref _musicVolume, value); _audio.MusicVolume = value; /* AudioService handles live update + debounced Preferences save */ }
     }
 
     private bool _sfxEnabled;

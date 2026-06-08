@@ -4,11 +4,8 @@ namespace LangGuess.Services;
 
 /// <summary>
 /// Background music (looping) + tap SFX.
-/// pong.mp3 bytes are pre-loaded once so every tap is instant (no file I/O per tap).
-///
-/// VOLUME NOTE: on Android, calling MediaPlayer.setVolume() while playing is unreliable
-/// (can kill the player). So we never touch _bgPlayer.Volume while it is playing.
-/// The saved volume is applied only when the player is (re)started.
+/// pong.mp3 bytes pre-loaded once so every tap is instant.
+/// MusicVolume: applied to live player immediately; Preferences write debounced 400ms.
 /// </summary>
 public class AudioService : IDisposable
 {
@@ -16,12 +13,19 @@ public class AudioService : IDisposable
     private Stream?       _bgStream;
     private bool          _disposed;
 
-    // Pre-loaded SFX bytes – populated once in PreloadAsync()
     private byte[]? _pongBytes;
+
+    // Cached volume — avoids Preferences.Get on every slider tick
+    private double _vol;
 
     private const string MusicKey    = "music_enabled";
     private const string MusicVolKey = "music_volume";
     private const string SfxKey      = "sfx_enabled";
+
+    public AudioService()
+    {
+        _vol = Preferences.Get(MusicVolKey, 0.5);
+    }
 
     // ── Settings ─────────────────────────────────────────────────────────────
 
@@ -36,14 +40,43 @@ public class AudioService : IDisposable
         }
     }
 
+    private CancellationTokenSource? _volSaveCts;
+
     public double MusicVolume
     {
-        get => Preferences.Get(MusicVolKey, 0.5);
+        get => _vol;
         set
         {
-            // Only persist – never touch _bgPlayer.Volume while it is live.
-            // Volume is applied on the next Start (or when music is toggled off/on).
-            Preferences.Set(MusicVolKey, Math.Clamp(value, 0.0, 1.0));
+            _vol = Math.Clamp(value, 0.0, 1.0);
+
+            // Apply immediately to the live player
+            if (_bgPlayer != null)
+            {
+                try
+                {
+                    _bgPlayer.Volume = _vol;
+                }
+                catch
+                {
+                    // If setVolume killed the player, restart it
+                    _ = Task.Run(async () =>
+                    {
+                        MainThread.BeginInvokeOnMainThread(StopBackgroundMusic);
+                        await Task.Delay(100);
+                        await StartBackgroundMusicAsync();
+                    });
+                }
+            }
+
+            // Debounce Preferences write — don't hit disk 60x/sec while slider moves
+            _volSaveCts?.Cancel();
+            _volSaveCts = new CancellationTokenSource();
+            var token = _volSaveCts.Token;
+            _ = Task.Delay(400, token).ContinueWith(t =>
+            {
+                if (!t.IsCanceled)
+                    Preferences.Set(MusicVolKey, _vol);
+            }, TaskScheduler.Default);
         }
     }
 
@@ -53,7 +86,6 @@ public class AudioService : IDisposable
         set => Preferences.Set(SfxKey, value);
     }
 
-    // kept for SettingsViewModel compatibility
     public bool IsEnabled { get => SfxEnabled; set => SfxEnabled = value; }
 
     // ── Lazy audio manager ────────────────────────────────────────────────────
@@ -64,7 +96,6 @@ public class AudioService : IDisposable
     }
 
     // ── Pre-load SFX bytes ────────────────────────────────────────────────────
-    /// <summary>Call once from HomePage.OnAppearing — loads pong.mp3 into RAM.</summary>
     public async Task PreloadAsync()
     {
         if (_pongBytes != null) return;
@@ -88,8 +119,7 @@ public class AudioService : IDisposable
         {
             try
             {
-                if (_bgPlayer.IsPlaying) return; // already fine
-                // stopped — fall through to recreate
+                if (_bgPlayer.IsPlaying) return;
                 StopBackgroundMusic();
             }
             catch
@@ -106,7 +136,7 @@ public class AudioService : IDisposable
             _bgStream = await FileSystem.OpenAppPackageFileAsync("background.mp3");
             _bgPlayer = mgr.CreatePlayer(_bgStream);
             _bgPlayer.Loop   = true;
-            _bgPlayer.Volume = MusicVolume;   // only set here, never while playing
+            _bgPlayer.Volume = _vol;
             _bgPlayer.Play();
         }
         catch
@@ -125,8 +155,6 @@ public class AudioService : IDisposable
     }
 
     // ── SFX ──────────────────────────────────────────────────────────────────
-    // Uses pre-loaded bytes → no async file I/O on the hot path.
-    // Disposal deferred off the PlaybackEnded Java thread (Android safety).
 
     public void PlayTap()
     {
@@ -153,7 +181,6 @@ public class AudioService : IDisposable
         catch { }
     }
 
-    // Async wrappers so ViewModels compile unchanged
     public Task PlayTapAsync()     { PlayTap(); return Task.CompletedTask; }
     public Task PlayCorrectAsync() { PlayTap(); return Task.CompletedTask; }
     public Task PlayWrongAsync()   { PlayTap(); return Task.CompletedTask; }
@@ -163,6 +190,7 @@ public class AudioService : IDisposable
     {
         if (_disposed) return;
         _disposed = true;
+        _volSaveCts?.Cancel();
         StopBackgroundMusic();
     }
 }
