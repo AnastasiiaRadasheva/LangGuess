@@ -5,21 +5,27 @@ namespace LangGuess.Services;
 /// <summary>
 /// Background music + tap SFX.
 ///
-/// Android MediaPlayer needs a real file path — MemoryStream won't work.
-/// We copy both assets to the app's cache directory once, then use CreatePlayer(path).
+/// Music lifecycle:
+///   App.OnResume  → StartBackgroundMusicAsync()   (initial launch + return from background)
+///   App.OnSleep   → StopBackgroundMusic()
+///   Settings      → MusicEnabled / MusicVolume
+///   Pages         → only call PreloadAsync() for SFX files, never touch music
+///
+/// Files are copied to CacheDirectory once (Android MediaPlayer needs real file paths).
+/// A SemaphoreSlim stops concurrent callers from spawning multiple players.
 /// </summary>
 public class AudioService : IDisposable
 {
     private readonly IAudioManager _mgr;
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
     private IAudioPlayer? _bgPlayer;
     private bool          _disposed;
+    private bool          _preloaded;
 
-    // Paths to cached audio files (written once to CacheDirectory)
     private string? _pongPath;
     private string? _bgPath;
-
-    private double _vol;
+    private double  _vol;
 
     private const string MusicKey    = "music_enabled";
     private const string MusicVolKey = "music_volume";
@@ -44,7 +50,7 @@ public class AudioService : IDisposable
         }
     }
 
-    private CancellationTokenSource? _volSaveCts;
+    private CancellationTokenSource? _volCts;
 
     public double MusicVolume
     {
@@ -52,17 +58,13 @@ public class AudioService : IDisposable
         set
         {
             _vol = Math.Clamp(value, 0.0, 1.0);
-
             if (_bgPlayer != null)
-            {
-                try   { _bgPlayer.Volume = _vol; }
-                catch { _ = RestartMusicAsync(); }
-            }
+                try { _bgPlayer.Volume = _vol; } catch { _ = RestartMusicAsync(); }
 
-            _volSaveCts?.Cancel();
-            _volSaveCts = new CancellationTokenSource();
-            var token = _volSaveCts.Token;
-            _ = Task.Delay(400, token).ContinueWith(t =>
+            _volCts?.Cancel();
+            _volCts = new CancellationTokenSource();
+            var tok = _volCts.Token;
+            _ = Task.Delay(400, tok).ContinueWith(t =>
             {
                 if (!t.IsCanceled) Preferences.Set(MusicVolKey, _vol);
             }, TaskScheduler.Default);
@@ -77,20 +79,23 @@ public class AudioService : IDisposable
 
     public bool IsEnabled { get => SfxEnabled; set => SfxEnabled = value; }
 
-    // ── Cache audio files to disk (called once from HomePage.OnAppearing) ─────
+    // ── Copy assets to CacheDirectory (safe to call multiple times) ───────────
 
     public async Task PreloadAsync()
     {
+        if (_preloaded) return;
+        _preloaded = true;
+
         var cache = FileSystem.CacheDirectory;
-        _pongPath = Path.Combine(cache, "pong.mp3");
-        _bgPath   = Path.Combine(cache, "background.mp3");
+        _pongPath = Path.Combine(cache, "sfx_pong.mp3");
+        _bgPath   = Path.Combine(cache, "bg_music.mp3");
 
         if (!File.Exists(_pongPath))
         {
             try
             {
-                using var src  = await FileSystem.OpenAppPackageFileAsync("pong.mp3");
-                await using var dst = File.Create(_pongPath);
+                using var src = await FileSystem.OpenAppPackageFileAsync("pong.mp3");
+                using var dst = File.Create(_pongPath);
                 await src.CopyToAsync(dst);
             }
             catch { _pongPath = null; }
@@ -100,8 +105,8 @@ public class AudioService : IDisposable
         {
             try
             {
-                using var src  = await FileSystem.OpenAppPackageFileAsync("background.mp3");
-                await using var dst = File.Create(_bgPath);
+                using var src = await FileSystem.OpenAppPackageFileAsync("background.mp3");
+                using var dst = File.Create(_bgPath);
                 await src.CopyToAsync(dst);
             }
             catch { _bgPath = null; }
@@ -114,36 +119,36 @@ public class AudioService : IDisposable
     {
         if (!MusicEnabled) return;
 
-        if (_bgPlayer != null)
-        {
-            try   { if (_bgPlayer.IsPlaying) return; }
-            catch { }
-            StopBackgroundMusic();
-        }
-
-        // Ensure cached file exists
-        if (_bgPath == null || !File.Exists(_bgPath))
-            await PreloadAsync();
-
+        // Ensure files are on disk before creating player
+        if (!_preloaded) await PreloadAsync();
         if (_bgPath == null) return;
 
+        // Block concurrent calls — skip if someone is already starting
+        if (!await _lock.WaitAsync(0)) return;
         try
         {
+            // Already playing → nothing to do
+            if (_bgPlayer != null)
+            {
+                bool playing = false;
+                try { playing = _bgPlayer.IsPlaying; } catch { }
+                if (playing) return;
+                StopBackgroundMusic();
+            }
+
             _bgPlayer = _mgr.CreatePlayer(_bgPath);
             _bgPlayer.Loop   = true;
             _bgPlayer.Volume = _vol;
             _bgPlayer.Play();
         }
-        catch
-        {
-            StopBackgroundMusic();
-        }
+        catch { StopBackgroundMusic(); }
+        finally { _lock.Release(); }
     }
 
     private async Task RestartMusicAsync()
     {
         StopBackgroundMusic();
-        await Task.Delay(100);
+        await Task.Delay(150);
         await StartBackgroundMusicAsync();
     }
 
@@ -155,8 +160,7 @@ public class AudioService : IDisposable
         try { p?.Dispose(); } catch { }
     }
 
-    // ── SFX ──────────────────────────────────────────────────────────────────
-    // Deferred disposal off the PlaybackEnded Java callback thread.
+    // ── SFX — short pong click, completely separate from music ───────────────
 
     public void PlayTap()
     {
@@ -188,7 +192,8 @@ public class AudioService : IDisposable
     {
         if (_disposed) return;
         _disposed = true;
-        _volSaveCts?.Cancel();
+        _volCts?.Cancel();
+        _lock.Dispose();
         StopBackgroundMusic();
     }
 }
