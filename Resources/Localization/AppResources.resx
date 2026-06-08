@@ -36,15 +36,15 @@
   <data name="WelcomeSub"      xml:space="preserve"><value>Guess today's mystery programming language</value></data>
   <data name="HowTo"           xml:space="preserve"><value>Tap a card or swipe it up to guess. Green = correct, Yellow = close, Red = wrong. You have 6 attempts.</value></data>
   <data name="PlayBtn"         xml:space="preserve"><value>Daily Challenge</value></data>
-  <data name="StreakBtn"       xml:space="preserve"><value>Streak Mode</value></data>
+  <data name="StreakBtn"       xml:space="preserve"><value>Score Mode</value></data>
   <data name="ChooseLang"      xml:space="preserve"><value>Interface language</value></data>
   <data name="ChooseTheme"     xml:space="preserve"><value>Dark mode</value></data>
   <data name="PlayAgain"       xml:space="preserve"><value>Play again</value></data>
   <data name="ClearHistory"    xml:space="preserve"><value>Clear history</value></data>
   <data name="WinMsg"          xml:space="preserve"><value>You guessed it!</value></data>
   <data name="LossMsg"         xml:space="preserve"><value>You lost! The answer was:</value></data>
-  <data name="StreakTitle"     xml:space="preserve"><value>Streak Challenge</value></data>
-  <data name="StreakSub"       xml:space="preserve"><value>How many in a row can you guess?</value></data>
+  <data name="StreakTitle"     xml:space="preserve"><value>Score Mode</value></data>
+  <data name="StreakSub"       xml:space="preserve"><value>Guess languages and build your score!</value></data>
   <data name="CurrentStreak"   xml:space="preserve"><value>Streak</value></data>
   <data name="BestStreak"      xml:space="preserve"><value>Best</value></data>
   <data name="NextBtn"         xml:space="preserve"><value>Next language!</value></data>

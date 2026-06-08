@@ -27,6 +27,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<SettingsService>();
         builder.Services.AddSingleton<AudioService>();
 
+        // IAudioManager — Plugin.Maui.Audio provides AudioManager.Current as static accessor
         builder.Services.AddSingleton<IAudioManager>(_ =>
         {
             try { return AudioManager.Current; }

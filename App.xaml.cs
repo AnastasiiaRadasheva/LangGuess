@@ -17,12 +17,6 @@ public partial class App : Application
     protected override Window CreateWindow(IActivationState? activationState)
         => new Window(new AppShell());
 
-    protected override async void OnStart()
-    {
-        base.OnStart();
-        await _audio.StartBackgroundMusicAsync();
-    }
-
     protected override void OnSleep()
     {
         base.OnSleep();

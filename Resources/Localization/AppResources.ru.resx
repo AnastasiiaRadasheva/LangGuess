@@ -36,15 +36,15 @@
   <data name="WelcomeSub"      xml:space="preserve"><value>Угадай сегодняшний язык программирования</value></data>
   <data name="HowTo"           xml:space="preserve"><value>Нажми на карточку или проведи вверх для угадывания. Зелёный = верно, жёлтый = близко, красный = нет. У тебя 6 попыток.</value></data>
   <data name="PlayBtn"         xml:space="preserve"><value>Ежедневный вызов</value></data>
-  <data name="StreakBtn"       xml:space="preserve"><value>Режим серии</value></data>
+  <data name="StreakBtn"       xml:space="preserve"><value>Режим очков</value></data>
   <data name="ChooseLang"      xml:space="preserve"><value>Язык интерфейса</value></data>
   <data name="ChooseTheme"     xml:space="preserve"><value>Тёмный режим</value></data>
   <data name="PlayAgain"       xml:space="preserve"><value>Играть снова</value></data>
   <data name="ClearHistory"    xml:space="preserve"><value>Очистить историю</value></data>
   <data name="WinMsg"          xml:space="preserve"><value>Ты угадал!</value></data>
   <data name="LossMsg"         xml:space="preserve"><value>Ты проиграл! Ответ был:</value></data>
-  <data name="StreakTitle"     xml:space="preserve"><value>Серия угадываний</value></data>
-  <data name="StreakSub"       xml:space="preserve"><value>Сколько подряд ты сможешь угадать?</value></data>
+  <data name="StreakTitle"     xml:space="preserve"><value>Режим очков</value></data>
+  <data name="StreakSub"       xml:space="preserve"><value>Угадывай языки и набирай очки!</value></data>
   <data name="CurrentStreak"   xml:space="preserve"><value>Серия</value></data>
   <data name="BestStreak"      xml:space="preserve"><value>Рекорд</value></data>
   <data name="NextBtn"         xml:space="preserve"><value>Следующий язык!</value></data>

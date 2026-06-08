@@ -7,13 +7,11 @@ public class AudioService : IDisposable
     private readonly IAudioManager? _audio;
     private IAudioPlayer?           _bgPlayer;
     private Stream?                 _bgStream;
-    private System.Threading.Timer? _fadeTimer;
-    private bool                    _fadingOut;
     private bool                    _disposed;
 
-    private const string MusicKey   = "music_enabled";
+    private const string MusicKey    = "music_enabled";
     private const string MusicVolKey = "music_volume";
-    private const string SfxKey     = "sfx_enabled";
+    private const string SfxKey      = "sfx_enabled";
 
     public bool MusicEnabled
     {
@@ -21,8 +19,10 @@ public class AudioService : IDisposable
         set
         {
             Preferences.Set(MusicKey, value);
-            if (!value) StopBackgroundMusic();
-            else        _ = StartBackgroundMusicAsync();
+            if (!value)
+                MainThread.BeginInvokeOnMainThread(StopBackgroundMusic);
+            else
+                _ = StartBackgroundMusicAsync();
         }
     }
 
@@ -31,8 +31,10 @@ public class AudioService : IDisposable
         get => Preferences.Get(MusicVolKey, 0.5);
         set
         {
-            Preferences.Set(MusicVolKey, value);
-            if (_bgPlayer != null) _bgPlayer.Volume = value;
+            var v = Math.Clamp(value, 0.0, 1.0);
+            Preferences.Set(MusicVolKey, v);
+            if (_bgPlayer != null)
+                try { _bgPlayer.Volume = v; } catch { }
         }
     }
 
@@ -42,7 +44,7 @@ public class AudioService : IDisposable
         set => Preferences.Set(SfxKey, value);
     }
 
-    // Legacy property so SettingsService doesn't break
+    // Legacy alias so nothing else breaks
     public bool IsEnabled
     {
         get => SfxEnabled;
@@ -52,98 +54,41 @@ public class AudioService : IDisposable
     public AudioService(IAudioManager? audio = null) => _audio = audio;
 
     // ── Background music ────────────────────────────────────────────────────
+    // Uses Loop = true — seamless looping without any timer or event hackery.
 
     public async Task StartBackgroundMusicAsync()
     {
         if (_audio == null || !MusicEnabled) return;
+        if (_bgPlayer != null) return; // already running
+
         try
         {
-            StopBackgroundMusic();
             _bgStream = await FileSystem.OpenAppPackageFileAsync("background.mp3");
             _bgPlayer = _audio.CreatePlayer(_bgStream);
-            _bgPlayer.Volume = 0;
-            _bgPlayer.Loop   = false; // we handle loop manually for crossfade
-            _bgPlayer.PlaybackEnded += OnBgEnded;
+            _bgPlayer.Loop   = true;
+            _bgPlayer.Volume = MusicVolume;
             _bgPlayer.Play();
-            _fadingOut = false;
-            StartFadeTimer();
-            await FadeInAsync();
         }
-        catch { /* file missing — silently skip */ }
+        catch { /* file missing or audio not available */ }
     }
 
     public void StopBackgroundMusic()
     {
-        _fadeTimer?.Dispose();
-        _fadeTimer = null;
-        if (_bgPlayer != null)
-        {
-            _bgPlayer.PlaybackEnded -= OnBgEnded;
-            _bgPlayer.Stop();
-            _bgPlayer.Dispose();
-            _bgPlayer = null;
-        }
-        _bgStream?.Dispose();
+        var player = _bgPlayer;
+        var stream = _bgStream;
+        _bgPlayer = null;
         _bgStream = null;
-    }
 
-    // ── Crossfade loop ──────────────────────────────────────────────────────
-
-    private void StartFadeTimer()
-    {
-        _fadeTimer?.Dispose();
-        _fadeTimer = new System.Threading.Timer(CheckFade, null, 500, 500);
-    }
-
-    private async void CheckFade(object? _)
-    {
-        if (_bgPlayer == null || _fadingOut) return;
-        try
-        {
-            double remaining = _bgPlayer.Duration - _bgPlayer.CurrentPosition;
-            if (remaining > 0 && remaining < 3.0)
-            {
-                _fadingOut = true;
-                await FadeOutAsync();
-            }
-        }
-        catch { }
-    }
-
-    private async Task FadeInAsync()
-    {
-        double target = MusicVolume;
-        if (_bgPlayer == null) return;
-        while (_bgPlayer != null && _bgPlayer.Volume < target - 0.01)
-        {
-            _bgPlayer.Volume = Math.Min(target, _bgPlayer.Volume + 0.04);
-            await Task.Delay(60);
-        }
-        if (_bgPlayer != null) _bgPlayer.Volume = target;
-    }
-
-    private async Task FadeOutAsync()
-    {
-        if (_bgPlayer == null) return;
-        while (_bgPlayer != null && _bgPlayer.Volume > 0.01)
-        {
-            _bgPlayer.Volume = Math.Max(0, _bgPlayer.Volume - 0.04);
-            await Task.Delay(60);
-        }
-        if (_bgPlayer != null) _bgPlayer.Volume = 0;
-    }
-
-    private async void OnBgEnded(object? sender, EventArgs e)
-    {
-        _fadeTimer?.Dispose();
-        _fadeTimer = null;
-        if (!MusicEnabled) return;
-        // Brief pause before restarting so the loop feels intentional
-        await Task.Delay(200);
-        await StartBackgroundMusicAsync();
+        try { player?.Stop(); }    catch { }
+        try { player?.Dispose(); } catch { }
+        try { stream?.Dispose(); } catch { }
     }
 
     // ── SFX ────────────────────────────────────────────────────────────────
+    // IMPORTANT: Never call player.Dispose() inside PlaybackEnded on Android —
+    // that fires on the Java audio thread and causes ObjectDisposedException.
+    // Instead we wait a short moment on a background thread, then dispose on
+    // the main thread after the callback chain is fully unwound.
 
     private async Task PlaySfxAsync(string fileName)
     {
@@ -154,7 +99,21 @@ public class AudioService : IDisposable
             var player = _audio.CreatePlayer(stream);
             player.Volume = 1.0;
             player.Play();
-            player.PlaybackEnded += (_, _) => { player.Dispose(); stream.Dispose(); };
+
+            // Defer cleanup: wait until the sound is definitely done,
+            // then dispose safely on the main thread.
+            player.PlaybackEnded += (_, _) =>
+            {
+                _ = Task.Run(async () =>
+                {
+                    await Task.Delay(300);
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        try { player.Dispose(); } catch { }
+                        try { stream.Dispose(); } catch { }
+                    });
+                });
+            };
         }
         catch { }
     }
