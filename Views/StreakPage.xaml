@@ -38,15 +38,15 @@
                         Command="{Binding BackCommand}"/>
 
                 <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
-                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakTitle]}"
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreTitle]}"
                            TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
                            FontSize="18" FontAttributes="Bold"/>
-                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakSub]}"
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreSub]}"
                            TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
                            FontSize="10"/>
                 </VerticalStackLayout>
 
-                <!-- Current streak -->
+                <!-- Score badge -->
                 <Border Grid.Column="2"
                         BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1E1540}"
                         StrokeShape="RoundRectangle 6"
@@ -54,28 +54,11 @@
                         StrokeThickness="1" Padding="10,6" Margin="0,0,6,0"
                         VerticalOptions="Center">
                     <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[CurrentStreak]}"
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreLabel]}"
                                TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#9B8EC4}"
                                FontSize="9" HorizontalOptions="Center"/>
-                        <Label Text="{Binding CurrentStreak}"
+                        <Label Text="{Binding Score}"
                                TextColor="#F0A500"
-                               FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Best streak -->
-                <Border Grid.Column="3"
-                        BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1E1540}"
-                        StrokeShape="RoundRectangle 6"
-                        Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
-                        StrokeThickness="1" Padding="10,6" Margin="0,0,6,0"
-                        VerticalOptions="Center">
-                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[BestStreak]}"
-                               TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#9B8EC4}"
-                               FontSize="9" HorizontalOptions="Center"/>
-                        <Label Text="{Binding BestStreak}"
-                               TextColor="#A374FF"
                                FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
@@ -213,7 +196,7 @@
                         BackgroundColor="#0F3D1A" StrokeShape="RoundRectangle 8"
                         Stroke="#2EA043" StrokeThickness="1.5" Padding="12,8">
                     <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakWinMsg]}"
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreWinMsg]}"
                                TextColor="#6EE7A0" FontSize="15" FontAttributes="Bold"
                                HorizontalOptions="Center"/>
                         <Label Text="{Binding StatusMessage}"
@@ -231,14 +214,14 @@
                         BackgroundColor="#3D0F0F" StrokeShape="RoundRectangle 8"
                         Stroke="#C0392B" StrokeThickness="1.5" Padding="12,8">
                     <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[StreakLossMsg]}"
+                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreLossMsg]}"
                                TextColor="#FF8080" FontSize="15" FontAttributes="Bold"
                                HorizontalOptions="Center"/>
                         <Label Text="{Binding StatusMessage}"
                                TextColor="White" FontSize="13" FontAttributes="Bold"
                                HorizontalOptions="Center"/>
-                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[RestartBtn]}"
-                                Command="{Binding RestartCommand}"
+                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[NextBtn]}"
+                                Command="{Binding NextCommand}"
                                 BackgroundColor="#C0392B" TextColor="White"
                                 FontSize="12" CornerRadius="6" HeightRequest="34" Padding="20,0"/>
                     </VerticalStackLayout>

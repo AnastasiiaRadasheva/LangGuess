@@ -52,6 +52,15 @@
   <data name="StreakWinMsg"    xml:space="preserve"><value>Верно! Продолжай!</value></data>
   <data name="StreakLossMsg"   xml:space="preserve"><value>Серия прервана! Ответ был:</value></data>
   <data name="LangInfoTitle"   xml:space="preserve"><value>Справочник языков</value></data>
-  <data name="WhoAreYou"       xml:space="preserve"><value>Как тебя зовут?</value></data>
-  <data name="Hello"           xml:space="preserve"><value>Привет,</value></data>
+  <data name="WhoAreYou"          xml:space="preserve"><value>Как тебя зовут?</value></data>
+  <data name="Hello"              xml:space="preserve"><value>Привет,</value></data>
+  <data name="AlreadyPlayedTitle" xml:space="preserve"><value>Дневной вызов выполнен!</value></data>
+  <data name="AlreadyPlayedSub"   xml:space="preserve"><value>Возвращайся завтра за новым языком.</value></data>
+  <data name="TodaysAnswer"       xml:space="preserve"><value>Язык дня:</value></data>
+  <data name="GoToScore"          xml:space="preserve"><value>Попробовать режим очков</value></data>
+  <data name="ScoreLabel"         xml:space="preserve"><value>Очки</value></data>
+  <data name="ScoreTitle"         xml:space="preserve"><value>Режим очков</value></data>
+  <data name="ScoreSub"           xml:space="preserve"><value>Угадывай языки и зарабатывай очки!</value></data>
+  <data name="ScoreLossMsg"       xml:space="preserve"><value>Не угадал! Ответ был:</value></data>
+  <data name="ScoreWinMsg"        xml:space="preserve"><value>+1 очко! Продолжай!</value></data>
 </root>

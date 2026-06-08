@@ -2,7 +2,6 @@ using LangGuess.Services;
 using LangGuess.ViewModels;
 using LangGuess.Views;
 using Microsoft.Extensions.Logging;
-using Plugin.Maui.Audio;
 
 namespace LangGuess;
 
@@ -20,19 +19,12 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Services
+        // Services (AudioService accesses AudioManager.Current lazily — no DI for IAudioManager)
         builder.Services.AddSingleton(LocalizationService.Instance);
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddSingleton<GameService>();
         builder.Services.AddSingleton<SettingsService>();
         builder.Services.AddSingleton<AudioService>();
-
-        // IAudioManager — Plugin.Maui.Audio provides AudioManager.Current as static accessor
-        builder.Services.AddSingleton<IAudioManager>(_ =>
-        {
-            try { return AudioManager.Current; }
-            catch { return null!; }
-        });
 
         // ViewModels
         builder.Services.AddTransient<HomeViewModel>();

@@ -132,22 +132,8 @@
                         BorderWidth="1.5"/>
             </VerticalStackLayout>
 
-            <!-- LANGUAGE SELECTOR -->
-            <Grid IsVisible="{Binding HasName}"
-                  Margin="20,24,20,36" ColumnDefinitions="*,*,*" ColumnSpacing="8">
-                <Button Grid.Column="0" Text="EN"
-                        BackgroundColor="{Binding Lang0Color}" TextColor="{Binding Lang0Text}"
-                        FontSize="13" CornerRadius="8" HeightRequest="38"
-                        Command="{Binding SelectLangCommand}" CommandParameter="0"/>
-                <Button Grid.Column="1" Text="ET"
-                        BackgroundColor="{Binding Lang1Color}" TextColor="{Binding Lang1Text}"
-                        FontSize="13" CornerRadius="8" HeightRequest="38"
-                        Command="{Binding SelectLangCommand}" CommandParameter="1"/>
-                <Button Grid.Column="2" Text="RU"
-                        BackgroundColor="{Binding Lang2Color}" TextColor="{Binding Lang2Text}"
-                        FontSize="13" CornerRadius="8" HeightRequest="38"
-                        Command="{Binding SelectLangCommand}" CommandParameter="2"/>
-            </Grid>
+            <!-- bottom padding -->
+            <BoxView IsVisible="{Binding HasName}" HeightRequest="36" BackgroundColor="Transparent"/>
 
         </VerticalStackLayout>
     </ScrollView>

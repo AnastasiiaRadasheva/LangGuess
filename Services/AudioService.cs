@@ -2,16 +2,21 @@ using Plugin.Maui.Audio;
 
 namespace LangGuess.Services;
 
+/// <summary>
+/// Handles background music (looping) and tap SFX.
+/// Uses AudioManager.Current lazily so it works regardless of DI init order.
+/// </summary>
 public class AudioService : IDisposable
 {
-    private readonly IAudioManager? _audio;
-    private IAudioPlayer?           _bgPlayer;
-    private Stream?                 _bgStream;
-    private bool                    _disposed;
+    private IAudioPlayer? _bgPlayer;
+    private Stream?       _bgStream;
+    private bool          _disposed;
 
     private const string MusicKey    = "music_enabled";
     private const string MusicVolKey = "music_volume";
     private const string SfxKey      = "sfx_enabled";
+
+    // ── Settings ────────────────────────────────────────────────────────────
 
     public bool MusicEnabled
     {
@@ -19,10 +24,8 @@ public class AudioService : IDisposable
         set
         {
             Preferences.Set(MusicKey, value);
-            if (!value)
-                MainThread.BeginInvokeOnMainThread(StopBackgroundMusic);
-            else
-                _ = StartBackgroundMusicAsync();
+            if (!value) MainThread.BeginInvokeOnMainThread(StopBackgroundMusic);
+            else        _ = StartBackgroundMusicAsync();
         }
     }
 
@@ -33,8 +36,7 @@ public class AudioService : IDisposable
         {
             var v = Math.Clamp(value, 0.0, 1.0);
             Preferences.Set(MusicVolKey, v);
-            if (_bgPlayer != null)
-                try { _bgPlayer.Volume = v; } catch { }
+            if (_bgPlayer != null) try { _bgPlayer.Volume = v; } catch { }
         }
     }
 
@@ -44,66 +46,59 @@ public class AudioService : IDisposable
         set => Preferences.Set(SfxKey, value);
     }
 
-    // Legacy alias so nothing else breaks
-    public bool IsEnabled
+    public bool IsEnabled { get => SfxEnabled; set => SfxEnabled = value; }
+
+    // ── Lazy audio manager — no DI dependency, works on all platforms ────────
+    private static IAudioManager? GetManager()
     {
-        get => SfxEnabled;
-        set => SfxEnabled = value;
+        try { return AudioManager.Current; }
+        catch { return null; }
     }
 
-    public AudioService(IAudioManager? audio = null) => _audio = audio;
-
     // ── Background music ────────────────────────────────────────────────────
-    // Uses Loop = true — seamless looping without any timer or event hackery.
 
     public async Task StartBackgroundMusicAsync()
     {
-        if (_audio == null || !MusicEnabled) return;
-        if (_bgPlayer != null) return; // already running
-
+        if (!MusicEnabled || _bgPlayer != null) return;
+        var mgr = GetManager();
+        if (mgr == null) return;
         try
         {
             _bgStream = await FileSystem.OpenAppPackageFileAsync("background.mp3");
-            _bgPlayer = _audio.CreatePlayer(_bgStream);
+            _bgPlayer = mgr.CreatePlayer(_bgStream);
             _bgPlayer.Loop   = true;
             _bgPlayer.Volume = MusicVolume;
             _bgPlayer.Play();
         }
-        catch { /* file missing or audio not available */ }
+        catch { }
     }
 
     public void StopBackgroundMusic()
     {
-        var player = _bgPlayer;
-        var stream = _bgStream;
-        _bgPlayer = null;
-        _bgStream = null;
-
-        try { player?.Stop(); }    catch { }
-        try { player?.Dispose(); } catch { }
-        try { stream?.Dispose(); } catch { }
+        var p = _bgPlayer; var s = _bgStream;
+        _bgPlayer = null;  _bgStream = null;
+        try { p?.Stop(); }    catch { }
+        try { p?.Dispose(); } catch { }
+        try { s?.Dispose(); } catch { }
     }
 
     // ── SFX ────────────────────────────────────────────────────────────────
-    // IMPORTANT: Never call player.Dispose() inside PlaybackEnded on Android —
-    // that fires on the Java audio thread and causes ObjectDisposedException.
-    // Instead we wait a short moment on a background thread, then dispose on
-    // the main thread after the callback chain is fully unwound.
+    // Disposal is deferred off the PlaybackEnded callback thread to avoid
+    // ObjectDisposedException on Android (Java audio thread cannot dispose
+    // Mono objects directly).
 
     private async Task PlaySfxAsync(string fileName)
     {
-        if (!SfxEnabled || _audio == null) return;
+        if (!SfxEnabled) return;
+        var mgr = GetManager();
+        if (mgr == null) return;
         try
         {
             var stream = await FileSystem.OpenAppPackageFileAsync(fileName);
-            var player = _audio.CreatePlayer(stream);
+            var player = mgr.CreatePlayer(stream);
             player.Volume = 1.0;
             player.Play();
-
-            // Defer cleanup: wait until the sound is definitely done,
-            // then dispose safely on the main thread.
             player.PlaybackEnded += (_, _) =>
-            {
                 _ = Task.Run(async () =>
                 {
                     await Task.Delay(300);
@@ -113,7 +108,6 @@ public class AudioService : IDisposable
                         try { stream.Dispose(); } catch { }
                     });
                 });
-            };
         }
         catch { }
     }

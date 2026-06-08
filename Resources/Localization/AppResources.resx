@@ -52,6 +52,15 @@
   <data name="StreakWinMsg"    xml:space="preserve"><value>Correct! Keep going!</value></data>
   <data name="StreakLossMsg"   xml:space="preserve"><value>Streak broken! Answer was:</value></data>
   <data name="LangInfoTitle"   xml:space="preserve"><value>Language guide</value></data>
-  <data name="WhoAreYou"       xml:space="preserve"><value>What is your name?</value></data>
-  <data name="Hello"           xml:space="preserve"><value>Hello,</value></data>
+  <data name="WhoAreYou"          xml:space="preserve"><value>What is your name?</value></data>
+  <data name="Hello"              xml:space="preserve"><value>Hello,</value></data>
+  <data name="AlreadyPlayedTitle" xml:space="preserve"><value>Today's challenge is done!</value></data>
+  <data name="AlreadyPlayedSub"   xml:space="preserve"><value>Come back tomorrow for a new language.</value></data>
+  <data name="TodaysAnswer"       xml:space="preserve"><value>Today's language:</value></data>
+  <data name="GoToScore"          xml:space="preserve"><value>Try Score Mode</value></data>
+  <data name="ScoreLabel"         xml:space="preserve"><value>Score</value></data>
+  <data name="ScoreTitle"         xml:space="preserve"><value>Score Mode</value></data>
+  <data name="ScoreSub"           xml:space="preserve"><value>Guess languages and earn points!</value></data>
+  <data name="ScoreLossMsg"       xml:space="preserve"><value>Not this time! The answer was:</value></data>
+  <data name="ScoreWinMsg"        xml:space="preserve"><value>+1 point! Keep going!</value></data>
 </root>
