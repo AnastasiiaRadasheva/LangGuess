@@ -42,21 +42,37 @@ public class SettingsViewModel : BaseViewModel
     public bool MusicEnabled
     {
         get => _musicEnabled;
-        set { SetField(ref _musicEnabled, value); _audio.MusicEnabled = value; }
+        set
+        {
+            // Guard: only push to AudioService when value actually changes.
+            // MAUI Switch binding fires IsToggled=false briefly on init —
+            // without this guard that stops the music every time Settings opens.
+            if (!SetField(ref _musicEnabled, value)) return;
+            _audio.MusicEnabled = value;
+        }
     }
 
     private double _musicVolume;
     public double MusicVolume
     {
         get => _musicVolume;
-        set { SetField(ref _musicVolume, value); _audio.MusicVolume = value; /* AudioService handles live update + debounced Preferences save */ }
+        set
+        {
+            if (!SetField(ref _musicVolume, value)) return;
+            _audio.MusicVolume = value;
+        }
     }
 
     private bool _sfxEnabled;
     public bool SfxEnabled
     {
         get => _sfxEnabled;
-        set { SetField(ref _sfxEnabled, value); _settings.SfxEnabled = value; _audio.SfxEnabled = value; }
+        set
+        {
+            if (!SetField(ref _sfxEnabled, value)) return;
+            _settings.SfxEnabled = value;
+            _audio.SfxEnabled = value;
+        }
     }
 
     private string _playerName = "";

@@ -25,6 +25,9 @@ public partial class StreakPage : ContentPage
         _vm    = (StreakViewModel)BindingContext;
         _audio = IPlatformApplication.Current!.Services.GetRequiredService<AudioService>();
 
+        // Safety net: restart music if it stopped during navigation
+        await _audio.StartBackgroundMusicAsync();
+
         _vm.AvailableLanguages.CollectionChanged += (_, _) => RefreshLangCards();
         await _vm.InitAsync();
         RefreshLangCards();
