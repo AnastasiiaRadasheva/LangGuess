@@ -26,11 +26,5 @@ public partial class HomePage : ContentPage
             audio.PreloadAsync(),
             audio.StartBackgroundMusicAsync()
         );
-
-#if DEBUG
-        // Show audio diagnostics on screen so we can see what's failing on device
-        AudioDiagLabel.Text      = audio.LastError;
-        AudioDiagLabel.IsVisible = !string.IsNullOrEmpty(audio.LastError);
-#endif
     }
 }

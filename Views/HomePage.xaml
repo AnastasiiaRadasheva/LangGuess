@@ -24,11 +24,6 @@
                         Command="{Binding GoToSettingsCommand}"/>
             </Grid>
 
-            <!-- AUDIO DIAG (DEBUG only — remove before release) -->
-            <Label x:Name="AudioDiagLabel"
-                   TextColor="Red" FontSize="10" Margin="8,4"
-                   IsVisible="False"/>
-
             <!-- NAME PROMPT (shown only if no name saved) -->
             <Border IsVisible="{Binding HasNoName}"
                     Margin="20,20,20,0"
