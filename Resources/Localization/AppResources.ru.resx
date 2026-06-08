@@ -63,4 +63,8 @@
   <data name="ScoreSub"           xml:space="preserve"><value>Угадывай языки и зарабатывай очки!</value></data>
   <data name="ScoreLossMsg"       xml:space="preserve"><value>Не угадал! Ответ был:</value></data>
   <data name="ScoreWinMsg"        xml:space="preserve"><value>+1 очко! Продолжай!</value></data>
+  <data name="HardModeLabel"      xml:space="preserve"><value>Сложный режим</value></data>
+  <data name="HardModeSub"        xml:space="preserve"><value>Только 3 попытки — счёт сбрасывается при проигрыше</value></data>
+  <data name="NormalScore"        xml:space="preserve"><value>Обычный</value></data>
+  <data name="HardScore"          xml:space="preserve"><value>Хард</value></data>
 </root>

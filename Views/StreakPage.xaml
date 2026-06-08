@@ -6,257 +6,289 @@
              x:Class="LangGuess.Views.StreakPage"
              BackgroundColor="{AppThemeBinding Light=#F5F0FF, Dark=#0A0714}">
 
-    <AbsoluteLayout x:Name="RootLayout">
-        <Grid AbsoluteLayout.LayoutBounds="0,0,1,1"
-              AbsoluteLayout.LayoutFlags="SizeProportional"
-              RowSpacing="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="130"/>
-            </Grid.RowDefinitions>
+    <Grid RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="130"/>
+        </Grid.RowDefinitions>
 
-            <!-- ── HEADER ── -->
-            <Grid Grid.Row="0"
-                  BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}"
-                  Padding="16,12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+        <!-- ── HEADER ── -->
+        <Grid Grid.Row="0"
+              BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}"
+              Padding="12,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0"
-                        Text="&#8592;"
-                        BackgroundColor="Transparent"
-                        TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
-                        FontSize="20" Padding="0,0,8,0"
-                        Command="{Binding BackCommand}"/>
+            <Button Grid.Column="0" Text="&#8592;"
+                    BackgroundColor="Transparent"
+                    TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
+                    FontSize="20" Padding="0,0,8,0"
+                    Command="{Binding BackCommand}"/>
 
-                <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
-                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreTitle]}"
-                           TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
-                           FontSize="18" FontAttributes="Bold"/>
-                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreSub]}"
-                           TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
-                           FontSize="10"/>
-                </VerticalStackLayout>
-
-                <!-- Score badge -->
-                <Border Grid.Column="2"
-                        BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1E1540}"
-                        StrokeShape="RoundRectangle 6"
-                        Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
-                        StrokeThickness="1" Padding="10,6" Margin="0,0,6,0"
-                        VerticalOptions="Center">
-                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreLabel]}"
-                               TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#9B8EC4}"
-                               FontSize="9" HorizontalOptions="Center"/>
-                        <Label Text="{Binding Score}"
-                               TextColor="#F0A500"
-                               FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                </Border>
-
-                <Button Grid.Column="4"
-                        Text="&#9881;"
-                        BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#2A1F45}"
-                        TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
-                        FontSize="18" CornerRadius="6" Padding="10,6"
-                        Command="{Binding GoToSettingsCommand}"/>
-            </Grid>
-
-            <!-- ── COLUMN HEADERS ── -->
-            <ScrollView Grid.Row="1" x:Name="HeaderScroll"
-                        Orientation="Horizontal" HorizontalScrollBarVisibility="Never"
-                        BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}">
-                <Grid WidthRequest="560" ColumnSpacing="2" Padding="4,6,4,4"
-                      ColumnDefinitions="88,56,56,52,60,52,56,56">
-                    <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColLang]}" Style="{StaticResource ColHeader}"/>
-                    </Border>
-                    <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColYear]}" Style="{StaticResource ColHeader}"/>
-                    </Border>
-                    <Border Grid.Column="2" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPara]}" Style="{StaticResource ColHeader}"/>
-                    </Border>
-                    <Border Grid.Column="3" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColType]}" Style="{StaticResource ColHeader}"/>
-                    </Border>
-                    <Border Grid.Column="4" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColComp]}" Style="{StaticResource ColHeader}"/>
-                    </Border>
-                    <Border Grid.Column="5" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPlat]}" Style="{StaticResource ColHeader}"/>
-                    </Border>
-                    <Border Grid.Column="6" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPop]}" Style="{StaticResource ColHeader}"/>
-                    </Border>
-                    <Border Grid.Column="7" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColGC]}" Style="{StaticResource ColHeader}"/>
-                    </Border>
-                </Grid>
-            </ScrollView>
-
-            <!-- ── GUESS ROWS ── -->
-            <ScrollView Grid.Row="2" x:Name="RowsScroll"
-                        Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                <CollectionView ItemsSource="{Binding GuessRows}" WidthRequest="560">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:GuessResultRow">
-                            <Grid ColumnSpacing="2" Margin="4,2,4,0"
-                                  ColumnDefinitions="88,56,56,52,60,52,56,56">
-                                <Border Grid.Column="0" BackgroundColor="{Binding AbbrColor}"
-                                        StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,6">
-                                    <VerticalStackLayout Spacing="1" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Abbr}" TextColor="#A374FF"
-                                               FontSize="13" FontAttributes="Bold" HorizontalOptions="Center"/>
-                                        <Label Text="{Binding LanguageName}" TextColor="White"
-                                               FontSize="9" HorizontalOptions="Center"
-                                               MaxLines="1" LineBreakMode="TailTruncation"/>
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="1" BackgroundColor="{Binding YearColor}"
-                                        StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
-                                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Year}" TextColor="White" FontSize="10" FontAttributes="Bold" HorizontalOptions="Center"/>
-                                        <Label Text="{Binding YearArrow}" TextColor="{Binding YearArrowColor}"
-                                               FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
-                                               IsVisible="{Binding YearArrow, Converter={StaticResource NotEmptyBool}}"/>
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="2" BackgroundColor="{Binding ParadigmColor}"
-                                        StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
-                                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Paradigm}" Style="{StaticResource CellLabel}" FontSize="9"/>
-                                        <Label Text="{Binding ParadigmArrow}" TextColor="{Binding ParadigmArrowColor}"
-                                               FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
-                                               IsVisible="{Binding ParadigmArrow, Converter={StaticResource NotEmptyBool}}"/>
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="3" BackgroundColor="{Binding TypingColor}"
-                                        StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
-                                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Typing}" Style="{StaticResource CellLabel}" FontSize="9"/>
-                                        <Label Text="{Binding TypingArrow}" TextColor="{Binding TypingArrowColor}"
-                                               FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
-                                               IsVisible="{Binding TypingArrow, Converter={StaticResource NotEmptyBool}}"/>
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="4" BackgroundColor="{Binding CompilationColor}"
-                                        StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
-                                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Compilation}" Style="{StaticResource CellLabel}" FontSize="9"/>
-                                        <Label Text="{Binding CompilationArrow}" TextColor="{Binding CompilationArrowColor}"
-                                               FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
-                                               IsVisible="{Binding CompilationArrow, Converter={StaticResource NotEmptyBool}}"/>
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="5" BackgroundColor="{Binding PlatformColor}"
-                                        StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
-                                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Platform}" Style="{StaticResource CellLabel}" FontSize="9"/>
-                                        <Label Text="{Binding PlatformArrow}" TextColor="{Binding PlatformArrowColor}"
-                                               FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
-                                               IsVisible="{Binding PlatformArrow, Converter={StaticResource NotEmptyBool}}"/>
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="6" BackgroundColor="{Binding PopularityColor}"
-                                        StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
-                                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding Popularity}" Style="{StaticResource CellLabel}" FontSize="9"/>
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="7" BackgroundColor="{Binding GCTypeColor}"
-                                        StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
-                                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
-                                        <Label Text="{Binding GCType}" Style="{StaticResource CellLabel}" FontSize="9"/>
-                                        <Label Text="{Binding GCTypeArrow}" TextColor="{Binding GCTypeArrowColor}"
-                                               FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
-                                               IsVisible="{Binding GCTypeArrow, Converter={StaticResource NotEmptyBool}}"/>
-                                    </VerticalStackLayout>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </ScrollView>
-
-            <!-- ── STATUS ── -->
-            <VerticalStackLayout Grid.Row="3" Spacing="6" Padding="12,4,12,4">
-
-                <!-- WIN banner -->
-                <Border IsVisible="{Binding IsWon}"
-                        BackgroundColor="#0F3D1A" StrokeShape="RoundRectangle 8"
-                        Stroke="#2EA043" StrokeThickness="1.5" Padding="12,8">
-                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreWinMsg]}"
-                               TextColor="#6EE7A0" FontSize="15" FontAttributes="Bold"
-                               HorizontalOptions="Center"/>
-                        <Label Text="{Binding StatusMessage}"
-                               TextColor="White" FontSize="13" FontAttributes="Bold"
-                               HorizontalOptions="Center"/>
-                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[NextBtn]}"
-                                Command="{Binding NextCommand}"
-                                BackgroundColor="#2EA043" TextColor="White"
-                                FontSize="12" CornerRadius="6" HeightRequest="34" Padding="20,0"/>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- LOSS banner -->
-                <Border IsVisible="{Binding IsLost}"
-                        BackgroundColor="#3D0F0F" StrokeShape="RoundRectangle 8"
-                        Stroke="#C0392B" StrokeThickness="1.5" Padding="12,8">
-                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                        <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreLossMsg]}"
-                               TextColor="#FF8080" FontSize="15" FontAttributes="Bold"
-                               HorizontalOptions="Center"/>
-                        <Label Text="{Binding StatusMessage}"
-                               TextColor="White" FontSize="13" FontAttributes="Bold"
-                               HorizontalOptions="Center"/>
-                        <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[NextBtn]}"
-                                Command="{Binding NextCommand}"
-                                BackgroundColor="#C0392B" TextColor="White"
-                                FontSize="12" CornerRadius="6" HeightRequest="34" Padding="20,0"/>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Attempts counter -->
-                <HorizontalStackLayout HorizontalOptions="Center" Spacing="6"
-                                       IsVisible="{Binding IsGameOver, Converter={StaticResource InvertBool}}">
-                    <Label Text="Attempts:"
-                           TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
-                           FontSize="12" VerticalOptions="Center"/>
-                    <Label TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
-                           FontSize="12" FontAttributes="Bold" VerticalOptions="Center">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{}{0}/6">
-                                <Binding Path="AttemptsLeft"/>
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>
-                </HorizontalStackLayout>
+            <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
+                <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreTitle]}"
+                       TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                       FontSize="17" FontAttributes="Bold"/>
+                <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreSub]}"
+                       TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
+                       FontSize="10"/>
             </VerticalStackLayout>
 
-            <!-- ── LANGUAGE CARDS ── -->
-            <Grid Grid.Row="4"
-                  BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <BoxView Grid.Row="0" HeightRequest="1"
-                         BackgroundColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" Margin="0"/>
-                <ScrollView Grid.Row="1" Orientation="Horizontal">
-                    <HorizontalStackLayout x:Name="LangLayout" Spacing="8" Padding="10,8"/>
-                </ScrollView>
-            </Grid>
+            <!-- Normal score badge -->
+            <Border Grid.Column="2"
+                    BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1E1540}"
+                    StrokeShape="RoundRectangle 6"
+                    Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"
+                    StrokeThickness="1" Padding="8,4" Margin="0,0,4,0"
+                    VerticalOptions="Center">
+                <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[NormalScore]}"
+                           TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#9B8EC4}"
+                           FontSize="8" HorizontalOptions="Center"/>
+                    <Label Text="{Binding ScoreNormal}"
+                           TextColor="#6EE7A0"
+                           FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Hard score badge -->
+            <Border Grid.Column="3"
+                    BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1E1540}"
+                    StrokeShape="RoundRectangle 6"
+                    Stroke="#C0392B"
+                    StrokeThickness="1" Padding="8,4" Margin="0,0,4,0"
+                    VerticalOptions="Center">
+                <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[HardScore]}"
+                           TextColor="#FF8080"
+                           FontSize="8" HorizontalOptions="Center"/>
+                    <Label Text="{Binding ScoreHard}"
+                           TextColor="#FF8080"
+                           FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Grid.Column="4" Text="&#9881;"
+                    BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#2A1F45}"
+                    TextColor="{AppThemeBinding Light=#6D28D9, Dark=#9B8EC4}"
+                    FontSize="18" CornerRadius="6" Padding="10,6"
+                    Command="{Binding GoToSettingsCommand}"/>
         </Grid>
-    </AbsoluteLayout>
+
+        <!-- ── HARD MODE TOGGLE BAR ── -->
+        <Grid Grid.Row="1"
+              BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#0E0B1C}"
+              Padding="14,7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <VerticalStackLayout Grid.Column="0" Spacing="1" VerticalOptions="Center">
+                <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[HardModeLabel]}"
+                       TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}"
+                       FontSize="13" FontAttributes="Bold"/>
+                <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[HardModeSub]}"
+                       TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}"
+                       FontSize="10"/>
+            </VerticalStackLayout>
+            <Switch Grid.Column="1"
+                    IsToggled="{Binding IsHardMode}"
+                    OnColor="#C0392B"
+                    VerticalOptions="Center"
+                    x:Name="HardModeSwitch"/>
+        </Grid>
+
+        <!-- ── COLUMN HEADERS ── -->
+        <ScrollView Grid.Row="2" x:Name="HeaderScroll"
+                    Orientation="Horizontal" HorizontalScrollBarVisibility="Never"
+                    BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}">
+            <Grid WidthRequest="560" ColumnSpacing="2" Padding="4,6,4,4"
+                  ColumnDefinitions="88,56,56,52,60,52,56,56">
+                <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColLang]}" Style="{StaticResource ColHeader}"/>
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColYear]}" Style="{StaticResource ColHeader}"/>
+                </Border>
+                <Border Grid.Column="2" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPara]}" Style="{StaticResource ColHeader}"/>
+                </Border>
+                <Border Grid.Column="3" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColType]}" Style="{StaticResource ColHeader}"/>
+                </Border>
+                <Border Grid.Column="4" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColComp]}" Style="{StaticResource ColHeader}"/>
+                </Border>
+                <Border Grid.Column="5" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPlat]}" Style="{StaticResource ColHeader}"/>
+                </Border>
+                <Border Grid.Column="6" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColPop]}" Style="{StaticResource ColHeader}"/>
+                </Border>
+                <Border Grid.Column="7" BackgroundColor="{AppThemeBinding Light=#E3DBFF, Dark=#1A1430}" StrokeShape="RoundRectangle 4" Stroke="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" StrokeThickness="1" Padding="4,4">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ColGC]}" Style="{StaticResource ColHeader}"/>
+                </Border>
+            </Grid>
+        </ScrollView>
+
+        <!-- ── GUESS ROWS ── -->
+        <ScrollView Grid.Row="3" x:Name="RowsScroll"
+                    Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+            <CollectionView ItemsSource="{Binding GuessRows}" WidthRequest="560">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:GuessResultRow">
+                        <Grid ColumnSpacing="2" Margin="4,2,4,0"
+                              ColumnDefinitions="88,56,56,52,60,52,56,56">
+                            <Border Grid.Column="0" BackgroundColor="{Binding AbbrColor}"
+                                    StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="4,6">
+                                <VerticalStackLayout Spacing="1" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Abbr}" TextColor="#A374FF"
+                                           FontSize="13" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding LanguageName}" TextColor="White"
+                                           FontSize="9" HorizontalOptions="Center"
+                                           MaxLines="1" LineBreakMode="TailTruncation"/>
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="1" BackgroundColor="{Binding YearColor}"
+                                    StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
+                                <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Year}" TextColor="White" FontSize="10" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding YearArrow}" TextColor="{Binding YearArrowColor}"
+                                           FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
+                                           IsVisible="{Binding YearArrow, Converter={StaticResource NotEmptyBool}}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="2" BackgroundColor="{Binding ParadigmColor}"
+                                    StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
+                                <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Paradigm}" Style="{StaticResource CellLabel}" FontSize="9"/>
+                                    <Label Text="{Binding ParadigmArrow}" TextColor="{Binding ParadigmArrowColor}"
+                                           FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
+                                           IsVisible="{Binding ParadigmArrow, Converter={StaticResource NotEmptyBool}}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="3" BackgroundColor="{Binding TypingColor}"
+                                    StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
+                                <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Typing}" Style="{StaticResource CellLabel}" FontSize="9"/>
+                                    <Label Text="{Binding TypingArrow}" TextColor="{Binding TypingArrowColor}"
+                                           FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
+                                           IsVisible="{Binding TypingArrow, Converter={StaticResource NotEmptyBool}}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="4" BackgroundColor="{Binding CompilationColor}"
+                                    StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
+                                <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Compilation}" Style="{StaticResource CellLabel}" FontSize="9"/>
+                                    <Label Text="{Binding CompilationArrow}" TextColor="{Binding CompilationArrowColor}"
+                                           FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
+                                           IsVisible="{Binding CompilationArrow, Converter={StaticResource NotEmptyBool}}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="5" BackgroundColor="{Binding PlatformColor}"
+                                    StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
+                                <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Platform}" Style="{StaticResource CellLabel}" FontSize="9"/>
+                                    <Label Text="{Binding PlatformArrow}" TextColor="{Binding PlatformArrowColor}"
+                                           FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
+                                           IsVisible="{Binding PlatformArrow, Converter={StaticResource NotEmptyBool}}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="6" BackgroundColor="{Binding PopularityColor}"
+                                    StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
+                                <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Popularity}" Style="{StaticResource CellLabel}" FontSize="9"/>
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="7" BackgroundColor="{Binding GCTypeColor}"
+                                    StrokeShape="RoundRectangle 4" Stroke="#3A2D5C" StrokeThickness="1" Padding="2,3">
+                                <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding GCType}" Style="{StaticResource CellLabel}" FontSize="9"/>
+                                    <Label Text="{Binding GCTypeArrow}" TextColor="{Binding GCTypeArrowColor}"
+                                           FontSize="15" FontAttributes="Bold" HorizontalOptions="Center"
+                                           IsVisible="{Binding GCTypeArrow, Converter={StaticResource NotEmptyBool}}"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <!-- ── STATUS ── -->
+        <VerticalStackLayout Grid.Row="4" Spacing="6" Padding="12,4,12,4">
+
+            <!-- WIN banner -->
+            <Border IsVisible="{Binding IsWon}"
+                    BackgroundColor="#0F3D1A" StrokeShape="RoundRectangle 8"
+                    Stroke="#2EA043" StrokeThickness="1.5" Padding="12,8">
+                <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreWinMsg]}"
+                           TextColor="#6EE7A0" FontSize="15" FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding StatusMessage}"
+                           TextColor="White" FontSize="13" FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                    <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[NextBtn]}"
+                            Command="{Binding NextCommand}"
+                            BackgroundColor="#2EA043" TextColor="White"
+                            FontSize="12" CornerRadius="6" HeightRequest="34" Padding="20,0"
+                            Clicked="OnNextClicked"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- LOSS banner -->
+            <Border IsVisible="{Binding IsLost}"
+                    BackgroundColor="#3D0F0F" StrokeShape="RoundRectangle 8"
+                    Stroke="#C0392B" StrokeThickness="1.5" Padding="12,8">
+                <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                    <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[ScoreLossMsg]}"
+                           TextColor="#FF8080" FontSize="15" FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding StatusMessage}"
+                           TextColor="White" FontSize="13" FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                    <Button Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[NextBtn]}"
+                            Command="{Binding NextCommand}"
+                            BackgroundColor="#C0392B" TextColor="White"
+                            FontSize="12" CornerRadius="6" HeightRequest="34" Padding="20,0"
+                            Clicked="OnNextClicked"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Attempts counter -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="6"
+                                   IsVisible="{Binding IsGameOver, Converter={StaticResource InvertBool}}">
+                <Label Text="Attempts:"
+                       TextColor="{AppThemeBinding Light=#8B7DC5, Dark=#5C5080}"
+                       FontSize="12" VerticalOptions="Center"/>
+                <Label Text="{Binding AttemptsDisplay}"
+                       TextColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
+                       FontSize="12" FontAttributes="Bold" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+        <!-- ── LANGUAGE CARDS ── -->
+        <Grid Grid.Row="5"
+              BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#130D24}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <BoxView Grid.Row="0" HeightRequest="1"
+                     BackgroundColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}" Margin="0"/>
+            <ScrollView Grid.Row="1" Orientation="Horizontal">
+                <HorizontalStackLayout x:Name="LangLayout" Spacing="8" Padding="10,8"/>
+            </ScrollView>
+        </Grid>
+    </Grid>
 </ContentPage>

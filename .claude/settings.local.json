@@ -18,7 +18,11 @@
       "Read(//c/Users/edw1e/Downloads/**)",
       "Bash(powershell -Command ' *)",
       "Bash(copy \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Nouded.docx\" \"C:\\\\Users\\\\edw1e\\\\Downloads\\\\LangGuess_Nouded_copy.docx\")",
-      "PowerShell(& \"C:\\\\Users\\\\edw1e\\\\Desktop\\\\MakeDoc.ps1\")"
+      "PowerShell(& \"C:\\\\Users\\\\edw1e\\\\Desktop\\\\MakeDoc.ps1\")",
+      "Read(//c/Users/edw1e/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/64bb0ab6-0066-4c1d-be8b-61fab11453db/76a87871-c273-45d6-8e47-b110832426b3/skills/docx/scripts/office/**)",
+      "Read(//c/Users/edw1e/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/64bb0ab6-0066-4c1d-be8b-61fab11453db/76a87871-c273-45d6-8e47-b110832426b3/skills/docx/**)",
+      "Bash(npm list *)",
+      "Bash(dir \"C:\\\\Users\\\\edw1e\\\\source\\\\repos\\\\LangGuess\\\\Resources\\\\Raw\\\\\")"
     ]
   }
 }

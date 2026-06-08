@@ -1,4 +1,5 @@
 using LangGuess.Models;
+using LangGuess.Services;
 using LangGuess.ViewModels;
 using Microsoft.Maui.Controls.Shapes;
 
@@ -6,7 +7,8 @@ namespace LangGuess.Views;
 
 public partial class GamePage : ContentPage
 {
-    private GameViewModel _vm = null!;
+    private GameViewModel _vm    = null!;
+    private AudioService  _audio = null!;
     private bool _drawerOpen = false;
 
     private const double SwipeThreshold = 60;
@@ -21,7 +23,8 @@ public partial class GamePage : ContentPage
             BindingContext = IPlatformApplication.Current!.Services
                                 .GetRequiredService<GameViewModel>();
 
-        _vm = (GameViewModel)BindingContext;
+        _vm    = (GameViewModel)BindingContext;
+        _audio = IPlatformApplication.Current!.Services.GetRequiredService<AudioService>();
         _vm.AvailableLanguages.CollectionChanged += (_, _) => RefreshLangCards();
         await _vm.InitAsync();
         RefreshLangCards();
@@ -176,6 +179,7 @@ public partial class GamePage : ContentPage
 
     private async void OnDrawerToggleClicked(object? sender, EventArgs e)
     {
+        _audio.PlayTap();
         if (_drawerOpen) await CloseDrawerAsync();
         else             await OpenDrawerAsync();
     }

@@ -18,9 +18,13 @@ public partial class HomePage : ContentPage
             BindingContext = IPlatformApplication.Current!.Services
                                 .GetRequiredService<HomeViewModel>();
 
-        // Start background music here — most reliable lifecycle point on Android
+        // Pre-load SFX bytes + start background music (most reliable Android lifecycle point)
         var audio = IPlatformApplication.Current!.Services
                         .GetRequiredService<AudioService>();
-        await audio.StartBackgroundMusicAsync();
+        // Run both in parallel: preload SFX bytes into RAM, start background track
+        await Task.WhenAll(
+            audio.PreloadAsync(),
+            audio.StartBackgroundMusicAsync()
+        );
     }
 }

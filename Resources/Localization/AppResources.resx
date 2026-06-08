@@ -63,4 +63,8 @@
   <data name="ScoreSub"           xml:space="preserve"><value>Guess languages and earn points!</value></data>
   <data name="ScoreLossMsg"       xml:space="preserve"><value>Not this time! The answer was:</value></data>
   <data name="ScoreWinMsg"        xml:space="preserve"><value>+1 point! Keep going!</value></data>
+  <data name="HardModeLabel"      xml:space="preserve"><value>Hard Mode</value></data>
+  <data name="HardModeSub"        xml:space="preserve"><value>Only 3 attempts — score resets on loss</value></data>
+  <data name="NormalScore"        xml:space="preserve"><value>Normal</value></data>
+  <data name="HardScore"          xml:space="preserve"><value>Hard</value></data>
 </root>
