@@ -2,6 +2,7 @@ using LangGuess.Services;
 using LangGuess.ViewModels;
 using LangGuess.Views;
 using Microsoft.Extensions.Logging;
+using Plugin.Maui.Audio;
 
 namespace LangGuess;
 
@@ -19,7 +20,9 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Services (AudioService accesses AudioManager.Current lazily — no DI for IAudioManager)
+        // IAudioManager factory — resolved lazily on first use (after Android is ready)
+        builder.Services.AddSingleton<IAudioManager>(_ => AudioManager.Current);
+
         builder.Services.AddSingleton(LocalizationService.Instance);
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddSingleton<GameService>();

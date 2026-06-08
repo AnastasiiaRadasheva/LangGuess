@@ -4,11 +4,17 @@ namespace LangGuess.Services;
 
 /// <summary>
 /// Background music (looping) + tap SFX.
-/// pong.mp3 bytes pre-loaded once so every tap is instant.
+///
+/// IAudioManager is injected via DI with a lazy factory (resolved on first access,
+/// after Android platform is fully ready — not during CreateMauiApp).
+///
+/// pong.mp3 bytes pre-loaded once into RAM so every tap is instant.
 /// MusicVolume: applied to live player immediately; Preferences write debounced 400ms.
 /// </summary>
 public class AudioService : IDisposable
 {
+    private readonly IAudioManager _mgr;
+
     private IAudioPlayer? _bgPlayer;
     private Stream?       _bgStream;
     private bool          _disposed;
@@ -22,8 +28,12 @@ public class AudioService : IDisposable
     private const string MusicVolKey = "music_volume";
     private const string SfxKey      = "sfx_enabled";
 
-    public AudioService()
+    // Diagnostic string — visible on HomePage in DEBUG builds
+    public string LastError { get; private set; } = "";
+
+    public AudioService(IAudioManager audioManager)
     {
+        _mgr = audioManager;
         _vol = Preferences.Get(MusicVolKey, 0.5);
     }
 
@@ -56,13 +66,14 @@ public class AudioService : IDisposable
                 {
                     _bgPlayer.Volume = _vol;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // If setVolume killed the player, restart it
+                    LastError = $"setVolume: {ex.Message}";
+                    // Player died — restart it
                     _ = Task.Run(async () =>
                     {
                         MainThread.BeginInvokeOnMainThread(StopBackgroundMusic);
-                        await Task.Delay(100);
+                        await Task.Delay(150);
                         await StartBackgroundMusicAsync();
                     });
                 }
@@ -88,25 +99,22 @@ public class AudioService : IDisposable
 
     public bool IsEnabled { get => SfxEnabled; set => SfxEnabled = value; }
 
-    // ── Lazy audio manager ────────────────────────────────────────────────────
-    private static IAudioManager? GetManager()
-    {
-        try { return AudioManager.Current; }
-        catch { return null; }
-    }
-
     // ── Pre-load SFX bytes ────────────────────────────────────────────────────
     public async Task PreloadAsync()
     {
         if (_pongBytes != null) return;
         try
         {
-            await using var s = await FileSystem.OpenAppPackageFileAsync("pong.mp3");
+            using var s  = await FileSystem.OpenAppPackageFileAsync("pong.mp3");
             using var ms = new MemoryStream();
             await s.CopyToAsync(ms);
             _pongBytes = ms.ToArray();
+            LastError = $"pong loaded {_pongBytes.Length} bytes";
         }
-        catch { }
+        catch (Exception ex)
+        {
+            LastError = $"PreloadAsync: {ex.Message}";
+        }
     }
 
     // ── Background music ─────────────────────────────────────────────────────
@@ -128,19 +136,18 @@ public class AudioService : IDisposable
             }
         }
 
-        var mgr = GetManager();
-        if (mgr == null) return;
-
         try
         {
             _bgStream = await FileSystem.OpenAppPackageFileAsync("background.mp3");
-            _bgPlayer = mgr.CreatePlayer(_bgStream);
+            _bgPlayer = _mgr.CreatePlayer(_bgStream);
             _bgPlayer.Loop   = true;
             _bgPlayer.Volume = _vol;
             _bgPlayer.Play();
+            LastError = "music started";
         }
-        catch
+        catch (Exception ex)
         {
+            LastError = $"StartMusic: {ex.Message}";
             StopBackgroundMusic();
         }
     }
@@ -155,16 +162,34 @@ public class AudioService : IDisposable
     }
 
     // ── SFX ──────────────────────────────────────────────────────────────────
+    // Deferred disposal off the PlaybackEnded Java thread (Android safety).
 
     public void PlayTap()
     {
-        if (!SfxEnabled || _pongBytes == null) return;
-        var mgr = GetManager();
-        if (mgr == null) return;
+        if (!SfxEnabled) return;
+
         try
         {
-            var ms     = new MemoryStream(_pongBytes);
-            var player = mgr.CreatePlayer(ms);
+            IAudioPlayer player;
+            Stream       stream;
+
+            if (_pongBytes != null)
+            {
+                // Fast path — pre-loaded bytes, no file I/O
+                stream = new MemoryStream(_pongBytes);
+                player = _mgr.CreatePlayer(stream);
+            }
+            else
+            {
+                // Fallback: try to load the file synchronously
+                // (happens if PreloadAsync hasn't run yet)
+                var t = FileSystem.OpenAppPackageFileAsync("pong.mp3");
+                t.Wait(1000);
+                if (!t.IsCompletedSuccessfully) return;
+                stream = t.Result;
+                player = _mgr.CreatePlayer(stream);
+            }
+
             player.Volume = 1.0;
             player.Play();
             player.PlaybackEnded += (_, _) =>
@@ -174,11 +199,14 @@ public class AudioService : IDisposable
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         try { player.Dispose(); } catch { }
-                        try { ms.Dispose();     } catch { }
+                        try { stream.Dispose(); } catch { }
                     });
                 });
         }
-        catch { }
+        catch (Exception ex)
+        {
+            LastError = $"PlayTap: {ex.Message}";
+        }
     }
 
     public Task PlayTapAsync()     { PlayTap(); return Task.CompletedTask; }
