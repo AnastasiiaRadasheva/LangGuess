@@ -15,11 +15,10 @@ public partial class SettingsPage : ContentPage
             BindingContext = IPlatformApplication.Current!.Services
                                 .GetRequiredService<SettingsViewModel>();
 
+        var audio = IPlatformApplication.Current!.Services.GetRequiredService<AudioService>();
+        audio.StopBackgroundMusic();
+
         if (BindingContext is SettingsViewModel vm)
             await vm.LoadHistoryAsync();
-
-        // Safety net: restart music if something stopped it during navigation
-        var audio = IPlatformApplication.Current!.Services.GetRequiredService<AudioService>();
-        await audio.StartBackgroundMusicAsync();
     }
 }

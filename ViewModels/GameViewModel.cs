@@ -9,7 +9,6 @@ public class GameViewModel : BaseViewModel
 {
     private readonly DatabaseService _db;
     private readonly GameService     _game;
-    private readonly AudioService    _audio;
 
     private ProgrammingLanguage? _secret;
     private List<ProgrammingLanguage>? _allLanguages;
@@ -46,11 +45,10 @@ public class GameViewModel : BaseViewModel
     public ICommand BackCommand         { get; }
     public ICommand GoToScoreCommand    { get; }
 
-    public GameViewModel(DatabaseService db, GameService game, AudioService audio)
+    public GameViewModel(DatabaseService db, GameService game)
     {
-        _db    = db;
-        _game  = game;
-        _audio = audio;
+        _db   = db;
+        _game = game;
 
         GuessCommand        = new RelayCommand<ProgrammingLanguage>(OnGuess, _ => !IsGameOver && !AlreadyPlayed);
         GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage?from=game"));
@@ -85,7 +83,6 @@ public class GameViewModel : BaseViewModel
     {
         if (lang == null || _secret == null || IsGameOver || AlreadyPlayed) return;
 
-        await _audio.PlayTapAsync();
         AvailableLanguages.Remove(lang);
 
         var row = _game.Compare(lang, _secret);
@@ -97,7 +94,6 @@ public class GameViewModel : BaseViewModel
             IsWon = true;
             IsGameOver = true;
             StatusMessage = _secret.Name;
-            await _audio.PlayWinAsync();
             await SaveHistoryAsync(true);
             Streak = await _db.GetStreakAsync();
         }
@@ -106,16 +102,12 @@ public class GameViewModel : BaseViewModel
             IsGameOver = true;
             StatusMessage = _secret.Name;
             OnPropertyChanged(nameof(IsLost));
-            await _audio.PlayWrongAsync();
             // Saves loss → daily streak is broken (GetStreakAsync will see IsWon=false)
             await SaveHistoryAsync(false);
             Streak = 0;
         }
         else
         {
-            bool anyGreen = row.YearStatus == GuessStatus.Green || row.ParadigmStatus == GuessStatus.Green;
-            if (anyGreen) await _audio.PlayCorrectAsync();
-            else          await _audio.PlayWrongAsync();
         }
 
         ((RelayCommand<ProgrammingLanguage>)GuessCommand).RaiseCanExecuteChanged();

@@ -26,8 +26,7 @@ public partial class GamePage : ContentPage
         _vm    = (GameViewModel)BindingContext;
         _audio = IPlatformApplication.Current!.Services.GetRequiredService<AudioService>();
 
-        // Safety net: restart music if it stopped during navigation
-        await _audio.StartBackgroundMusicAsync();
+        _ = _audio.StartBackgroundMusicAsync();
 
         _vm.AvailableLanguages.CollectionChanged += (_, _) => RefreshLangCards();
         await _vm.InitAsync();
@@ -183,7 +182,6 @@ public partial class GamePage : ContentPage
 
     private async void OnDrawerToggleClicked(object? sender, EventArgs e)
     {
-        _audio.PlayTap();
         if (_drawerOpen) await CloseDrawerAsync();
         else             await OpenDrawerAsync();
     }

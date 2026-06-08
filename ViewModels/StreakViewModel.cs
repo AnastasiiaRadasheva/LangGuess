@@ -16,7 +16,6 @@ public class StreakViewModel : BaseViewModel
 {
     private readonly DatabaseService _db;
     private readonly GameService     _game;
-    private readonly AudioService    _audio;
 
     private ProgrammingLanguage?       _secret;
     private List<ProgrammingLanguage>? _allLanguages;
@@ -69,17 +68,16 @@ public class StreakViewModel : BaseViewModel
     public ICommand RestartCommand      { get; }
     public ICommand GoToSettingsCommand { get; }
 
-    public StreakViewModel(DatabaseService db, GameService game, AudioService audio)
+    public StreakViewModel(DatabaseService db, GameService game)
     {
-        _db    = db;
-        _game  = game;
-        _audio = audio;
+        _db   = db;
+        _game = game;
 
         GuessCommand        = new RelayCommand<ProgrammingLanguage>(OnGuess, _ => !IsGameOver);
         BackCommand         = new RelayCommand(() => Shell.Current.GoToAsync("//HomePage"));
         NextCommand         = new RelayCommand(async () => await LoadNextLanguageAsync(), () => IsGameOver);
         RestartCommand      = new RelayCommand(async () => await RestartAsync());
-        GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage?from=game"));
+        GoToSettingsCommand = new RelayCommand(() => Shell.Current.GoToAsync("//SettingsPage?from=streak"));
     }
 
     public async Task InitAsync()
@@ -116,7 +114,6 @@ public class StreakViewModel : BaseViewModel
     {
         if (lang == null || _secret == null || IsGameOver) return;
 
-        await _audio.PlayTapAsync();
         AvailableLanguages.Remove(lang);
 
         var row = _game.Compare(lang, _secret);
@@ -132,7 +129,6 @@ public class StreakViewModel : BaseViewModel
             IsWon         = true;
             IsGameOver    = true;
             StatusMessage = _secret.Name;
-            await _audio.PlayWinAsync();
         }
         else if (GuessRows.Count >= MaxAttempts)
         {
@@ -143,13 +139,6 @@ public class StreakViewModel : BaseViewModel
             IsLost        = true;
             IsGameOver    = true;
             StatusMessage = _secret.Name;
-            await _audio.PlayWrongAsync();
-        }
-        else
-        {
-            bool anyGreen = row.YearStatus == GuessStatus.Green || row.ParadigmStatus == GuessStatus.Green;
-            if (anyGreen) await _audio.PlayCorrectAsync();
-            else          await _audio.PlayWrongAsync();
         }
 
         ((RelayCommand<ProgrammingLanguage>)GuessCommand).RaiseCanExecuteChanged();

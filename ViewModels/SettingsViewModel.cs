@@ -44,9 +44,6 @@ public class SettingsViewModel : BaseViewModel
         get => _musicEnabled;
         set
         {
-            // Guard: only push to AudioService when value actually changes.
-            // MAUI Switch binding fires IsToggled=false briefly on init —
-            // without this guard that stops the music every time Settings opens.
             if (!SetField(ref _musicEnabled, value)) return;
             _audio.MusicEnabled = value;
         }
@@ -59,19 +56,8 @@ public class SettingsViewModel : BaseViewModel
         set
         {
             if (!SetField(ref _musicVolume, value)) return;
+            _settings.MusicVolume = value; // keeps SettingsService in sync so next visit is correct
             _audio.MusicVolume = value;
-        }
-    }
-
-    private bool _sfxEnabled;
-    public bool SfxEnabled
-    {
-        get => _sfxEnabled;
-        set
-        {
-            if (!SetField(ref _sfxEnabled, value)) return;
-            _settings.SfxEnabled = value;
-            _audio.SfxEnabled = value;
         }
     }
 
@@ -91,7 +77,12 @@ public class SettingsViewModel : BaseViewModel
     private string _returnRoute = "//HomePage";
     public string From
     {
-        set => _returnRoute = value == "game" ? "//GamePage" : "//HomePage";
+        set => _returnRoute = value switch
+        {
+            "game"   => "//GamePage",
+            "streak" => "//StreakPage",
+            _        => "//HomePage"
+        };
     }
 
     public SettingsViewModel(SettingsService settings, LocalizationService loc,
@@ -104,8 +95,7 @@ public class SettingsViewModel : BaseViewModel
 
         _isDark                = settings.IsDark;
         _musicEnabled          = audio.MusicEnabled;
-        _musicVolume           = settings.MusicVolume;
-        _sfxEnabled            = settings.SfxEnabled;
+        _musicVolume           = audio.MusicVolume; // read from Preferences directly — always fresh
         _playerName            = settings.PlayerName;
         _selectedLanguageIndex = LanguageCodes.IndexOf(settings.Language);
         if (_selectedLanguageIndex < 0) _selectedLanguageIndex = 0;

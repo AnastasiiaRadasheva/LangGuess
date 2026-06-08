@@ -20,5 +20,6 @@ public partial class HomePage : ContentPage
         var audio = IPlatformApplication.Current!.Services
                         .GetRequiredService<AudioService>();
         await audio.PreloadAsync();
+        audio.StopBackgroundMusic();
     }
 }

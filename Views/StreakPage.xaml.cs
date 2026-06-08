@@ -7,8 +7,8 @@ namespace LangGuess.Views;
 
 public partial class StreakPage : ContentPage
 {
-    private StreakViewModel _vm    = null!;
-    private AudioService    _audio = null!;
+    private StreakViewModel _vm = null!;
+    private AudioService _audio = null!;
 
     private const double SwipeThreshold = 60;
 
@@ -25,33 +25,19 @@ public partial class StreakPage : ContentPage
         _vm    = (StreakViewModel)BindingContext;
         _audio = IPlatformApplication.Current!.Services.GetRequiredService<AudioService>();
 
-        // Safety net: restart music if it stopped during navigation
-        await _audio.StartBackgroundMusicAsync();
+        _ = _audio.StartBackgroundMusicAsync();
 
         _vm.AvailableLanguages.CollectionChanged += (_, _) => RefreshLangCards();
+
         await _vm.InitAsync();
         RefreshLangCards();
 
         RowsScroll.Scrolled += (_, e) =>
             HeaderScroll.ScrollToAsync(e.ScrollX, 0, false);
 
-        // Play tap SFX when hard mode switch is toggled
-        HardModeSwitch.Toggled += OnHardModeSwitchToggled;
     }
 
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        HardModeSwitch.Toggled -= OnHardModeSwitchToggled;
-    }
-
-    // Play sound on hard mode toggle (but let the binding handle the actual logic)
-    private void OnHardModeSwitchToggled(object? sender, ToggledEventArgs e)
-        => _audio.PlayTap();
-
-    // Play sound when Next/Continue button is pressed
-    public void OnNextClicked(object? sender, EventArgs e)
-        => _audio.PlayTap();
+    public void OnNextClicked(object? sender, EventArgs e) { }
 
     // ── LANGUAGE CARDS ───────────────────────────────────────────────────────
 

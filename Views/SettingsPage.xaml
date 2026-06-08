@@ -114,20 +114,6 @@
                                 ThumbColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"/>
                     </VerticalStackLayout>
 
-                    <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#C4B5FD, Dark=#3A2D5C}"/>
-
-                    <!-- SFX -->
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout Grid.Column="0" Spacing="2">
-                            <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[SfxLabel]}"
-                                   TextColor="{AppThemeBinding Light=#1A1035, Dark=#E2D9F3}" FontSize="15"/>
-                            <Label Text="{Binding Source={x:Static svc:LocalizationService.Instance}, Path=[SfxSub]}"
-                                   TextColor="{AppThemeBinding Light=#5C4F7C, Dark=#9B8EC4}" FontSize="12"/>
-                        </VerticalStackLayout>
-                        <Switch Grid.Column="1" IsToggled="{Binding SfxEnabled}"
-                                OnColor="{AppThemeBinding Light=#6D28D9, Dark=#A374FF}"
-                                VerticalOptions="Center"/>
-                    </Grid>
 
                 </VerticalStackLayout>
             </Border>
