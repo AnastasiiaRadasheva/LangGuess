@@ -5,6 +5,10 @@ namespace LangGuess.Services;
 /// <summary>
 /// Background music (looping) + tap SFX.
 /// pong.mp3 bytes are pre-loaded once so every tap is instant (no file I/O per tap).
+///
+/// VOLUME NOTE: on Android, calling MediaPlayer.setVolume() while playing is unreliable
+/// (can kill the player). So we never touch _bgPlayer.Volume while it is playing.
+/// The saved volume is applied only when the player is (re)started.
 /// </summary>
 public class AudioService : IDisposable
 {
@@ -19,7 +23,7 @@ public class AudioService : IDisposable
     private const string MusicVolKey = "music_volume";
     private const string SfxKey      = "sfx_enabled";
 
-    // ── Settings ────────────────────────────────────────────────────────────
+    // ── Settings ─────────────────────────────────────────────────────────────
 
     public bool MusicEnabled
     {
@@ -37,9 +41,9 @@ public class AudioService : IDisposable
         get => Preferences.Get(MusicVolKey, 0.5);
         set
         {
-            var v = Math.Clamp(value, 0.0, 1.0);
-            Preferences.Set(MusicVolKey, v);
-            if (_bgPlayer != null) try { _bgPlayer.Volume = v; } catch { }
+            // Only persist – never touch _bgPlayer.Volume while it is live.
+            // Volume is applied on the next Start (or when music is toggled off/on).
+            Preferences.Set(MusicVolKey, Math.Clamp(value, 0.0, 1.0));
         }
     }
 
@@ -59,7 +63,7 @@ public class AudioService : IDisposable
         catch { return null; }
     }
 
-    // ── Pre-load SFX bytes ───────────────────────────────────────────────────
+    // ── Pre-load SFX bytes ────────────────────────────────────────────────────
     /// <summary>Call once from HomePage.OnAppearing — loads pong.mp3 into RAM.</summary>
     public async Task PreloadAsync()
     {
@@ -71,7 +75,7 @@ public class AudioService : IDisposable
             await s.CopyToAsync(ms);
             _pongBytes = ms.ToArray();
         }
-        catch { /* silent – SFX just won't play if file missing */ }
+        catch { }
     }
 
     // ── Background music ─────────────────────────────────────────────────────
@@ -80,17 +84,12 @@ public class AudioService : IDisposable
     {
         if (!MusicEnabled) return;
 
-        // If player exists and is still running – just ensure volume is right
         if (_bgPlayer != null)
         {
             try
             {
-                if (_bgPlayer.IsPlaying)
-                {
-                    _bgPlayer.Volume = MusicVolume;
-                    return;
-                }
-                // Player exists but stopped — dispose and recreate below
+                if (_bgPlayer.IsPlaying) return; // already fine
+                // stopped — fall through to recreate
                 StopBackgroundMusic();
             }
             catch
@@ -107,7 +106,7 @@ public class AudioService : IDisposable
             _bgStream = await FileSystem.OpenAppPackageFileAsync("background.mp3");
             _bgPlayer = mgr.CreatePlayer(_bgStream);
             _bgPlayer.Loop   = true;
-            _bgPlayer.Volume = MusicVolume;
+            _bgPlayer.Volume = MusicVolume;   // only set here, never while playing
             _bgPlayer.Play();
         }
         catch
@@ -127,8 +126,7 @@ public class AudioService : IDisposable
 
     // ── SFX ──────────────────────────────────────────────────────────────────
     // Uses pre-loaded bytes → no async file I/O on the hot path.
-    // Disposal deferred off the PlaybackEnded Java thread to avoid
-    // ObjectDisposedException on Android.
+    // Disposal deferred off the PlaybackEnded Java thread (Android safety).
 
     public void PlayTap()
     {
@@ -155,7 +153,7 @@ public class AudioService : IDisposable
         catch { }
     }
 
-    // Async wrappers kept so ViewModels compile unchanged
+    // Async wrappers so ViewModels compile unchanged
     public Task PlayTapAsync()     { PlayTap(); return Task.CompletedTask; }
     public Task PlayCorrectAsync() { PlayTap(); return Task.CompletedTask; }
     public Task PlayWrongAsync()   { PlayTap(); return Task.CompletedTask; }
